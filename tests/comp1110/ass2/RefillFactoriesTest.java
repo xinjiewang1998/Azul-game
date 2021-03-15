@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @org.junit.jupiter.api.Timeout(value = 1000, unit = MILLISECONDS)
 public class RefillFactoriesTest {
-    // TODO test correct number of tiles in each factory
 
     @Test
     public void testCorrectNumberOfTiles() {
@@ -68,9 +67,4 @@ public class RefillFactoriesTest {
             }
         }
     }
-
-    // TODO test no factory is empty if bag is non-empty
-
-    // TODO test neither bag nor any factory are empty if discard area is non-empty
-
 }

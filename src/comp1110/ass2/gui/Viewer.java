@@ -29,7 +29,7 @@ public class Viewer extends Application {
      *              TASK 4
      */
     void displayState(String[] state) {
-        // FIXME Task 5: implement the simple state viewer
+        // FIXME Task 4: implement the simple state viewer
     }
 
     /**

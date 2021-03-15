@@ -47,12 +47,10 @@ has completed the most rows in their mosaic is the winner. In case of a further 
 both players win.
 
 There is a great video walk-through on YouTube by [Meeple University](https://www.youtube.com/watch?v=csJL-78NEPQ),
-however you must read this page in its entirety since some of our rules differ slightly.
+however you must read this page in its entirety.
 
 For a complete description, and in case of any ambiguities in the assignment description,
-consult the [game rules](assets/rules.pdf), which are distributed with the published game.   
-Aside from the rule changes used by this assignment (which are clearly listed below under the
-*Game Rule Exceptions* heading below), the official published rules should be used.
+consult the [game rules](https://www.boardgamecapital.com/game_rules/azul.pdf), which are distributed with the published game.   
 
 ### Tiles
 
@@ -131,7 +129,7 @@ They also may not place the tiles in *row 2* because a different coloured tile i
 
 ### Placing tiles on the floor
 The floor can hold at most 7 tiles. If you would place more tiles onto the floor, they are placed into the discard pile instead.
-If you would place the first player tile (see [encoding game state](https://gitlab.cecs.anu.edu.au/comp1110/dev/comp1110-ass2-dev#encoding-game-state) below) on the floor when the floor is full, you should swap the last tile with the first player tile, placing the last tile into the discard pile, and the first player tile onto the floor. *The first player tile cannot be placed in the discard pile.*
+If you would place the first player tile (see [encoding game state](https://gitlab.cecs.anu.edu.au/comp1110/dev/comp1110-ass2-dev#encoding-game-state) below) on the floor when the floor is full, you should swap the last tile on the floor with the first player tile, placing the last tile into the discard pile, and the first player tile onto the floor. *The first player tile cannot be placed in the discard pile.*
 
 ### 2. Mosaic-tiling/Scoring
 
