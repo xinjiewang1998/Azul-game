@@ -5,4 +5,4 @@ public class B {
         return "B";
     }
 }
-}
+
