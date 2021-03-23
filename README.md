@@ -280,10 +280,10 @@ Each encoding of a singular Factory placement string is as follows:
 #### Centre
 The encoding for the Centre placement string is very similar for factories, but is not limited to 4 tiles.
 * The first character is a `"C"`.
-* The following characters are any number of `a` to `e` tiles, in alphabetical order.
+* The following characters are any number of `a` to `e` tiles and up to one `f` (first player) tile, in alphabetical order.
   for example:
 * `"C"` means the Centre is empty.
-* `"Caaaabbc"` means the Centre contains four `a` tiles, two `b` tiles and one `c` tile.
+* `"Caaaabbcf"` means the Centre contains four `a` tiles, two `b` tiles, one `c` tile and one `f` tile.
 
 #### Bag
 The Bag is an 11-character string that represents the tiles left in the Bag.
