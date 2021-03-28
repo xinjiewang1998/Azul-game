@@ -1,7 +1,5 @@
 package comp1110.ass2;
 
-import comp1110.ass2.common.Factory;
-import gittest.A;
 import java.util.ArrayList;
 
 public class Azul {
@@ -58,7 +56,6 @@ public class Azul {
      * TASK 2
      */
     public static boolean isSharedStateWellFormed(String sharedState) {
-        // Finished Task 2
         int indexF = sharedState.indexOf('F', 0);
         int indexC = sharedState.indexOf('C', indexF + 1);
         int indexB = sharedState.indexOf('B', indexC + 1);
@@ -194,9 +191,6 @@ public class Azul {
                 return false;
             }
         }
-//        if(fCount == 0) {
-//            return false;
-//        }
         return true;
     }
 
@@ -309,8 +303,6 @@ public class Azul {
      * TASK 3
      */
     public static boolean isPlayerStateWellFormed(String playerState) {
-        // FIXME Task 3
-
         int[] indexes = new int[4];
         indexes[0] = playerState.indexOf('A', 0);
         indexes[1] = playerState.indexOf('B', indexes[0] + 1);
