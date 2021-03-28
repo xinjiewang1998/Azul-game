@@ -10,12 +10,18 @@ public class Mosaic {
     private final ArrayList<String> DEFAULT_COLORS = new ArrayList<>(
             Arrays.asList("blue", "green", "orange", "purple", "red"));
 
+    // simple [][] is enough for use.
+    private Tile[][] square;
+
+    public Mosaic () {
+        this.square = new Tile[NUM_ROWS][NUM_ROWS];
+    }
 
     /**
      * calculate the column number according to the color and row number.
-     * @param color
-     * @param row
-     * @return
+     * @param color the target color
+     * @param row the target row number
+     * @return the column number
      */
     public int calculateColumn(String color, int row) {
         // FIXME
@@ -25,9 +31,9 @@ public class Mosaic {
     /**
      * tells whether a colored tile has occupied that row.
      * if it is true, cannot put tile with same color on that row again.
-     * @param color
-     * @param row
-     * @return
+     * @param color the target color
+     * @param row the target row
+     * @return true if the color exists in mosaic
      */
     public boolean hasColor(String color, int row) {
         // FIXME
@@ -36,17 +42,17 @@ public class Mosaic {
 
     /**
      * find the correct position and place the tile
-     * @param t
-     * @param row
+     * @param tile the tile to be placed
+     * @param row the target row
      */
-    public void addTile(Tile t, int row) {
+    public void addTile(Tile tile, int row) {
         // FIXME
     }
 
     /**
      * check if there is a complete row in our mosaic
      * if it has, then end the game.
-     * @return
+     * @return true if exists a complete row
      */
     public boolean hasCompleteRow() {
         // FIXME
@@ -59,7 +65,7 @@ public class Mosaic {
      * Gain 2 points for each complete row of your mosaic (5 consecutive horizontal tiles).
      * Gain 7 points for each complete column of your mosaic (5 consecutive vertical tiles).
      * Gain 10 points for each colour of tile for which you have placed all 5 tiles on your mosaic.
-     * @return
+     * @return the Bonus Score
      */
     public int calculateBonusScore() {
         // FIXME

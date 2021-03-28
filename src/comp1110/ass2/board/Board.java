@@ -17,7 +17,7 @@ public class Board {
      * Initialize the board with correct prams.
      */
     public void init() {
-        this.score = new Score();
+        this.score = new Score(0);
         this.storage = new Storage();
         this.mosaic = new Mosaic();
         this.floor = new Floor();
@@ -28,13 +28,13 @@ public class Board {
      * 1. add tiles to storage
      * 2. move complete row to mosaic
      * 3. bring back score
-     * @param tiles
-     * @param instruction
-     * @return
+     * @param tiles the tiles goes to the storage
+     * @param instruction the instruction of operation
+     * @return the score
      */
-    public int performInstruction(ArrayList<Tile> tiles, String instruction) {
+    public Score performInstruction(ArrayList<Tile> tiles, String instruction) {
         // FIXME
-        return 0;
+        return new Score(0);
     }
 
     /**
@@ -44,7 +44,8 @@ public class Board {
         // FIXME
     }
 
-    public String toSting() {
+    @Override
+    public String toString() {
         // FIXME
         return "";
     };

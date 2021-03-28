@@ -1,6 +1,7 @@
 package comp1110.ass2.board;
 
 import comp1110.ass2.Tile;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class Floor {
@@ -15,7 +16,7 @@ public class Floor {
      * Add all other tiles to our tiles.
      * @param otherTiles
      */
-    public void addTiles(ArrayList<Tile> otherTiles) {
+    public void addTiles(ArrayDeque<Tile> otherTiles) {
         // FIXME
     }
 
@@ -32,9 +33,9 @@ public class Floor {
      * calculate the total penalty of the floor.
      * @return
      */
-    public int calculatePenalty() {
+    public Score calculatePenalty() {
         // FIXME
-        return 0;
+        return new Score(0);
     }
 
     @Override
