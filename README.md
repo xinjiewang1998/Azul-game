@@ -78,7 +78,7 @@ The first player for the round is determined randomly.
 
 In the example image below, the areas outlined in red -- factories, centre, bag, and discard area -- are *shared* between all players.
 
-<img src="assets/game_areas.png" width="600">
+![](assets/game_areas.png)
 
 We will be playing a two-player game, but you may extend your game to accommodate up to four players.
 
@@ -114,15 +114,15 @@ In the example images below, the player has picked up two `'a'` tiles. They may 
 
 1. place one tile in *row 0*, dropping the other tile onto the *floor*;
 
-<img src="assets/drafting_a.png" width="400"> 
+![](assets/drafting_a.png)
 
 2. place both tiles into *row 4*; or
 
-<img src="assets/drafting_b.png" width="400">
+![](assets/drafting_b.png)
 
 3. place both tiles onto the *floor*.
 
-<img src="assets/drafting_c.png" width="400">
+![](assets/drafting_c.png)
 
 Note that they cannot place the tiles in *row 1* or *row 3* because the corresponding mosaic rows already contain an `'a'` tile.
 They also may not place the tiles in *row 2* because a different coloured tile is already stored there.
@@ -140,7 +140,7 @@ This is a suggested mosaic pattern. It obeys all the rules of the variant mosaic
 1. Go through your storage rows from row 0 to row 4 and move the **rightmost** tile of each **complete** row to the space
    of the same colour in the corresponding row of the mosaic. The pattern can be seen in the image below.
 
-<img src="assets/beginner_mosaic_pattern.PNG" width="250"> 
+![](assets/beginner_mosaic_pattern.PNG)
 
 *Each time you move a tile, score points **immediately***.
 
@@ -152,8 +152,8 @@ They are moved across into the `mosaic`, starting from row 0.
 The remaining `'a'` and `'c'` tiles are placed in the `Discard` pile. The `'b'` and `'d'` tiles do not form a complete row,
 so they are left in the storage area for the next round.
 
-<img src="assets/tiling_a.PNG" height = "250">
-<img src="assets/tiling_b.PNG" height = "250">
+![](assets/tiling_a.PNG)
+![](assets/tiling_b.PNG)
 
 
 **Variant Mosaic:**
@@ -169,7 +169,7 @@ so they are left in the storage area for the next round.
 In the example below, the player must place an `'a'` tile in row 1 but cannot place it
 in columns 1, 3 or 4 because those columns already contain an `'a'` tile.
 
-<img src="assets/variant_tiling_placement.png" height = "250">
+![](assets/variant_tiling_placement.png)
 
 
 #### Scoring
@@ -187,15 +187,15 @@ horizontally-linked tile, and 1 for itself). There are also 2 tiles vertically l
 Yes, the `'e'` tile is counted twice!
 Placing this tile gains the player 7 points in total.
 
-<img src="assets/scoring_1a.png" width="250"> 
-<img src="assets/scoring_1b.png" width="250"> 
+![](assets/scoring_1a.png) 
+![](assets/scoring_1b.png)
 
 In the second example below, the red `'e'` tile is again placed in row 2, column 3. Like example 1 it scores 3 points for the vertically-linked tiles,
 but it only scores 2 points for the horizontally-linked tiles, because the `'c'` tile in row 2, column 1 is *not* horizontally linked. The player gains a total of 5 points
 for this placement.
 
-<img src="assets/scoring_2a.png" width="250"> 
-<img src="assets/scoring_2b.png" width="250"> 
+![](assets/scoring_2a.png)
+![](assets/scoring_2b.png)
 
 After you have finished scoring the mosaic, check if you have any tiles on the floor. You lose points based on the number of tiles you have
 on the floor. The first player token is considered a normal tile on the floor. Note that you cannot drop below 0 points.
