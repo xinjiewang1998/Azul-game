@@ -280,10 +280,10 @@ Each encoding of a singular Factory placement string is as follows:
 #### Centre
 The encoding for the Centre placement string is very similar for factories, but is not limited to 4 tiles.
 * The first character is a `"C"`.
-* The following characters are any number of `a` to `e` tiles, in alphabetical order.
+* The following characters are any number of `a` to `e` tiles and up to one `f` (first player) tile, in alphabetical order.
   for example:
 * `"C"` means the Centre is empty.
-* `"Caaaabbc"` means the Centre contains four `a` tiles, two `b` tiles and one `c` tile.
+* `"Caaaabbcf"` means the Centre contains four `a` tiles, two `b` tiles, one `c` tile and one `f` tile.
 
 #### Bag
 The Bag is an 11-character string that represents the tiles left in the Bag.
@@ -457,7 +457,7 @@ The only **firm** requirements are that:
 * it runs in a 1280x768 window, and
 * that it is executable on the VDI from a JAR file called `game.jar`,
 
-Your game must successfully run from `game.jar` from within another user's (i.e. your tutor's) account on the VDI (in other words, your game must not depend on features not self-contained within that jar file, the Java 13 runtime and the JavaFX library).
+Your game must successfully run from `game.jar` from within another user's (i.e. your tutor's) account on the VDI (in other words, your game must not depend on features not self-contained within that jar file, the Java 15 runtime and the JavaFX library).
 
 An indicative grade level for each task for the [completion of part two](https://cs.anu.edu.au/courses/comp1110/assessments/deliverables/#D2F) is as follows:
 
