@@ -9,6 +9,38 @@ public class Common {
     public Common() {
     }
 
+    public Bag getBag() {
+        return bag;
+    }
+
+    public Centre getCentre() {
+        return centre;
+    }
+
+    public Discard getDiscard() {
+        return discard;
+    }
+
+    public Factory[] getFactories() {
+        return factories;
+    }
+
+    public void setBag(Bag bag) {
+        this.bag = bag;
+    }
+
+    public void setCentre(Centre centre) {
+        this.centre = centre;
+    }
+
+    public void setDiscard(Discard discard) {
+        this.discard = discard;
+    }
+
+    public void setFactories(Factory[] factories) {
+        this.factories = factories;
+    }
+
     /**
      * Initialize the Common area.
      */
