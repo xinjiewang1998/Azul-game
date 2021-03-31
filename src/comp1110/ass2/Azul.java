@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Azul {
     /**
@@ -508,8 +509,66 @@ public class Azul {
      * TASK 5
      */
     public static char drawTileFromBag(String[] gameState) {
+        int indexF = gameState[0].indexOf('F', 0);
+        int indexC = gameState[0].indexOf('C', indexF + 1);
+        int indexB = gameState[0].indexOf('B', indexC + 1);
+        int indexD = gameState[0].indexOf('D', indexB + 1);
+        String a =gameState[0].substring(indexB+1,indexD);
+        ArrayList<String> B = new ArrayList<>();
+        for(int i = 0;i<a.length()-1;i=i+2){
+            B.add(a.substring(i,i+2));
+        }
+        int num = 0;
+        for (String s : B) {
+            if (s.equals("00")) {
+                num++;
+            }
+        }
+        String b =gameState[0].substring(indexD+1);
+        ArrayList<String> D = new ArrayList<>();
+        if(num ==B.size()){
+            for(int i = 0;i<a.length()-2;i=i+2){
+                D.add(a.substring(i,i+2));
+            }
+            int numD=0;
+            for (String s : D) {
+                if (s.equals("00")) {
+                    numD++;
+                }
+            }
+            if (numD==D.size()){
+                return 'Z';
+            }
+            else{
+                for (int i =0;i<B.size();i=i+2){
+                    B.set(i, D.get(i));
+                    if(Integer.parseInt(D.get(i))<10){
+                        B.add(i,"0");
+                    }
+                }
+            }
+        }
+        Random r = new Random();
+        char result =' ';
+        char[] tile = {'a','b','c','d','e'};
+        while(true){
+         int position = r.nextInt(5);
+         if(!B.get(position).equals("00")){
+             //String to int
+             int p = Integer.parseInt(B.get(position));
+             p = p-1;
+             B.set(position,""+p);
+             result = tile[position];
+             break;
+         }
+        }
+        //for (int i = indexB; i < gameState[0].length(); i++) {
+            //if (i > indexB && i < indexD-1) {
+                //chars.add(gameState[0].charAt(i));
+            //}
+       // }
         // FIXME Task 5
-        return '0';
+        return result;
     }
 
     /**
@@ -522,8 +581,73 @@ public class Azul {
      * TASK 6
      */
     public static String[] refillFactories(String[] gameState) {
+        int indexF = gameState[0].indexOf('F', 0);
+        int indexC = gameState[0].indexOf('C', indexF + 1);
+        int indexB = gameState[0].indexOf('B', indexC + 1);
+        int indexD = gameState[0].indexOf('D', indexB + 1);
+        String f =gameState[0].substring(indexF+1,indexC);
+        String b = gameState[0].substring(indexB+1,indexD);
+        String a =gameState[0];
+        ArrayList<String> B = new ArrayList<>();
+        ArrayList<String> F = new ArrayList<>();
+        for(int i = 0;i<b.length()-1;i=i+2){
+            B.add(b.substring(i,i+2));
+        }
+        int index = 0;
+        if(f.length()!=0){
+            return gameState;
+        }
+        else{
+            for(int i=0;i<5;i++){
+                F.add(""+i);
+                for (int j=0;j<4;j++){
+                    char tile = drawTileFromBag(gameState);
+
+                    if(tile=='a'){
+                        if(Integer.parseInt(B.get(0)) -1<10){
+                        B.set(0,"0"+(Integer.parseInt(B.get(0)) -1));
+                        }else{
+                            B.set(0,""+(Integer.parseInt(B.get(0)) -1));
+                        }
+                    }
+                    if(tile=='b'){
+                        if(Integer.parseInt(B.get(1)) -1<10){
+                        B.set(1,"0"+(Integer.parseInt(B.get(1)) -1));}
+                        else{
+                            B.set(1,""+(Integer.parseInt(B.get(1)) -1));
+                        }
+                    }
+                    if(tile=='c'){
+                        if(Integer.parseInt(B.get(2)) -1<10){
+                            B.set(2,"0"+(Integer.parseInt(B.get(2)) -1));
+                        }else{
+                            B.set(2,""+(Integer.parseInt(B.get(2)) -1));
+                        }
+                    }
+                    if(tile=='d'){
+                        if(Integer.parseInt(B.get(3)) -1<10){
+                            B.set(3,"0"+(Integer.parseInt(B.get(3)) -1));
+                        }else{
+                            B.set(3,""+(Integer.parseInt(B.get(3)) -1));
+                        }
+                    }
+                    if(tile=='e'){
+                        if(Integer.parseInt(B.get(4)) -1<10){
+                            B.set(4,"0"+(Integer.parseInt(B.get(4)) -1));
+                        }else{
+                            B.set(4,""+(Integer.parseInt(B.get(4)) -1));
+                        }
+                    }
+                    if(tile!='Z'){
+                    F.add(""+tile);
+                }
+                    gameState[0] = "F"+String.join("", F)+a.substring(indexC,indexB)+"B"+String.join("", B)+a.substring(indexD);
+                }
+            }
+        }
+        //gameState[0] = "F"+String.join("", F)+gameState[0].substring(indexC,indexB)+"B"+String.join("", B)+gameState[0].substring(indexD);
         // FIXME Task 6
-        return null;
+        return gameState;
     }
 
     /**
