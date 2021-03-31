@@ -1,5 +1,7 @@
 package comp1110.ass2.gui;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class Viewer extends Application {
@@ -21,15 +25,41 @@ public class Viewer extends Application {
     private TextField playerTextField;
     private TextField boardTextField;
 
+    private final ArrayList<Color> colorArrayList = new ArrayList<>(
+            Arrays.asList(Color.BLUE, Color.GREEN, Color.ORANGE, Color.PURPLE, Color.RED)
+    );
+
+    private Rectangle[][] mosaic = new Rectangle[5][5];
 
     /**
      * Draw a placement in the window, removing any previously drawn placements
      *
-     * @param state an array of two strings, representing the current game state
-     *              TASK 4
+     * @param state an array of two strings, representing the current game state TASK 4
      */
     void displayState(String[] state) {
         // FIXME Task 4: implement the simple state viewer
+        // A20Ma02a13b00e42S2a13e44a1Faabbe
+        // A20 M a02 a13 b00 e42 S 2a1 3e4 4a1 F aabbe
+
+        String playerState = state[0];
+        String boardState = state[1];
+
+        int indexM = playerState.indexOf("M");
+        int indexS = playerState.indexOf("S");
+
+        String substring = playerState.substring(indexM, indexS);
+        decodeMosaic(substring);
+    }
+
+    void decodeMosaic(String positions) {
+        for(int i = 1; i < positions.length(); i++) {
+            char code = positions.charAt(i);
+            i = i + 1;
+            int row = positions.charAt(i) - 48;
+            i = i + 1;
+            int column = positions.charAt(i) - 48;
+            mosaic[row][column].setOpacity(1.0);
+        }
     }
 
     /**
@@ -64,13 +94,59 @@ public class Viewer extends Application {
         primaryStage.setTitle("Azul Viewer");
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
+        Rectangle storageRect = new Rectangle(50, 50, 410, 410);
+        storageRect.setFill(Color.GREY);
+        root.getChildren().add(storageRect);
+
+        Rectangle mosaicRect = new Rectangle(700, 50, 410, 410);
+        mosaicRect.setFill(Color.YELLOW);
+//        root.getChildren().add(mosaicRect);
+
+        Rectangle floorRect = new Rectangle(50, 500, 570, 90);
+        floorRect.setFill(Color.RED);
+        root.getChildren().add(floorRect);
+
+//        Rectangle tileRect = new Rectangle(420, 100, 80, 80);
+//        tileRect.setFill(Color.GREEN);
+//        root.getChildren().add(tileRect);
+
+
+        ////////////////////// STORAGE //////////////////////
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (i + j <= 3) {
+                    continue;
+                }
+                Rectangle tileRect = new Rectangle(50 + 10 + 80 * j,
+                        50 + 10 + 80 * i, 70, 70);
+                tileRect.setFill(Color.GREEN);
+                root.getChildren().add(tileRect);
+            }
+        }
+
+        ////////////////////// <MOSAIC> //////////////////////
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                Rectangle tileRect = new Rectangle(700 + 10 + 80 * j,
+                        50 + 10 + 80 * i, 70, 70);
+                tileRect.setFill(colorArrayList.get((j - i + 5) % 5));
+                tileRect.setOpacity(0.2);
+                mosaic[i][j] = tileRect;
+                root.getChildren().add(tileRect);
+            }
+        }
+
+        ////////////////////// FLOOR //////////////////////
+        for (int i = 0; i < 7; i++) {
+            Rectangle tileRect = new Rectangle(50 + 10 + 80 * i,
+                    500 + 10, 70, 70);
+            tileRect.setFill(Color.GREEN);
+            root.getChildren().add(tileRect);
+        }
+
         root.getChildren().add(controls);
-
         makeControls();
-
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 }
-
-
