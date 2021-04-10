@@ -1,33 +1,36 @@
 package comp1110.ass2.common;
 
-import comp1110.ass2.Tile;
-
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Random;
 
 public class Bag {
 
     private final int COLOR_LIMIT = 20;
-    private ArrayList<Tile> bag = new ArrayList<>();
+    //private ArrayList<Tile> bag = new ArrayList<>();
+    private String bag;
+    private String discard;
 
-    public ArrayList<Tile> getBag() {
+    public String getBag() {
         return bag;
     }
 
-    public void setBag(ArrayList<Tile> bag) {
+    public void setBag(String bag) {
         this.bag = bag;
     }
 
     //constructor
+    //public Bag() {
+    //for (int i = 0; i < COLOR_LIMIT; i++) {
+    //bag.add(Tile.Blue);
+    //bag.add(Tile.Green);
+    //bag.add(Tile.Orange);
+    //bag.add(Tile.Purple);
+    // bag.add(Tile.Red);
+    // }
+    //Collections.shuffle(bag);
+    // }
     public Bag() {
-        for (int i = 0; i < COLOR_LIMIT; i++) {
-            bag.add(Tile.Blue);
-            bag.add(Tile.Green);
-            bag.add(Tile.Orange);
-            bag.add(Tile.Purple);
-            bag.add(Tile.Red);
-        }
-        Collections.shuffle(bag);
+
     }
 
     /**
@@ -37,8 +40,61 @@ public class Bag {
      *
      * @return a Array contains four tiles.
      */
-    public ArrayList<Tile> takeTiles() {
-        return new ArrayList<>();
+    public char drawTile(String[] gameState) {
+        ArrayList<String> B = new ArrayList<>();
+        int indexF = gameState[0].indexOf('F', 0);
+        int indexC = gameState[0].indexOf('C', indexF + 1);
+        int indexB = gameState[0].indexOf('B', indexC + 1);
+        int indexD = gameState[0].indexOf('D', indexB + 1);
+        this.bag = gameState[0].substring(indexB + 1, indexD);
+        this.discard = gameState[0].substring(indexD + 1);
+        for (int i = 0; i < this.bag.length() - 1; i = i + 2) {
+            B.add(this.bag.substring(i, i + 2));
+        }
+        int num = 0;
+        for (String s : B) {
+            if (s.equals("00")) {
+                num++;
+            }
+        }
+        //String b = gameState[0].substring(indexD + 1);
+        ArrayList<String> D = new ArrayList<>();
+        if (num == B.size()) {
+            for (int i = 0; i < this.discard.length() - 2; i = i + 2) {
+                D.add(this.discard.substring(i, i + 2));
+            }
+            //refill the Bag from Discard
+
+            for (int n =0;n<D.size();n=n+1){
+            D.set(n,"00");}
+            B = refill(B,D);
+            int numB=0;
+            for (String s : B) {
+                if (s.equals("00")) {
+                    numB++;
+                }
+            }
+            if (numB==B.size()) {
+                return 'Z';
+            }
+
+        }
+        Random r = new Random();
+        char result = ' ';
+        char[] tile = {'a', 'b', 'c', 'd', 'e'};
+        while (true) {
+            int position = r.nextInt(5);
+            if (!B.get(position).equals("00")) {
+                //String to int
+                int p = Integer.parseInt(B.get(position));
+                p = p - 1;
+                B.set(position, "" + p);
+                result = tile[position];
+                break;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -48,10 +104,17 @@ public class Bag {
      * <p>
      * refill from discard.
      *
-     * @param discard a array contains tiles in discard
+     * @param B Statement of Bag
+     * @param D Statement of Discard
+     * @return Statement of Bag after being refilled
      */
-    public void refill(Discard discard) {
+    public ArrayList<String> refill(ArrayList<String> B, ArrayList<String> D) {
+        for (int n =0;n<B.size();n=n+1){
+            B.set(n, D.get(n));
+        }
 
+
+        return B;
     }
 
     @Override

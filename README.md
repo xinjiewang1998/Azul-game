@@ -30,7 +30,7 @@ You will be marked according to whatever is committed to your repository at the 
 You will be assessed on how effectively you use Git as a development tool.
 
 ## Problem Description
-Your task is to implement in Java, using JavaFX, a board game called [Azul](https://planbgames.com/azul-next-move-games-michael-kiesling-strategy-abstract-board-game-winner-spiel-des-jahres-game-of-the-year-cannes-portuguese-tiles-royal-palace-of-evora-1),
+Your task is to implement in Java, using JavaFX, a comp1110.ass2.board game called [Azul](https://planbgames.com/azul-next-move-games-michael-kiesling-strategy-abstract-board-game-winner-spiel-des-jahres-game-of-the-year-cannes-portuguese-tiles-royal-palace-of-evora-1),
 designed by [Michael Kiesling](https://en.wikipedia.org/wiki/Michael_Kiesling) and published by [Plan B Games](https://planbgames.com/en).
 Board Game Geek provides a [description of Azul](https://boardgamegeek.com/boardgame/230802/azul).
 
@@ -60,7 +60,7 @@ There is also one special "first player" tile.
 
 ## Game setup
 
-Each player has their own board on which they will play. Each board contains:
+Each player has their own comp1110.ass2.board on which they will play. Each comp1110.ass2.board contains:
 - five storage *rows*;
 - a *Floor* area; and
 - a *Mosaic* area.
@@ -102,7 +102,7 @@ On your turn, you must either:
 2. Pick all tiles of the same colour from the centre. If you are the first person to do so, you also take the starting player
    token and place it on your floor. You will be the first player next round.
 
-After picking up tiles, you must add them to **one** of the five *storage rows* on your board, adhering to the following conditions:
+After picking up tiles, you must add them to **one** of the five *storage rows* on your comp1110.ass2.board, adhering to the following conditions:
 1. You must place the tiles **from right to left** in your chosen row.
 2. If a row already contains tiles, you may only add tiles of the same colour to it.
 3. If you have more tiles than can fit in your chosen row, then you must place the excess tiles on the *floor*.
@@ -145,7 +145,7 @@ This is a suggested mosaic pattern. It obeys all the rules of the variant mosaic
 *Each time you move a tile, score points **immediately***.
 
 2. Empty any row that no longer has a tile in the rightmost space and place all remaining tiles in the discard pile.
-   Any tiles that remain in incomplete rows on your board remain for the next round.
+   Any tiles that remain in incomplete rows on your comp1110.ass2.board remain for the next round.
 
 In the example below, the rightmost tiles `'e'` `'a'` and `'c'` are in complete rows.
 They are moved across into the `mosaic`, starting from row 0.
@@ -164,7 +164,7 @@ so they are left in the storage area for the next round.
 - If you are unable to move a tile of a certain colour across because there is no valid space
   left for it, you must place **all** tiles from that row onto your floor instead.
 2. As with the beginner mosaic, empty any row that no longer has a tile in the rightmost space and place these in the discard pile.
-   Any tiles that remain on your board remain for the next round.
+   Any tiles that remain on your comp1110.ass2.board remain for the next round.
 
 In the example below, the player must place an `'a'` tile in row 1 but cannot place it
 in columns 1, 3 or 4 because those columns already contain an `'a'` tile.
