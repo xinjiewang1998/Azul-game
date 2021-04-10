@@ -1,6 +1,11 @@
 package comp1110.ass2;
 
+import comp1110.ass2.board.Mosaic;
+import comp1110.ass2.common.Bag;
+import comp1110.ass2.common.Factory;
+
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Azul {
     /**
@@ -508,8 +513,8 @@ public class Azul {
      * TASK 5
      */
     public static char drawTileFromBag(String[] gameState) {
-        // FIXME Task 5
-        return '0';
+        Bag bag = new Bag();
+        return bag.drawTile(gameState);
     }
 
     /**
@@ -522,8 +527,9 @@ public class Azul {
      * TASK 6
      */
     public static String[] refillFactories(String[] gameState) {
-        // FIXME Task 6
-        return null;
+       Factory factory = new Factory();
+
+        return factory.addTilesFromBag(gameState);
     }
 
     /**
@@ -537,8 +543,8 @@ public class Azul {
      * TASK 7
      */
     public static int getBonusPoints(String[] gameState, char player) {
-        // FIXME Task 7
-        return -1;
+        Mosaic M = new Mosaic();
+        return M.calculateBonusScore(gameState,player);
     }
 
     /**
@@ -558,6 +564,8 @@ public class Azul {
      */
     public static String[] nextRound(String[] gameState) {
         // FIXME TASK 8
+
+
         return null;
     }
 

@@ -45,12 +45,12 @@ public class Common {
      * Initialize the Common area.
      */
     public void init() {
-        this.bag = new Bag();
+        //this.bag = new Bag();
         this.centre = new Centre();
         this.discard = new Discard();
         this.factories = new Factory[5];
         for (int i = 0;i<5;i++){
-            factories[i] = new Factory();
+            //factories[i] = new Factory();
         }
     }
 
