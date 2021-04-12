@@ -63,12 +63,12 @@ task5:
   allow_failure: true
 
 task6:
-  tags:
-    - comp1110
-  stage: test
-  script:
-    - $JUNIT -c=comp1110.ass2.RefillFactoriesTest
-  allow_failure: true
+    tags:
+      - comp1110
+    stage: test
+    script:
+      - $JUNIT -c=comp1110.ass2.RefillFactoriesTest
+    allow_failure: true
 
 task7:
   tags:
@@ -76,6 +76,14 @@ task7:
   stage: test
   script:
     - $JUNIT -c=comp1110.ass2.GetBonusPointsTest
+  allow_failure: true
+
+task8:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.NextRoundTest
   allow_failure: true
 
 task9:
@@ -100,6 +108,14 @@ task11:
   stage: test
   script:
     - $JUNIT -c=comp1110.ass2.ApplyMoveTest
+  allow_failure: true
+
+task13:
+  tags:
+    - comp1110
+  stage: test
+  script:
+    - $JUNIT -c=comp1110.ass2.GenerateActionTest
   allow_failure: true
 
 ## Local Variables:

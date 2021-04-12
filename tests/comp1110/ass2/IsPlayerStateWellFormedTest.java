@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class IsPlayerStateWellFormedTest {
     private void test(String in, boolean expected) {
         boolean out = Azul.isPlayerStateWellFormed(in);
-        assertEquals(expected, out, "isPlayerStateWellFormed for input state: " + in + "'");
+        assertEquals(expected, out, "isPlayerStateWellFormed for input state: \"" + in + "\"");
     }
 
     @Test
