@@ -60,14 +60,15 @@ public class Bag {
         //String b = gameState[0].substring(indexD + 1);
         ArrayList<String> D = new ArrayList<>();
         if (num == B.size()) {
-            for (int i = 0; i < this.discard.length() - 2; i = i + 2) {
+            for (int i = 0; i < this.discard.length(); i = i + 2) {
                 D.add(this.discard.substring(i, i + 2));
             }
             //refill the Bag from Discard
 
-            for (int n =0;n<D.size();n=n+1){
-            D.set(n,"00");}
+
             B = refill(B,D);
+            for (int n =0;n<D.size();n=n+1){
+                D.set(n,"00");}
             int numB=0;
             for (String s : B) {
                 if (s.equals("00")) {
@@ -82,17 +83,26 @@ public class Bag {
         Random r = new Random();
         char result = ' ';
         char[] tile = {'a', 'b', 'c', 'd', 'e'};
-        while (true) {
-            int position = r.nextInt(5);
-            if (!B.get(position).equals("00")) {
-                //String to int
-                int p = Integer.parseInt(B.get(position));
-                p = p - 1;
-                B.set(position, "" + p);
-                result = tile[position];
-                break;
+        ArrayList<Character> Bag = new ArrayList<>();
+        for(int i = 0;i<B.size(); i++){
+            for(int j =0;j<Integer.parseInt(B.get(i));j++){
+                Bag.add(tile[i]);
             }
         }
+            int position = r.nextInt(Bag.size());
+            result = Bag.get(position);
+
+        //while (true) {
+            //int position = r.nextInt(5);
+            //if (!B.get(position).equals("00")) {
+                //String to int
+                //int p = Integer.parseInt(B.get(position));
+                //p = p - 1;
+                //B.set(position, "" + p);
+               // result = tile[position];
+                //break;
+           // }
+        //}
 
         return result;
     }
@@ -112,7 +122,6 @@ public class Bag {
         for (int n =0;n<B.size();n=n+1){
             B.set(n, D.get(n));
         }
-
 
         return B;
     }
