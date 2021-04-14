@@ -50,7 +50,7 @@ There is a great video walk-through on YouTube by [Meeple University](https://ww
 however you must read this page in its entirety.
 
 For a complete description, and in case of any ambiguities in the assignment description,
-consult the [game rules](https://www.boardgamecapital.com/game_rules/azul.pdf), which are distributed with the published game.   
+consult the [game rules](https://www.boardgamecapital.com/game_rules/azul.pdf), which are distributed with the published game.
 
 ### Tiles
 
@@ -304,8 +304,8 @@ The Discard is an 11-character string that represents the tiles in the Discard a
 
 #### Entire Shared State String
 
-- A complete shared state string at the start of the game (with full factories and an empty discard area) might look like this: `"F0cdde1bbbe2abde3cdee4bcceCfB1915161614D0000000000"`
-- At the end of the first turn, after emptying all the factories and discarding some tiles, the shared state string might look like this: `"FCB1915161614D0003010203"`
+- A complete shared state string at the start of the game (with full factories and an empty discard area) might look like this: `"AF0cdde1bbbe2abde3cdee4bcceCfB1915161614D0000000000"`
+- At the end of the first turn, after emptying all the factories and discarding some tiles, the shared state string might look like this: `"AFCB1915161614D0003010203"`
 
 ### Player States - `state[1]`
 `state[1]` is a string representing the individual player states.
@@ -362,7 +362,7 @@ An empty Floor string would look like this: `"F"`
 #### Entire Player State
 
 * A *single* player state string might look like this: `"A20Ma02a13b00e42S2a13e44a1Faabbe"`
-* A *full* player state string for 2 players might look like this: `"A20Ma02a13b00e42S2a13e44a1FaabbeB30fMc01b11d21S0e12b2F"`
+* A *full* player state string for 2 players might look like this: `"A20Ma02a13b00e42S2a13e44a1FaabbeB30Mc01b11d21S0e12b2F"`
 * An *empty* player state string for 2 players would look like this: `"A0MSFB0MSF"`
 
 
