@@ -46,8 +46,10 @@ public class ExampleGames {
             "BF0aace1acdd2abce3bbeee4cdeeCB1617161714D0000000000", // factory contains > 4 tiles.
             "BF0aace1acdd2abce3bbee4cedCB1617161714D0000000000", // tiles in factory not alphabetical
             "AF0aace1acdd2abce3bbee4cdeCB3117163714D0000000000", // greater than 20 tiles (one colour) in bag.
-            "BF0aace1acdd2abce3bbee4cdeeCB161716171413D0000000000", // greater than 11 characters in centre string
-            "AF0aace1acdd2abce3bbee4cdeeCB1617161714D00000000000" // greater than 11 characters in discard string
+            "BF0aace1acdd2abce3bbee4cdeeCB161716171413D0000000000", // greater than 11 characters in bag string
+            "AF0aace1acdd2abce3bbee4cdeeCB1617161714D00000000000", // greater than 11 characters in discard string
+            "AFCaaabcfeB1108151109D0003010204" // tiles in centre not in alphabetical order.
+
     };
 
     public static final String[] WELL_FORMED_PLAYER_STATE = {
@@ -166,7 +168,7 @@ public class ExampleGames {
             new String[]{"BFCB0609090913D0003000402", "A29Mb00a01c02d03e04d10b11c13a14a20c21e22a32b33a43d44S1e1FabdfB10Mb00a01c02e03d04d12a13b14c21b23e24b31d33S1c22a13c44a4Fa", "B10"},
             new String[]{"BFCB0609090913D0003010402", "A29Mb00a01c02d03e04d10b11c13a14a20c21e22a32b33a43d44S1e1FabdfB12Mb00a01c02e03d04c10d12a13b14c21b23e24b31d33S2a13c44a4Fa", "B34"},
             new String[]{"AFCB0609090913D0003040402", "A29Mb00a01c02d03e04d10b11c13a14a20c21e22a32b33a43d44S1e1FabdfB18Mb00a01c02e03d04c10d12a13b14c21b23e24b31d33c34S2a14a4Fa"},
-            new String[]{"AFCfB0609090913D0204040502", "A23Mb00a01c02d03e04d10b11c13a14a20c21e22a32b33a43d44S1e1FB17Mb00a01c02e03d04c10d12a13b14c21b23e24b31d33c34S2a14a4F"}
+            new String[]{"AFCfB0609090913D0204040502", "A35Mb00a01c02d03e04d10b11c13a14a20c21e22a32b33a43d44S1e1FB19Mb00a01c02e03d04c10d12a13b14c21b23e24b31d33c34S2a14a4F"}
 
     };
 

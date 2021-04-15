@@ -2,6 +2,9 @@ package comp1110.ass2;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
+import static comp1110.ass2.ExampleGames.FULL_GAME_WITH_MOVES;
 import static comp1110.ass2.ExampleGames.VALID_STATES;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +24,7 @@ public class RefillFactoriesTest {
     @Test
     public void testCorrectNumberOfTiles() {
         for (String[] validState : VALID_STATES) {
-            String[] out = Azul.refillFactories(validState);
+            String[] out = Azul.refillFactories(validState.clone());
             assertNotNull(out, "Azul.refillFactories({\"" + validState[0] + "\", \"" + validState[1] + "\"})");
             String sharedState = out[0].substring(1);
             String errorMessagePrefix = errorPrefix(validState, out);
@@ -79,7 +82,7 @@ public class RefillFactoriesTest {
     public void testEmptyBag() {
         String[] emptyBag = {"BFCB0000000000D1314121012", "A40Mb01d03e04e10a11c13d14d20a22b23c24e32a33b34d42e43S2e23c3FadfB25Ma00b01e10a11b12d14d20e21c24c30b40c41a44S3d3F"};
         String[] pre = emptyBag[0].split("(?=[BD])")[2].substring(1).split("(?<=\\G.{2})");
-        String[] out = Azul.refillFactories(emptyBag);
+        String[] out = Azul.refillFactories(emptyBag.clone());
         String errorMessagePrefix = errorPrefix(emptyBag, out);
         assertNotNull(out, errorMessagePrefix);
         String[] postBag = out[0].split("(?=[BD])")[1].substring(1).split("(?<=\\G.{2})");
@@ -97,7 +100,7 @@ public class RefillFactoriesTest {
     @Test
     public void testMissingTiles() {
         String[] missingA = {"AFCfB0013041410D1207120108", "A0MS1a12e23c24a4FB0MS1d22c23a34d3F"};
-        String[] out = Azul.refillFactories(missingA);
+        String[] out = Azul.refillFactories(missingA.clone());
         String errorMessagePrefix = errorPrefix(missingA, out);
         assertNotNull(out, errorMessagePrefix);
         String[] fact = out[0].split("[FC]");
@@ -114,7 +117,7 @@ public class RefillFactoriesTest {
     @Test
     public void testPartialBag() {
         String[] state = {"AFCfB0012000006D0903090705", "A0Ma00b01c02d03e10a11c13d14e21a22b23c24c30d31e32b34b40d42e43a44S3a34c4FB0Md00a01e04e11e20b21d22c23e32d33e43S1d22c23a34d4F"};
-        String[] out = Azul.refillFactories(state);
+        String[] out = Azul.refillFactories(state.clone());
         String errorMessagePrefix = errorPrefix(state, out);
         assertNotNull(out, errorMessagePrefix);
         int[] counts = new int[5];
@@ -131,5 +134,18 @@ public class RefillFactoriesTest {
                 + counts[0] + " 'a' tiles,\n" + counts[2] + " 'c' tiles,\n" + counts[3] + " 'd' tiles.");
     }
 
-
+    @Test
+    public void testFactoriesNotEmpty() {
+        for (int i = 0; i < 9; i++) {
+            String[] state = new String[2];
+            state[0] = FULL_GAME_WITH_MOVES[i][0];
+            state[1] = FULL_GAME_WITH_MOVES[i][1];
+            String[] out = Azul.refillFactories(state.clone());
+            String errorMessagePrefix = errorPrefix(state, out);
+            assertEquals(Arrays.toString(state), Arrays.toString(out), errorMessagePrefix + "factories and/or centre are not empty, factories cannot be refilled");
+        }
+        String[] out = Azul.refillFactories(VALID_STATES[1].clone());
+        String errorMesagePrefix = errorPrefix(VALID_STATES[1], out);
+        assertNotEquals(Arrays.toString(VALID_STATES[1]), Arrays.toString(out), errorMesagePrefix + "expected factories to be refilled");
+    }
 }
