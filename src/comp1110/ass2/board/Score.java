@@ -1,26 +1,18 @@
 package comp1110.ass2.board;
 
 public class Score {
-<<<<<<< HEAD
 
-    int score;
 
-    public Score() {
-        score = 0;
-    }
-
-    public void minus (int anotherNum) {
-        if (score > anotherNum) {
-            this.score -= anotherNum;
-        } else {
-            this.score = 0;
-        }
-=======
     private int score;
 
     public Score(int score) {
         this.score = score;
     }
+
+    public Score() {
+        score = 0;
+    }
+
 
     /**
      * add other score
@@ -36,6 +28,14 @@ public class Score {
      */
     public void addScore(Score otherScore) {
         // FIXME
+    }
+
+    public void minus (int anotherNum) {
+        if (score > anotherNum) {
+            this.score -= anotherNum;
+        } else {
+            this.score = 0;
+        }
     }
 
     /**
@@ -69,6 +69,5 @@ public class Score {
     public String toString() {
         // FIXME
         return "";
->>>>>>> a91385b2ffdf018acb34b1448499b292d5f24f2f
     }
 }

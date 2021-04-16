@@ -1,21 +1,5 @@
 package comp1110.ass2.board;
 
-<<<<<<< HEAD
-public class Board {
-
-    // fields
-    Floor floor;
-    Mosaic mosaic;
-    Storage storage;
-
-    // constructors
-    public Board() {
-
-    }
-
-    // methods
-
-=======
 import comp1110.ass2.Tile;
 import java.util.ArrayList;
 
@@ -65,5 +49,4 @@ public class Board {
         // FIXME
         return "";
     };
->>>>>>> a91385b2ffdf018acb34b1448499b292d5f24f2f
 }

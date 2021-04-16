@@ -1,8 +1,6 @@
 package comp1110.ass2.board;
 
 import comp1110.ass2.Tile;
-<<<<<<< HEAD
-
 
 import comp1110.ass2.common.Discard;
 import java.util.ArrayDeque;
@@ -12,8 +10,12 @@ import java.util.List;
 
 public class Storage {
 
+
+    private final int NUM_ROWS = 5;
+    private final int[] MAX_LENGTH = new int[]{1, 2, 3, 4, 5};
+
+
     final int STORAGE_LENGTH = 5;
-    final int[] MAX_LENGTH = new int[]{1, 2, 3, 4, 5};
 
     List<Deque<Tile>> ladder;
 
@@ -67,9 +69,9 @@ public class Storage {
     public int tileAndScore() {
         int total = 0;
         // tiling
-        for(int i = 0; i < STORAGE_LENGTH; i++) {
+        for (int i = 0; i < STORAGE_LENGTH; i++) {
             Deque<Tile> row = ladder.get(i);
-            if(MAX_LENGTH[i] == row.size()) {
+            if (MAX_LENGTH[i] == row.size()) {
 
                 // tiling
                 int score = mosaic.putTile(row.pop(), i);
@@ -80,14 +82,7 @@ public class Storage {
             }
         }
         return total;
-=======
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-
-public class Storage {
-
-    private final int NUM_ROWS = 5;
-    private final int[] MAX_LENGTH = new int[]{1, 2, 3, 4, 5};
+    }
 
 
     // ArrayList is better for access each elements,
@@ -141,6 +136,5 @@ public class Storage {
     public String toString() {
         // FIXME
         return "";
->>>>>>> a91385b2ffdf018acb34b1448499b292d5f24f2f
     }
 }

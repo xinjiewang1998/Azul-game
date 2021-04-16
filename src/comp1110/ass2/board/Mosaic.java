@@ -3,28 +3,33 @@ package comp1110.ass2.board;
 import comp1110.ass2.Tile;
 import java.util.ArrayList;
 import java.util.Arrays;
-<<<<<<< HEAD
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Mosaic {
 
     final int MOSAIC_LENGTH = 5;
-    final ArrayList<String> DEFAULT_COLORS = new ArrayList<>(
-            Arrays.asList("blue", "green", "orange", "purple", "red"));
-
     Tile[][] matrix;
     int[] colorCount;
+
+    private final int NUM_ROWS = 5;
+    private final ArrayList<String> DEFAULT_COLORS = new ArrayList<>(
+            Arrays.asList("blue", "green", "orange", "purple", "red"));
+
+    // simple [][] is enough for use.
+    private Tile[][] square;
+
+    public Mosaic (Tile[][]matrix) {
+        this.matrix = matrix;
+        this.square = new Tile[NUM_ROWS][NUM_ROWS];
+    }
 
     public Mosaic() {
         matrix = new Tile[MOSAIC_LENGTH][MOSAIC_LENGTH];
         colorCount = new int[] {0, 0, 0, 0, 0};
     }
 
-    public boolean hasColor(String color, int row) {
-        int column = (row + DEFAULT_COLORS.indexOf(color)) % MOSAIC_LENGTH;
-        return (matrix[row][column] != null);
-    }
+
 
     // no safety guarantee, please call hasColor first if required.
     public int putTile(Tile t, int row) {
@@ -76,21 +81,7 @@ public class Mosaic {
         return (hasHorizontallyLinkedTiles && hasVerticallyLinkedTiles) ? count + 1 : count;
     }
 
-    public boolean hasCompleteRow() {
-        for (int i = 0; i < MOSAIC_LENGTH; i++) {
-            boolean allFilled = true;
-            for(int j = 0; j < MOSAIC_LENGTH; j++) {
-                if(matrix[i][j]==null) {
-                    allFilled = false;
-                    break;
-                }
-            }
-            if(allFilled) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     public int getBonus() {
         int total = 0;
@@ -121,43 +112,6 @@ public class Mosaic {
         }
         return total;
     }
-}
-
-
-
-
-
-class Spot {
-    boolean isOccupied;
-    String defaultColor;
-    Tile tile;
-
-    public Spot(boolean isOccupied, String defaultColor) {
-        this.isOccupied = isOccupied;
-        this.defaultColor = defaultColor;
-    }
-
-    public boolean placeTile(Tile t) {
-        if (!this.isOccupied && this.defaultColor.equals(t.getColor())) {
-            this.isOccupied = true;
-            this.tile = t;
-            return true;
-        }
-        return false;
-=======
-
-public class Mosaic {
-
-    private final int NUM_ROWS = 5;
-    private final ArrayList<String> DEFAULT_COLORS = new ArrayList<>(
-            Arrays.asList("blue", "green", "orange", "purple", "red"));
-
-    // simple [][] is enough for use.
-    private Tile[][] square;
-
-    public Mosaic () {
-        this.square = new Tile[NUM_ROWS][NUM_ROWS];
-    }
 
     /**
      * calculate the column number according to the color and row number.
@@ -178,8 +132,8 @@ public class Mosaic {
      * @return true if the color exists in mosaic
      */
     public boolean hasColor(String color, int row) {
-        // FIXME
-        return true;
+        int column = (row + DEFAULT_COLORS.indexOf(color)) % MOSAIC_LENGTH;
+        return (matrix[row][column] != null);
     }
 
     /**
@@ -197,8 +151,19 @@ public class Mosaic {
      * @return true if exists a complete row
      */
     public boolean hasCompleteRow() {
-        // FIXME
-        return true;
+        for (int i = 0; i < MOSAIC_LENGTH; i++) {
+            boolean allFilled = true;
+            for(int j = 0; j < MOSAIC_LENGTH; j++) {
+                if(matrix[i][j]==null) {
+                    allFilled = false;
+                    break;
+                }
+            }
+            if(allFilled) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -385,18 +350,11 @@ public class Mosaic {
         }
 
         return Score;
->>>>>>> a91385b2ffdf018acb34b1448499b292d5f24f2f
     }
 
     @Override
     public String toString() {
-<<<<<<< HEAD
-        return this.defaultColor;
-    }
-=======
         // FIXME
         return "";
     }
-
->>>>>>> a91385b2ffdf018acb34b1448499b292d5f24f2f
 }
