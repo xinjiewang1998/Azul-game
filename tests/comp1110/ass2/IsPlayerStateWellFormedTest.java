@@ -7,10 +7,10 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @org.junit.jupiter.api.Timeout(value = 1000, unit = MILLISECONDS)
-public class isPlayerStateWellFormedTest {
+public class IsPlayerStateWellFormedTest {
     private void test(String in, boolean expected) {
         boolean out = Azul.isPlayerStateWellFormed(in);
-        assertEquals(expected, out, "isPlayerStateWellFormed for input state: " + in + "'");
+        assertEquals(expected, out, "isPlayerStateWellFormed for input state: \"" + in + "\"");
     }
 
     @Test

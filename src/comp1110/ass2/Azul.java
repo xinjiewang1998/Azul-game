@@ -8,9 +8,14 @@ public class Azul {
      * Note: you don't need to consider validity for this task.
      * A sharedState is well-formed if it satisfies the following conditions.
      * <p>
-     * [factories][centre][bag][discard]
-     * where [factories], [centre], [bag] and [discard] are replaced by the
+     * [turn][factories][centre][bag][discard]
+     * where [turn][factories], [centre], [bag] and [discard] are replaced by the
      * corresponding small string as described below.
+     * <p>
+     * 0. [turn] The Turn substring is one character 'A'-'D' representing a
+     * player, which indicates that it is this player's turn to make the next
+     * drafting move. (In a two-player game, the turn substring can only take
+     * the values 'A' or 'B').
      * <p>
      * 1. [factories] The factories substring begins with an 'F'
      * and is followed by a collection of *up to* 5 5-character factory strings

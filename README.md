@@ -50,7 +50,7 @@ There is a great video walk-through on YouTube by [Meeple University](https://ww
 however you must read this page in its entirety.
 
 For a complete description, and in case of any ambiguities in the assignment description,
-consult the [game rules](https://www.boardgamecapital.com/game_rules/azul.pdf), which are distributed with the published game.   
+consult the [game rules](https://www.boardgamecapital.com/game_rules/azul.pdf), which are distributed with the published game.
 
 ### Tiles
 
@@ -280,10 +280,10 @@ Each encoding of a singular Factory placement string is as follows:
 #### Centre
 The encoding for the Centre placement string is very similar for factories, but is not limited to 4 tiles.
 * The first character is a `"C"`.
-* The following characters are any number of `a` to `e` tiles, in alphabetical order.
+* The following characters are any number of `a` to `e` tiles and up to one `f` (first player) tile, in alphabetical order.
   for example:
 * `"C"` means the Centre is empty.
-* `"Caaaabbc"` means the Centre contains four `a` tiles, two `b` tiles and one `c` tile.
+* `"Caaaabbcf"` means the Centre contains four `a` tiles, two `b` tiles, one `c` tile and one `f` tile.
 
 #### Bag
 The Bag is an 11-character string that represents the tiles left in the Bag.
@@ -304,8 +304,8 @@ The Discard is an 11-character string that represents the tiles in the Discard a
 
 #### Entire Shared State String
 
-- A complete shared state string at the start of the game (with full factories and an empty discard area) might look like this: `"F0cdde1bbbe2abde3cdee4bcceCfB1915161614D0000000000"`
-- At the end of the first turn, after emptying all the factories and discarding some tiles, the shared state string might look like this: `"FCB1915161614D0003010203"`
+- A complete shared state string at the start of the game (with full factories and an empty discard area) might look like this: `"AF0cdde1bbbe2abde3cdee4bcceCfB1915161614D0000000000"`
+- At the end of the first turn, after emptying all the factories and discarding some tiles, the shared state string might look like this: `"AFCB1915161614D0003010203"`
 
 ### Player States - `state[1]`
 `state[1]` is a string representing the individual player states.
@@ -362,7 +362,7 @@ An empty Floor string would look like this: `"F"`
 #### Entire Player State
 
 * A *single* player state string might look like this: `"A20Ma02a13b00e42S2a13e44a1Faabbe"`
-* A *full* player state string for 2 players might look like this: `"A20Ma02a13b00e42S2a13e44a1FaabbeB30fMc01b11d21S0e12b2F"`
+* A *full* player state string for 2 players might look like this: `"A20Ma02a13b00e42S2a13e44a1FaabbeB30Mc01b11d21S0e12b2F"`
 * An *empty* player state string for 2 players would look like this: `"A0MSFB0MSF"`
 
 
@@ -457,7 +457,7 @@ The only **firm** requirements are that:
 * it runs in a 1280x768 window, and
 * that it is executable on the VDI from a JAR file called `game.jar`,
 
-Your game must successfully run from `game.jar` from within another user's (i.e. your tutor's) account on the VDI (in other words, your game must not depend on features not self-contained within that jar file, the Java 13 runtime and the JavaFX library).
+Your game must successfully run from `game.jar` from within another user's (i.e. your tutor's) account on the VDI (in other words, your game must not depend on features not self-contained within that jar file, the Java 15 runtime and the JavaFX library).
 
 An indicative grade level for each task for the [completion of part two](https://cs.anu.edu.au/courses/comp1110/assessments/deliverables/#D2F) is as follows:
 
