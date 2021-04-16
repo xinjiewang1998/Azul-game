@@ -4,23 +4,49 @@ import comp1110.ass2.Tile;
 import java.util.ArrayList;
 
 public class Centre {
+    private final int PLAYER_LIMIT = 1;
+    private ArrayList<Tile> centre = new ArrayList<>();
 
-    ArrayList<Tile> tile;
-
+    //constructor
     public Centre() {
-        tile = new ArrayList<>(tile);
+        centre.add(Tile.FirstPlayer);
     }
 
-    public ArrayList<Tile> getTiles() {
-        return this.tile;
+    public ArrayList<Tile> getCentre() {
+        return centre;
     }
 
-    public void setTiles(ArrayList<Tile> tiles) {
-        this.tile = tiles;
+    public void setCentre(ArrayList<Tile> centre) {
+        this.centre = centre;
     }
-
 
     public void addTileToCentre(Tile tile) {
-        this.tile.add(tile);
+        this.centre.add(tile);
+    }
+
+    /**
+     * move the remaining tiles on this factory to the centre.
+     *
+     * @param otherTiles a array contains remaining tiles on this factory
+     */
+    public void addTilesToCentre(ArrayList<Tile> otherTiles) {
+        //FIXME
+    }
+
+
+    /**
+     * Pick all tiles of the same colour from the centre.
+     *
+     * @param color the color player chose.
+     * @return a array contains all tiles of the same color player chose.
+     */
+    public ArrayList<Tile> takeTilesFromCentre(String color) {
+        //FIXME
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }

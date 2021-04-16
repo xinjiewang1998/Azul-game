@@ -1,6 +1,15 @@
 package comp1110.ass2;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+import comp1110.ass2.board.Mosaic;
+import comp1110.ass2.common.Bag;
+import comp1110.ass2.common.Factory;
+
+import java.util.ArrayList;
+import java.util.Random;
+>>>>>>> a91385b2ffdf018acb34b1448499b292d5f24f2f
 
 public class Azul {
     /**
@@ -228,7 +237,38 @@ public class Azul {
             }
         }
         return true;
+<<<<<<< HEAD
     }
+
+    /**
+     * 4. [discard] The discard substring starts with a 'D'
+     * and is followed by 5 2-character substrings defined the same as the
+     * bag substring.
+     * For example: "D0005201020" The bag contains zero 'a' tiles, five 'b'
+     * tiles, twenty 'c' tiles, ten 'd' tiles, and twenty 'e' tiles.
+     */
+    private static boolean isWellFormedDiscardString(ArrayList<Character> chars) {
+        if (chars.size() != 10) {
+            return false;
+        } else {
+            for(int i = 0; i < 10; i++) {
+                String s = chars.get(i).toString() + chars.get(++i).toString();
+                try {
+                    int num = Integer.parseInt(s);
+                    if (num < 0 || num > 20) {
+                        return false;
+                    }
+                } catch (Exception e) {
+                    return false;
+                }
+
+            }
+        }
+        return true;
+=======
+>>>>>>> a91385b2ffdf018acb34b1448499b292d5f24f2f
+    }
+
 
     /**
      * 4. [discard] The discard substring starts with a 'D'
@@ -513,8 +553,8 @@ public class Azul {
      * TASK 5
      */
     public static char drawTileFromBag(String[] gameState) {
-        // FIXME Task 5
-        return '0';
+        Bag bag = new Bag();
+        return bag.drawTile(gameState);
     }
 
     /**
@@ -527,8 +567,9 @@ public class Azul {
      * TASK 6
      */
     public static String[] refillFactories(String[] gameState) {
-        // FIXME Task 6
-        return null;
+       Factory factory = new Factory();
+
+        return factory.addTilesFromBag(gameState);
     }
 
     /**
@@ -542,8 +583,8 @@ public class Azul {
      * TASK 7
      */
     public static int getBonusPoints(String[] gameState, char player) {
-        // FIXME Task 7
-        return -1;
+        Mosaic M = new Mosaic();
+        return M.calculateBonusScore(gameState,player);
     }
 
     /**
@@ -563,6 +604,8 @@ public class Azul {
      */
     public static String[] nextRound(String[] gameState) {
         // FIXME TASK 8
+
+
         return null;
     }
 

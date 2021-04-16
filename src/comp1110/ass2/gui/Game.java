@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Game extends Application {
-    /* board layout */
+    /* comp1110.ass2.board layout */
     private static final int BOARD_WIDTH = 1200;
     private static final int BOARD_HEIGHT = 700;
 

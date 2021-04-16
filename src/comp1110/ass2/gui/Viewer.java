@@ -30,7 +30,8 @@ public class Viewer extends Application {
     );
 
     private Rectangle[][] mosaic = new Rectangle[5][5];
-
+    private Rectangle[][] Storage = new Rectangle[5][5];
+    private Rectangle[][] Floor = new Rectangle[1][7];
     /**
      * Draw a placement in the window, removing any previously drawn placements
      *
@@ -46,9 +47,17 @@ public class Viewer extends Application {
 
         int indexM = playerState.indexOf("M");
         int indexS = playerState.indexOf("S");
+        int indexF = playerState.indexOf("F");
+        int indexB = playerState.indexOf("B");
 
-        String substring = playerState.substring(indexM, indexS);
-        decodeMosaic(substring);
+        String substringm = playerState.substring(indexM, indexS);
+        decodeMosaic(substringm);
+
+        String substrings = playerState.substring(indexS, indexF);
+        decodeStorage(substrings);
+
+        String substringf = playerState.substring(indexF, indexB);
+        decodeFloor(substringf);
     }
 
     void decodeMosaic(String positions) {
@@ -59,6 +68,31 @@ public class Viewer extends Application {
             i = i + 1;
             int column = positions.charAt(i) - 48;
             mosaic[row][column].setOpacity(1.0);
+        }
+    }
+
+    void decodeStorage(String positions) {
+        for(int i = 1; i < positions.length(); i++) {
+            int row = positions.charAt(i) - 48;
+            i = i + 1;
+            char code =  positions.charAt(i);
+            String code1 = String.valueOf(code);
+            i = i + 1;
+            int num = positions.charAt(i) - 48;
+            for(int j =1; j<=num;j++){
+                switch (code1){
+                    case "a":
+                        //想把灰色的初始瓷砖变成解码出来的颜色
+                };
+            }
+        }
+    }
+
+    void decodeFloor(String positions) {
+        for(int i = 1; i < positions.length(); i++) {
+            char code = positions.charAt(i);
+            i = i + 1;
+            Floor[1][i].setOpacity(1.0);
         }
     }
 
@@ -110,7 +144,6 @@ public class Viewer extends Application {
 //        tileRect.setFill(Color.GREEN);
 //        root.getChildren().add(tileRect);
 
-
         ////////////////////// STORAGE //////////////////////
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -119,7 +152,11 @@ public class Viewer extends Application {
                 }
                 Rectangle tileRect = new Rectangle(50 + 10 + 80 * j,
                         50 + 10 + 80 * i, 70, 70);
-                tileRect.setFill(Color.GREEN);
+                tileRect.setFill(Color.GREY);
+                tileRect.setOpacity(0.2);
+                /*
+                怎么才能变色，底色是灰色，然后把decode出来的转成颜色填充进去
+                 */
                 root.getChildren().add(tileRect);
             }
         }
