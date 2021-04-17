@@ -22,8 +22,12 @@ public enum Tile {
      * @return the corresponding tile
      */
     public static Tile from(char code) {
-        // FIXME
-        return Blue;
+        for (Tile t : Tile.values()) {
+            if (code == t.code) {
+                return t;
+            }
+        }
+        return FirstPlayer;
     }
 
     /**
@@ -32,5 +36,13 @@ public enum Tile {
      */
     public String getColor() {
         return this.color;
+    }
+
+    /**
+     * Getter method for code.
+     * @return return the color code character
+     */
+    public char getColorCode() {
+        return this.code;
     }
 }

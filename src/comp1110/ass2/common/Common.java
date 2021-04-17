@@ -7,6 +7,7 @@ public class Common {
     private Factory[] factories;
 
     public Common() {
+        factories = new Factory[5];
     }
 
     public Bag getBag() {
@@ -63,7 +64,17 @@ public class Common {
 
     @Override
     public String toString() {
-        //FIXME
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append('F');
+        for(int i = 0; i <  this.factories.length; i++) {
+            stringBuilder.append(this.factories[i].toString());
+        }
+        stringBuilder.append('C');
+        stringBuilder.append(this.centre);
+        stringBuilder.append('B');
+        stringBuilder.append(this.bag);
+        stringBuilder.append('D');
+        stringBuilder.append(this.discard);
+        return stringBuilder.toString();
     }
 }

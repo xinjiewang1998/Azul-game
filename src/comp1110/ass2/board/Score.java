@@ -1,26 +1,45 @@
 package comp1110.ass2.board;
 
 public class Score {
+
+
     private int score;
 
     public Score(int score) {
         this.score = score;
     }
 
+    public Score() {
+        score = 0;
+    }
+
+
     /**
      * add other score
      * @param otherScore the other score with type int
+     * @return the score
      */
-    public void addScore(int otherScore) {
-        // FIXME
+    public Score addScore(int otherScore) {
+        this.score = Math.max(0, this.score + otherScore);
+        return this;
     }
 
     /**
      * add other score
      * @param otherScore the other score with type Score
+     * @return the score
      */
-    public void addScore(Score otherScore) {
-        // FIXME
+    public Score addScore(Score otherScore) {
+        this.score = Math.max(0, this.score + otherScore.getScore());
+        return this;
+    }
+
+    public void minus (int anotherNum) {
+        if (score > anotherNum) {
+            this.score -= anotherNum;
+        } else {
+            this.score = 0;
+        }
     }
 
     /**
@@ -50,9 +69,19 @@ public class Score {
         this.score = score;
     }
 
+    //////////////////NEW//////////////////////////////////
+
+
+    public void fillFrom(String scoreToken) {
+        this.score = Integer.parseInt(scoreToken);
+    }
+
+
     @Override
     public String toString() {
         // FIXME
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.score);
+        return stringBuilder.toString();
     }
 }

@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+
 import comp1110.ass2.board.Mosaic;
 import comp1110.ass2.common.Bag;
 import comp1110.ass2.common.Factory;
@@ -66,201 +67,10 @@ public class Azul {
      * TASK 2
      */
     public static boolean isSharedStateWellFormed(String sharedState) {
-        int indexF = sharedState.indexOf('F', 0);
-        int indexC = sharedState.indexOf('C', indexF + 1);
-        int indexB = sharedState.indexOf('B', indexC + 1);
-        int indexD = sharedState.indexOf('D', indexB + 1);
-
-        if (indexF == -1 || indexC == -1 || indexB == -1 || indexD == -1) {
-            return false;
-        }
-
-        ArrayList<Character> chars = new ArrayList<>();
-        for (int i = 0; i < sharedState.length(); i++) {
-            if (i > indexF && i < indexC) {
-                chars.add(sharedState.charAt(i));
-            } else if (i == indexC) {
-                if(!isWellFormedFactoryString(chars)) {
-                    return false;
-                }
-                chars.clear();
-            } else if (i > indexC && i < indexB){
-                chars.add(sharedState.charAt(i));
-            } else if (i == indexB) {
-                if(!isWellFormedCentreString(chars)) {
-                    return false;
-                }
-                chars.clear();
-            } else if (i > indexB && i < indexD) {
-                chars.add(sharedState.charAt(i));
-            } else if (i == indexD) {
-                if(!isWellFormedBagString(chars)) {
-                    return false;
-                }
-                chars.clear();
-            } else if (i > indexD) {
-                chars.add(sharedState.charAt(i));
-            }
-        }
-        if(!isWellFormedDiscardString(chars)){
-            return false;
-        }
-
-        return true;
+        Game game = new Game();
+        return game.isSharedStateWellFormed(sharedState);
     }
 
-    /**
-     * 1. [factories] The factories substring begins with an 'F'
-     * and is followed by a collection of *up to* 5 5-character factory strings
-     * representing each factory.
-     * Each factory string is defined in the following way:
-     * 1st character is a sequential digit '0' to '4' - representing the
-     * factory number.
-     * 2nd - 5th characters are 'a' to 'e', alphabetically - representing
-     * the tiles.
-     * A factory may have between 0 and 4 tiles. If a factory has 0 tiles,
-     * it does not appear in the factories string.
-     * Factory strings are ordered by factory number.
-     * For example: given the string "F1aabc2abbb4ddee": Factory 1 has tiles
-     * 'aabc', Factory 2 has tiles 'abbb', Factory 4 has tiles 'ddee', and
-     * Factories 0 and 4 are empty.
-     */
-    private static boolean isWellFormedFactoryString(ArrayList<Character> chars) {
-        ArrayList<Character> factories = new ArrayList<>();
-        ArrayList<Character> tiles = new ArrayList<>();
-
-        if(chars.size() == 0) {
-            return true;
-        }
-
-        for (int i = 0; i < chars.size(); i++) {
-            char c = chars.get(i);
-
-            if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4') {
-                factories.add(c);
-                if (i == 0) {
-                    continue;
-                }
-                if(tiles.size() == 0 || tiles.size() != 4) {
-                    return false;
-                }
-                tiles.clear();
-            } else if (c == 'a' || c == 'b' || c == 'c' || c == 'd' || c == 'e') {
-                if (i == 0) {
-                    return false;
-                }
-                tiles.add(c);
-            } else {
-                return false;
-            }
-        }
-
-        // check the remaining;
-        if (tiles.size() == 0 || tiles.size() != 4) {
-            return false;
-        }
-
-        // check unique and strictly increase
-        for (int i = 0; i < factories.size() - 1; i++) {
-            int curr = factories.get(i);
-            int next = factories.get(i+1);
-            if (next <= curr) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 2. [centre] The centre substring starts with a 'C'
-     * This is followed by *up to* 15 characters.
-     * Each character is 'a' to 'e', alphabetically - representing a tile
-     * in the centre.
-     * The centre string is sorted alphabetically.
-     * For example: "Caaabcdde" The Centre contains three 'a' tiles, one 'b'
-     * tile, one 'c' tile, two 'd' tile and one 'e' tile.
-     */
-    private static boolean isWellFormedCentreString(ArrayList<Character> chars) {
-        if (chars.size() > 15) {
-            return false;
-        }
-        int fCount = 0;
-        for (int i = 0; i < chars.size(); i++) {
-            char c = chars.get(i);
-            char prevChar, currChar;
-            if (c == 'a' || c == 'b' || c == 'c' || c == 'd' || c == 'e') {
-                if (i != 0 && (c - chars.get(i-1) < 0)) {
-                        return false;
-                }
-            } else if (c == 'f') {
-                fCount++;
-                if(fCount > 1) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 3. [bag] The bag substring starts with a 'B'
-     * and is followed by 5 2-character substrings
-     * 1st substring represents the number of 'a' tiles, from 0 - 20.
-     * 2nd substring represents the number of 'b' tiles, from 0 - 20.
-     * 3rd substring represents the number of 'c' tiles, from 0 - 20.
-     * 4th substring represents the number of 'd' tiles, from 0 - 20.
-     * 5th substring represents the number of 'e' tiles, from 0 - 20.
-     * For example: "B0005201020" The bag contains zero 'a' tiles, five 'b'
-     * tiles, twenty 'c' tiles, ten 'd' tiles and twenty 'e' tiles.
-     */
-    private static boolean isWellFormedBagString(ArrayList<Character> chars) {
-        if (chars.size() != 10) {
-            return false;
-        } else {
-            for(int i = 0; i < 10; i++) {
-                String s = chars.get(i).toString() + chars.get(++i).toString();
-                try {
-                    int num = Integer.parseInt(s);
-                    if (num < 0 || num > 20) {
-                        return false;
-                    }
-                } catch (Exception e) {
-                    return false;
-                }
-
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 4. [discard] The discard substring starts with a 'D'
-     * and is followed by 5 2-character substrings defined the same as the
-     * bag substring.
-     * For example: "D0005201020" The bag contains zero 'a' tiles, five 'b'
-     * tiles, twenty 'c' tiles, ten 'd' tiles, and twenty 'e' tiles.
-     */
-    private static boolean isWellFormedDiscardString(ArrayList<Character> chars) {
-        if (chars.size() != 10) {
-            return false;
-        } else {
-            for(int i = 0; i < 10; i++) {
-                String s = chars.get(i).toString() + chars.get(++i).toString();
-                try {
-                    int num = Integer.parseInt(s);
-                    if (num < 0 || num > 20) {
-                        return false;
-                    }
-                } catch (Exception e) {
-                    return false;
-                }
-
-            }
-        }
-        return true;
-    }
 
 
     /**
@@ -313,200 +123,11 @@ public class Azul {
      * TASK 3
      */
     public static boolean isPlayerStateWellFormed(String playerState) {
-        int[] indexes = new int[4];
-        indexes[0] = playerState.indexOf('A', 0);
-        indexes[1] = playerState.indexOf('B', indexes[0] + 1);
-        indexes[2] = playerState.indexOf('C', indexes[1] + 1);
-        indexes[3] = playerState.indexOf('D', indexes[2] + 1);
-        int starting = 0;
-        int ending = playerState.length();
-        ArrayList<String> subStrings = new ArrayList<>();
-        for (int i = 0; i < indexes.length; i++) {
-            if (indexes[i] != -1) {
-                String sub = playerState.substring(starting, indexes[i]);
-                subStrings.add(sub);
-                starting = indexes[i];
-            }
-        }
-        subStrings.add(playerState.substring(starting, ending));
-        subStrings.removeIf(sub -> sub.equals(""));
-
-        for(String sub: subStrings) {
-
-            int indexM = sub.indexOf('M', 1);
-            int indexS = sub.indexOf('S', indexM + 1);
-            int indexF = sub.indexOf('F', indexS + 1);
-
-            if (indexM == -1 || indexS == -1 || indexF == -1) {
-                return false;
-            }
-
-            ArrayList<Character> chars = new ArrayList<>();
-            for (int i = 0; i < sub.length(); i++) {
-                if (i < indexM) {
-                    chars.add(sub.charAt(i));
-                } else if (i == indexM) {
-                    if (!isPlayerAndScoreWellFormedString(chars)) {
-                        return false;
-                    }
-                    chars.clear();
-                } else if (i > indexM && i < indexS) {
-                    chars.add(sub.charAt(i));
-                } else if (i == indexS) {
-                    if (!isMosaicWellFormedString(chars)) {
-                        return false;
-                    }
-                    chars.clear();
-                } else if (i > indexS && i < indexF) {
-                    chars.add(sub.charAt(i));
-                } else if (i == indexF) {
-                    if (!isStorageWellFormedString(chars)) {
-                        return false;
-                    }
-                    chars.clear();
-                } else if (i > indexF) {
-                    chars.add(sub.charAt(i));
-                }
-            }
-            if (!isFloorWellFormedString(chars)) {
-                return false;
-            }
-        }
-
-        return true;
+        Game game = new Game();
+        return game.isPlayerStateWellFormed(playerState);
     }
 
-    /**
-     * 1. [player] The player substring is one character 'A' to 'D' -
-     * representing the Player
-     * <p>
-     * 2. [score] The score substring is one or more digits between '0' and '9' -
-     * representing the score
-     */
-    public static boolean isPlayerAndScoreWellFormedString(ArrayList<Character> playerWithScore) {
-        if (playerWithScore.size() < 2 ) {
-            return false;
-        }
-        StringBuilder score = new StringBuilder();
-        for(int i = 0; i < playerWithScore.size(); i++) {
-            char c = playerWithScore.get(i);
-            if (i == 0 && c != 'A' && c != 'B' && c != 'C' && c != 'D') {
-                return false;
-            }
-            if (i != 0){
-                score.append(c);
-            }
-        }
 
-        try {
-            Integer.parseInt(score.toString());
-        } catch (Exception e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * 3. [mosaic] The Mosaic substring begins with a 'M'
-     * Which is followed by *up to* 25 3-character strings.
-     * Each 3-character string is defined as follows:
-     * 1st character is 'a' to 'e' - representing the tile colour.
-     * 2nd character is '0' to '4' - representing the row.
-     * 3rd character is '0' to '4' - representing the column.
-     * The Mosaic substring is ordered first by row, then by column.
-     * That is, "a01" comes before "a10".
-     */
-    public static boolean isMosaicWellFormedString(ArrayList<Character> mosaic) {
-        if(mosaic.size() % 3 != 0 || mosaic.size() > 75) {
-            return false;
-        }
-
-        for (int i = 0; i < mosaic.size(); i++) {
-            char first = mosaic.get(i);
-            char second = mosaic.get(++i);
-            char third = mosaic.get(++i);
-            if (first != 'a' && first != 'b' && first !='c' && first != 'd' && first != 'e') {
-                return false;
-            }
-            if (second != '0' && second != '1' && second !='2' && second != '3' && second != '4') {
-                return false;
-            }
-            if (third != '0' && third != '1' && third !='2' && third != '3' && third != '4') {
-                return false;
-            }
-            if (i > 3 && (second - mosaic.get(i-4) < 0)) {
-                 return false;
-            }
-            if (i > 3 && second == mosaic.get(i-4) && third - mosaic.get(i-3) < 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 4. [storage] The Storage substring begins with an 'S'
-     * and is followed by *up to* 5 3-character strings.
-     * Each 3-character string is defined as follows:
-     * 1st character is '0' to '4' - representing the row - each row number must only appear once.
-     * 2nd character is 'a' to 'e' - representing the tile colour.
-     * 3rd character is '0' to '5' - representing the number of tiles stored in that row.
-     * Each 3-character string is ordered by row number.
-     */
-    public static boolean isStorageWellFormedString(ArrayList<Character> storage) {
-        if(storage.size() % 3 != 0 || storage.size() > 15) {
-            return false;
-        }
-
-        for (int i = 0; i < storage.size(); i++) {
-            char first = storage.get(i);
-            char second = storage.get(++i);
-            char third = storage.get(++i);
-            if (first != '0' && first != '1' && first !='2' && first != '3' && first != '4') {
-                return false;
-            }
-            if (second != 'a' && second != 'b' && second !='c' && second != 'd' && second != 'e') {
-                return false;
-            }
-            if (third != '0' && third != '1' && third !='2' && third != '3' && third != '4' && third != '5') {
-                return false;
-            }
-            if (i > 3 && (first - storage.get(i-5) <= 0)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 5. [floor] The Floor substring begins with an 'F'
-     * and is followed by *up to* 7 characters in alphabetical order.
-     * Each character is 'a' to 'f' - where 'f' represents the first player token.
-     * There is only one first player token.
-     */
-    public static boolean isFloorWellFormedString(ArrayList<Character> floor) {
-        if (floor.size() > 7) {
-            return false;
-        }
-        int countF = 0;
-        for (int i = 0; i < floor.size(); i++) {
-            char c = floor.get(i);
-            if (c != 'a' && c != 'b' && c != 'c' && c != 'd' && c != 'e' && c != 'f') {
-                return false;
-            }
-            if(i != 0 && (c - floor.get(i-1) < 0)) {
-                return false;
-            }
-            if(c == 'f') {
-                countF += 1;
-            }
-        }
-        if(countF > 1) {
-            return false;
-        }
-        return true;
-    }
 
     /**
      * Given the gameState, draw a *random* tile from the bag.
@@ -518,9 +139,18 @@ public class Azul {
      * TASK 5
      */
     public static char drawTileFromBag(String[] gameState) {
-        Bag bag = new Bag();
-        return bag.drawTile(gameState);
+
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+//        game.reconstructBoardsFrom(gameState[1]);
+        Tile tile = game.getCommon().getBag().drawTile(game.getCommon().getDiscard());
+        if (tile == null) {
+            return 'Z';
+        } else {
+            return tile.getColorCode();
+        }
     }
+
 
     /**
      * Given a state, refill the factories with tiles.
@@ -532,9 +162,27 @@ public class Azul {
      * TASK 6
      */
     public static String[] refillFactories(String[] gameState) {
-       Factory factory = new Factory();
 
-        return factory.addTilesFromBag(gameState);
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        Factory[] factories = game.common.getFactories();
+        if (game.common.getCentre().getTiles().size() > 0 &&
+                !(game.common.getCentre().getTiles().size() == 1 &&
+                        game.common.getCentre().getTiles().get(0).getColorCode() == 'f') ) {
+            return gameState;
+        }
+
+        for(int i = 0; i < factories.length; i++) {
+            if (factories[i].getTiles().size() != 0) {
+                return gameState;
+            }
+        }
+        for(int i = 0; i < factories.length; i++) {
+            factories[i].drawTiles(game.common.getBag(), game.common.getDiscard());
+        }
+        gameState[0] = game.turn + game.common.toString();
+
+        return gameState;
     }
 
     /**
@@ -548,8 +196,14 @@ public class Azul {
      * TASK 7
      */
     public static int getBonusPoints(String[] gameState, char player) {
-        Mosaic M = new Mosaic();
-        return M.calculateBonusScore(gameState,player);
+//        Mosaic M = new Mosaic();
+//        return M.calculateBonusScore(gameState,player);
+
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        game.reconstructBoardsFrom(gameState[1]);
+        return game.getPlayers()[player - 'A'].getBoard().getMosaic().getBonus();
+
     }
 
     /**
@@ -569,10 +223,67 @@ public class Azul {
      */
     public static String[] nextRound(String[] gameState) {
         // FIXME TASK 8
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        game.reconstructBoardsFrom(gameState[1]);
+
+        Factory[] factories = game.common.getFactories();
+        if (game.common.getCentre().getTiles().size() > 0 &&
+                !(game.common.getCentre().getTiles().size() == 1 &&
+                        game.common.getCentre().getTiles().get(0).getColorCode() == 'f') ) {
+            return gameState;
+        }
+
+        for(int i = 0; i < factories.length; i++) {
+            if (factories[i].getTiles().size() != 0) {
+                return gameState;
+            }
+        }
+
+        for(int i = 0; i <  game.getPlayers().length; i++) {
+            if (game.getPlayers()[i].getBoard().getStorage().hasCompleteRow()) {
+                return gameState;
+            }
+        }
+
+        for(int i = 0; i <  game.getPlayers().length; i++) {
+            if (game.getPlayers()[i].getBoard().getFloor().hasFirstPlayerTile()) {
+                game.turn = String.valueOf(game.getPlayers()[i].getId());
+            }
+        }
+
+        for(int i = 0; i < game.getPlayers().length; i++) {
+            Player player = game.getPlayers()[i];
+            player.getBoard().getFloor().calculatePenalty(player.getBoard().getScore());
+            player.getBoard().getScore().addScore(player.getBoard().getMosaic().getBonus());
+            player.getBoard().getFloor().clearTiles(game.common.getDiscard(), game.common.getCentre());
+        }
+
+        gameState[0] = game.turn + game.getCommon().toString();
+        StringBuilder stringBuilder1 = new StringBuilder();
+        for(int i = 0; i < game.getPlayers().length; i++) {
+            stringBuilder1.append(game.getPlayers()[i].toString());
+        }
+        gameState[1] = stringBuilder1.toString();
 
 
+        for(int i = 0; i <  game.getPlayers().length; i++) {
+            if (game.getPlayers()[i].getBoard().getMosaic().hasCompleteRow()) {
+                return gameState;
+            }
+        }
 
-        return null;
+        for(int i = 0; i < factories.length; i++) {
+            factories[i].drawTiles(game.common.getBag(), game.common.getDiscard());
+        }
+
+        gameState[0] = game.turn + game.getCommon().toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i = 0; i < game.getPlayers().length; i++) {
+            stringBuilder.append(game.getPlayers()[i].toString());
+        }
+        gameState[1] = stringBuilder.toString();
+        return gameState;
     }
 
     /**

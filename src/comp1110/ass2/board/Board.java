@@ -23,6 +23,39 @@ public class Board {
         this.floor = new Floor();
     }
 
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public Storage getStorage() {
+        return storage;
+    }
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
+
+    public Mosaic getMosaic() {
+        return mosaic;
+    }
+
+    public void setMosaic(Mosaic mosaic) {
+        this.mosaic = mosaic;
+    }
+
+    public Floor getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Floor floor) {
+        this.floor = floor;
+    }
+
+
     /**
      * 0. decode instruction
      * 1. add tiles to storage
@@ -46,7 +79,14 @@ public class Board {
 
     @Override
     public String toString() {
-        // FIXME
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.score.toString());
+        stringBuilder.append('M');
+        stringBuilder.append(this.mosaic.toString());
+        stringBuilder.append('S');
+        stringBuilder.append(this.storage.toString());
+        stringBuilder.append('F');
+        stringBuilder.append(this.floor.toString());
+        return stringBuilder.toString();
     };
 }

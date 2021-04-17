@@ -31,10 +31,13 @@ public class Viewer extends Application {
             Arrays.asList(Color.BLUE, Color.GREEN, Color.ORANGE, Color.PURPLE, Color.RED)
     );
 
-    private final Rectangle[][] storage = new Rectangle[5][5];
+    private final Rectangle[][] storageA = new Rectangle[5][5];
+    private final Rectangle[][] storageB = new Rectangle[5][5];
     private final Rectangle[][] mosaicA = new Rectangle[5][5];
     private final Rectangle[][] mosaicB = new Rectangle[5][5];
-    private final Rectangle[][] floor = new Rectangle[1][7];
+    private final Rectangle[] floorA = new Rectangle[7];
+    private final Rectangle[] floorB = new Rectangle[7];
+
 
     private final Rectangle[][] factories = new Rectangle[2][10];
     private final Rectangle[][] centre = new Rectangle[4][4];
@@ -48,59 +51,101 @@ public class Viewer extends Application {
     void displayState(String[] state) {
         // FIXME Task 4: implement the simple state viewer
         // A20Ma02a13b00e42S2a13e44a1Faabbe
+        //
+        // A21Ma00b01c02d03e04a11b12c13e21a22c30b34a44S2b2FaaaafB24Ma00c02d03e04e10a11b12c13d14d20a22b23e32b34b40S4d2Fdd
+
         // A20 M a02 a13 b00 e42 S 2a1 3e4 4a1 F aabbe
 
         String playerState = state[0];
-        String boardState = state[1];
 
         int indexA = playerState.indexOf('A', 0);
-        int indexA2 = playerState.indexOf('B', indexA + 1);
-        String playerAStr = playerState.substring(indexA,indexA2);
-        String playerBStr = playerState.substring(indexA2);
-        ArrayList<String> playerA = new ArrayList<>();
-        ArrayList<String> playerB = new ArrayList<>();
+        int indexB = playerState.indexOf('B', indexA + 1);
+
+        String playerAStr = "";
+        if (indexB != -1) {
+            playerAStr = playerState.substring(indexA, indexB);
+        } else {
+            playerAStr = playerState.substring(indexA);
+        }
+        System.out.println(playerAStr);
 
         int indexAM = playerAStr.indexOf('M', 0);
-        int indexAS = playerAStr.indexOf('S', indexAM+1);
-        int indexAF = playerAStr.indexOf('F', indexAS +1);
+        int indexAS = playerAStr.indexOf('S', indexAM + 1);
+        int indexAF = playerAStr.indexOf('F', indexAS + 1);
+
+        String substringAM = playerAStr.substring(indexAM, indexAS);
+        decodeMosaicA(substringAM);
+        String substringAS = playerAStr.substring(indexAS, indexAF);
+        decodeStorage(substringAS, storageA);
+        String substringAF = playerAStr.substring(indexAF);
+        System.out.println(substringAF);
+        decodeFloor(substringAF, floorA);
+
+
+
+
+        String playerBStr = playerState.substring(indexB);
+        System.out.println(playerBStr);
+
         int indexBM = playerBStr.indexOf('M', 0);
-        int indexBS = playerBStr.indexOf('S', indexBM+1);
-        int indexBF = playerBStr.indexOf('F', indexBS +1);
+        int indexBS = playerBStr.indexOf('S', indexBM + 1);
+        int indexBF = playerBStr.indexOf('F', indexBS + 1);
 
-        int indexF = boardState.indexOf('F',0);
-        int indexC = boardState.indexOf('C',indexF +1);
-        int indexB = boardState.indexOf('B',indexC +1);
-        int indexD = boardState.indexOf('D',indexB +1);
+        String substringBM = playerBStr.substring(indexBM, indexBS);
+        decodeMosaicB(substringBM);
+        String substringBS = playerBStr.substring(indexBS, indexBF);
+        decodeStorage(substringBS, storageB);
+        String substringBF = playerBStr.substring(indexBF);
+        decodeFloor(substringBF, floorB);
 
-        //Decode the status of player A
-        if(state[0].length()>=1){
-            String substringAM = playerAStr.substring(indexAM, indexAS);
-            decodeMosaicA(substringAM);
-            String substringAS = playerAStr.substring(indexAS, indexAF);
-            decodeStorage(substringAS);
-            String substringAF = playerAStr.substring(indexAF);
-            decodeFloor(substringAF);
-
-        //Decode the state of player B.
-            String substringBM = playerBStr.substring(indexBM, indexBS);
-            decodeMosaicB(substringBM);
-            String substringBS = playerBStr.substring(indexBS, indexBF);
-            decodeStorage(substringBS);
-            String substringBF = playerBStr.substring(indexBF);
-            decodeFloor(substringBF);
-        }
-
-        //Decode the boardState
-        if(state[1].length()>=1){
-            String substringF = boardState.substring(indexF, indexC);
-            decodeFactories(substringF);
-            String substringC = boardState.substring(indexC, indexB);
-            decodeCentre(substringC);
-            String substringB = boardState.substring(indexB, indexD);
-            decodeBag(substringB);
-            String substringD = boardState.substring(indexD);
-            decodeDiscard(substringD);}
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    String boardState = state[1];
+//
+//    ArrayList<String> playerA = new ArrayList<>();
+//    ArrayList<String> playerB = new ArrayList<>();
+
+
+//
+//
+//    int indexF = boardState.indexOf('F',0);
+//    int indexC = boardState.indexOf('C',indexF +1);
+//    int indexB = boardState.indexOf('B',indexC +1);
+//    int indexD = boardState.indexOf('D',indexB +1);
+
+//
+//
+//        //Decode the status of player a
+//
+//
+//        //Decode the state of player B.
+
+//
+//        //Decode the boardState
+//        if(state[1].length()>=1){
+//            String substringF = boardState.substring(indexF, indexC);
+//            decodeFactories(substringF);
+//            String substringC = boardState.substring(indexC, indexB);
+//            decodeCentre(substringC);
+//            String substringB = boardState.substring(indexB, indexD);
+//            decodeBag(substringB);
+//            String substringD = boardState.substring(indexD);
+//            decodeDiscard(substringD);
+//        }
+//    }
 
     //This step is to make the decoded mosaic position opaque.
     // Opacity means there are ceramic tiles in this place, and transparency means there are no ceramic tiles
@@ -127,47 +172,43 @@ public class Viewer extends Application {
     }
 
     //In this step, we hope to cover the colored tiles with the background color (gray) in the storage position
-    void decodeStorage(String positions) {//S2e23c3
+    void decodeStorage(String positions,  Rectangle[][] storage) {
         for(int i = 1; i < positions.length(); i = i+3) {
             int row = positions.charAt(i) - 48;
             char code =  positions.charAt(i+1);
             int num = positions.charAt(i+2) - 48;
-            if(code == 'a'){
-                storage[row][num].setFill(Color.RED);
-                storage[row][num].setOpacity(1.0);
-                //need to cover the color
-            } else if(code == 'b'){
-                storage[row][num].setFill(Color.RED);
-                storage[row][num].setOpacity(1.0);
 
-            }else if(code == 'c'){
-                storage[row][num].setFill(Color.RED);
-                storage[row][num].setOpacity(1.0);
-            }else if(code == 'd'){
-                storage[row][num].setFill(Color.RED);
-                storage[row][num].setOpacity(1.0);
-            }else if(code == 'e'){
-                storage[row][num].setFill(Color.RED);
-                storage[row][num].setOpacity(1.0);
+            Color color = switch (code) {
+                case 'a' -> Color.BLUE;
+                case 'b' -> Color.GREEN;
+                case 'c' -> Color.ORANGE;
+                case 'd' -> Color.PURPLE;
+                case 'e' -> Color.RED;
+                case 'f' -> Color.FIREBRICK;
+                default -> Color.GREY ;
+            };
+
+            for (int q = 4; q > 3 - row + num - 1; q--) {
+                storage[row][q].setFill(color);
             }
+
         }
     }
 
-    void decodeFloor(String positions) {
+    void decodeFloor(String positions, Rectangle[] floor) {
         for(int i = 1; i < positions.length(); i++) {
             char code = positions.charAt(i);
+            Color color = switch (code) {
+                case 'a' -> Color.BLUE;
+                case 'b' -> Color.GREEN;
+                case 'c' -> Color.ORANGE;
+                case 'd' -> Color.PURPLE;
+                case 'e' -> Color.RED;
+                case 'f' -> Color.FIREBRICK;
+                default -> Color.GREY ;
+            };
 
-            if(code == 'a'){
-                //Also need to cover the color method
-            } else if(code == 'b'){
-
-            }else if(code == 'c'){
-
-            }else if(code == 'd'){
-
-            }else if(code == 'e'){
-
-            }
+            floor[i-1].setFill(color);
         }
     }
 
@@ -350,6 +391,7 @@ public class Viewer extends Application {
                 }
                 Rectangle tileRect = new Rectangle(10 + 45 * j, 180 + 45 * i, 40, 40);
                 tileRect.setFill(Color.LIGHTGREY);
+                storageA[i][j] = tileRect;
                 root.getChildren().add(tileRect);
             }
         }
@@ -364,6 +406,7 @@ public class Viewer extends Application {
                 }
                 Rectangle tileRect = new Rectangle(710 + 45 * j, 180 + 45 * i, 40, 40);
                 tileRect.setFill(Color.LIGHTGREY);
+                storageB[i][j] = tileRect;
                 root.getChildren().add(tileRect);
             }
         }
@@ -403,6 +446,7 @@ public class Viewer extends Application {
         for (int i = 0; i < 7; i++) {
             Rectangle tileRect = new Rectangle(10 + 45 * i, 430, 40, 40);
             tileRect.setFill(Color.LIGHTGREY);
+            floorA[i] = tileRect;
             root.getChildren().add(tileRect);
         }
         Text FloorText = new Text(150 , 490, "Floor");
@@ -412,6 +456,7 @@ public class Viewer extends Application {
         for (int i = 0; i < 7; i++) {
             Rectangle tileRect = new Rectangle(710 + 45 * i, 430, 40, 40);
             tileRect.setFill(Color.LIGHTGREY);
+            floorB[i] = tileRect;
             root.getChildren().add(tileRect);
         }
         Text FloorText2 = new Text(850 , 490, "Floor");
