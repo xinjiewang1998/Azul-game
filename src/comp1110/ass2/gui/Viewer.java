@@ -82,7 +82,7 @@ public class Viewer extends Application {
             for(int j =1; j<=num;j++){
                 switch (code1){
                     case "a":
-                        /想把灰色的初始瓷砖变成解码出来的颜色
+                        //想把灰色的初始瓷砖变成解码出来的颜色
                 };
             }
         }
