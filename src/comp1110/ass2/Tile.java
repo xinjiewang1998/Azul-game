@@ -37,4 +37,12 @@ public enum Tile {
     public String getColor() {
         return this.color;
     }
+
+    /**
+     * Getter method for code.
+     * @return return the color code character
+     */
+    public char getColorCode() {
+        return this.code;
+    }
 }

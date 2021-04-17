@@ -17,17 +17,21 @@ public class Score {
     /**
      * add other score
      * @param otherScore the other score with type int
+     * @return the score
      */
-    public void addScore(int otherScore) {
+    public Score addScore(int otherScore) {
         // FIXME
+        return this;
     }
 
     /**
      * add other score
      * @param otherScore the other score with type Score
+     * @return the score
      */
-    public void addScore(Score otherScore) {
+    public Score addScore(Score otherScore) {
         // FIXME
+        return this;
     }
 
     public void minus (int anotherNum) {

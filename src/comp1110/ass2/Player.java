@@ -17,15 +17,10 @@ public class Player {
 
     boolean isFirstPlayer;
     Player nextPlayer;
-
-    int score;
-
-    String playerState;
-
-    Storage storage;
-    Mosaic mosaic;
     Floor floor;
 
+
+    String playerState;
     Factory[] factories;
     Centre centre;
 
@@ -45,8 +40,15 @@ public class Player {
         this.factories = factories;
         this.centre = centre;
 
-        this.score = 0;
+        this.score = new Score(0);
 
+    }
+
+    public Player() {
+        this.mosaic = new Mosaic();
+        this.floor = new Floor();
+        this.storage = new Storage();
+        this.score = new Score(0);
     }
 
     public boolean getFirstPlayer() {
@@ -76,7 +78,7 @@ public class Player {
                 factoryTiles.clear();
             }
         } else {
-            ArrayList<Tile> centreTiles = centre.getCentre();
+            ArrayList<Tile> centreTiles = centre.getTiles();
             for (int i = 0; i < centreTiles.size(); i++) {
                 Tile tile = centreTiles.get(i);
                 if(tile != null && tile.getColor().equals(color)) {
@@ -89,7 +91,7 @@ public class Player {
     }
 
     public int calculateScore() {
-        return this.score + this.mosaic.getBonus();
+        return this.score.addScore(this.mosaic.getBonus()).getScore();
     }
 
     public boolean play() {
@@ -102,8 +104,8 @@ public class Player {
         this.storage.putTiles(tiles, "blue", tiles.size(), 4);
 
         // tiling & scoring
-        this.score += this.storage.tileAndScore();
-        this.score -= this.floor.score();
+        this.score.addScore(this.storage.tileAndScore());
+        this.score.subtractScore(this.floor.score());
 
         // check completes a row
         return this.mosaic.hasCompleteRow();

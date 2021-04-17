@@ -74,6 +74,37 @@ public class Floor {
 
     }
 
+
+
+    /**
+     * 5. [floor] The Floor substring begins with an 'F'
+     * and is followed by *up to* 7 characters in alphabetical order.
+     * Each character is 'a' to 'f' - where 'f' represents the first player token.
+     * There is only one first player token.
+     */
+    public static boolean isFloorWellFormedString(ArrayList<Character> floor) {
+        if (floor.size() > 7) {
+            return false;
+        }
+        int countF = 0;
+        for (int i = 0; i < floor.size(); i++) {
+            char c = floor.get(i);
+            if (c != 'a' && c != 'b' && c != 'c' && c != 'd' && c != 'e' && c != 'f') {
+                return false;
+            }
+            if(i != 0 && (c - floor.get(i-1) < 0)) {
+                return false;
+            }
+            if(c == 'f') {
+                countF += 1;
+            }
+        }
+        if(countF > 1) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         // FIXME

@@ -132,6 +132,41 @@ public class Storage {
         return new Score(0);
     }
 
+
+    /**
+     * 4. [storage] The Storage substring begins with an 'S'
+     * and is followed by *up to* 5 3-character strings.
+     * Each 3-character string is defined as follows:
+     * 1st character is '0' to '4' - representing the row - each row number must only appear once.
+     * 2nd character is 'a' to 'e' - representing the tile colour.
+     * 3rd character is '0' to '5' - representing the number of tiles stored in that row.
+     * Each 3-character string is ordered by row number.
+     */
+    public static boolean isStorageWellFormedString(ArrayList<Character> storage) {
+        if(storage.size() % 3 != 0 || storage.size() > 15) {
+            return false;
+        }
+
+        for (int i = 0; i < storage.size(); i++) {
+            char first = storage.get(i);
+            char second = storage.get(++i);
+            char third = storage.get(++i);
+            if (first != '0' && first != '1' && first !='2' && first != '3' && first != '4') {
+                return false;
+            }
+            if (second != 'a' && second != 'b' && second !='c' && second != 'd' && second != 'e') {
+                return false;
+            }
+            if (third != '0' && third != '1' && third !='2' && third != '3' && third != '4' && third != '5') {
+                return false;
+            }
+            if (i > 3 && (first - storage.get(i-5) <= 0)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         // FIXME

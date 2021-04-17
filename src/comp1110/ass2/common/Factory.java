@@ -7,18 +7,19 @@ import java.util.ArrayList;
 import static comp1110.ass2.Azul.drawTileFromBag;
 
 public class Factory {
-    //private ArrayList<Tile> factory = new ArrayList<Tile>();
     private String factory;
     private String bag;
     private String discard;
 
     Bag bagg;
 
-    ArrayList<Tile> tiles;
+    ////////////////////////////////////////////////////
+    private int id;
+    private ArrayList<Tile> tiles;
 
 
     public Factory() {
-
+        tiles = new ArrayList<>();
     }
 
     // old
@@ -30,10 +31,13 @@ public class Factory {
     public void setTiles(ArrayList<Tile> tiles) {
         this.tiles = tiles;
     }
-
     public ArrayList<Tile> getTiles() {
         return this.tiles;
     }
+
+    public void setId(int id) {this.id = id;}
+    public int getId() {return this.id;}
+
 
     public void drawTiles(){
         if(tiles != null && tiles.size() != 0 ) {
@@ -174,9 +178,27 @@ public class Factory {
         return new ArrayList<Tile>();
     }
 
+
+    /////////////////////////////NEW////////////////////////////
+
+
+
+    public void fillFrom(String factoryState) {
+        this.id = factoryState.charAt(0) - 48;
+        for(int i = 1; i < factoryState.length(); i++) {
+            this.tiles.add(Tile.from(factoryState.charAt(i)));
+        }
+    }
+
+
     @Override
     public String toString() {
         //FIXME
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(id);
+        for(int i = 0; i < tiles.size(); i++) {
+            stringBuilder.append(tiles.get(i).getColorCode());
+        }
+        return stringBuilder.toString();
     }
 }

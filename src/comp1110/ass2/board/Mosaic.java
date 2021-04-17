@@ -352,6 +352,45 @@ public class Mosaic {
         return Score;
     }
 
+
+    /**
+     * 3. [mosaic] The Mosaic substring begins with a 'M'
+     * Which is followed by *up to* 25 3-character strings.
+     * Each 3-character string is defined as follows:
+     * 1st character is 'a' to 'e' - representing the tile colour.
+     * 2nd character is '0' to '4' - representing the row.
+     * 3rd character is '0' to '4' - representing the column.
+     * The Mosaic substring is ordered first by row, then by column.
+     * That is, "a01" comes before "a10".
+     */
+    public static boolean isMosaicWellFormedString(ArrayList<Character> mosaic) {
+        if(mosaic.size() % 3 != 0 || mosaic.size() > 75) {
+            return false;
+        }
+
+        for (int i = 0; i < mosaic.size(); i++) {
+            char first = mosaic.get(i);
+            char second = mosaic.get(++i);
+            char third = mosaic.get(++i);
+            if (first != 'a' && first != 'b' && first !='c' && first != 'd' && first != 'e') {
+                return false;
+            }
+            if (second != '0' && second != '1' && second !='2' && second != '3' && second != '4') {
+                return false;
+            }
+            if (third != '0' && third != '1' && third !='2' && third != '3' && third != '4') {
+                return false;
+            }
+            if (i > 3 && (second - mosaic.get(i-4) < 0)) {
+                return false;
+            }
+            if (i > 3 && second == mosaic.get(i-4) && third - mosaic.get(i-3) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         // FIXME

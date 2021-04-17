@@ -4,6 +4,7 @@ import comp1110.ass2.Tile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Bag {
@@ -61,7 +62,7 @@ public class Bag {
 
 
     public Bag() {
-
+        tiles = new ArrayList<>();
     }
 
     // old
@@ -184,8 +185,72 @@ public class Bag {
         return B;
     }
 
+    /////////////////////////////NEW////////////////////////////
+
+    /**
+     * 3. [bag] The bag substring starts with a 'B'
+     * and is followed by 5 2-character substrings
+     * 1st substring represents the number of 'a' tiles, from 0 - 20.
+     * 2nd substring represents the number of 'b' tiles, from 0 - 20.
+     * 3rd substring represents the number of 'c' tiles, from 0 - 20.
+     * 4th substring represents the number of 'd' tiles, from 0 - 20.
+     * 5th substring represents the number of 'e' tiles, from 0 - 20.
+     * For example: "B0005201020" The bag contains zero 'a' tiles, five 'b'
+     * tiles, twenty 'c' tiles, ten 'd' tiles and twenty 'e' tiles.
+     */
+    public static boolean isWellFormedBagString(ArrayList<Character> chars) {
+        if (chars.size() != 10) {
+            return false;
+        } else {
+            for(int i = 0; i < 10; i++) {
+                String s = chars.get(i).toString() + chars.get(++i).toString();
+                try {
+                    int num = Integer.parseInt(s);
+                    if (num < 0 || num > 20) {
+                        return false;
+                    }
+                } catch (Exception e) {
+                    return false;
+                }
+
+            }
+        }
+        return true;
+    }
+
+    public void fillFrom(String bagState) {
+        for(int i = 0; i < bagState.length(); i+=2) {
+            String substring = bagState.substring(i, i+2);
+            int amount = Integer.parseInt(substring);
+            for(int j = 0; j < amount; j++) {
+                this.tiles.add(Tile.from((char) ('a' + i/2)));
+            }
+//            this.tiles.add(Tile.from(centreState.charAt(i)));
+        }
+    }
+
     @Override
     public String toString() {
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        HashMap<Character, Integer> count = new HashMap<>();
+
+        for (int i = 0; i < 5; i++) {
+            count.put((char) ('a' + i), 0);
+        }
+
+        for (Tile tile : tiles) {
+            char code = tile.getColorCode();
+            count.merge(code, 1, Integer::sum);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            int num = count.get((char) ('a' + i));
+            if (num < 10) {
+                stringBuilder.append(0);
+            }
+            stringBuilder.append(num);
+        }
+
+        return stringBuilder.toString();
     }
 }
