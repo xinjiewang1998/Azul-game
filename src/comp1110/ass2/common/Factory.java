@@ -35,6 +35,7 @@ public class Factory {
         int indexB = gameState[0].indexOf('B', indexC + 1);
         int indexD = gameState[0].indexOf('D', indexB + 1);
         String f =gameState[0].substring(indexF+1,indexC);
+        String c = gameState[0].substring(indexC+1,indexB);
         String b = gameState[0].substring(indexB+1,indexD);
         String a =gameState[0];
         ArrayList<String> B = new ArrayList<>();
@@ -43,7 +44,7 @@ public class Factory {
             B.add(b.substring(i,i+2));
         }
         int index = 0;
-        if(f.length()!=0){
+        if(f.length()!=0||(c.length()!=0&& !c.equals("f"))){
             return gameState;
         }
         else{

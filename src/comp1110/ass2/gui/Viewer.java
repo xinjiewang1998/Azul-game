@@ -72,10 +72,10 @@ public class Viewer extends Application {
         int indexB = boardState.indexOf('B',indexC +1);
         int indexD = boardState.indexOf('D',indexB +1);
 
-        //Decode the status of player a
+        //Decode the status of player A
         if(state[0].length()>=1){
             String substringAM = playerAStr.substring(indexAM, indexAS);
-            decodeMosaicB(substringAM);
+            decodeMosaicA(substringAM);
             String substringAS = playerAStr.substring(indexAS, indexAF);
             decodeStorage(substringAS);
             String substringAF = playerAStr.substring(indexAF);
@@ -83,7 +83,7 @@ public class Viewer extends Application {
 
         //Decode the state of player B.
             String substringBM = playerBStr.substring(indexBM, indexBS);
-            decodeMosaicA(substringBM);
+            decodeMosaicB(substringBM);
             String substringBS = playerBStr.substring(indexBS, indexBF);
             decodeStorage(substringBS);
             String substringBF = playerBStr.substring(indexBF);
@@ -127,21 +127,28 @@ public class Viewer extends Application {
     }
 
     //In this step, we hope to cover the colored tiles with the background color (gray) in the storage position
-    void decodeStorage(String positions) {
+    void decodeStorage(String positions) {//S2e23c3
         for(int i = 1; i < positions.length(); i = i+3) {
             int row = positions.charAt(i) - 48;
             char code =  positions.charAt(i+1);
             int num = positions.charAt(i+2) - 48;
             if(code == 'a'){
+                storage[row][num].setFill(Color.RED);
+                storage[row][num].setOpacity(1.0);
                 //need to cover the color
             } else if(code == 'b'){
+                storage[row][num].setFill(Color.RED);
+                storage[row][num].setOpacity(1.0);
 
             }else if(code == 'c'){
-
+                storage[row][num].setFill(Color.RED);
+                storage[row][num].setOpacity(1.0);
             }else if(code == 'd'){
-
+                storage[row][num].setFill(Color.RED);
+                storage[row][num].setOpacity(1.0);
             }else if(code == 'e'){
-
+                storage[row][num].setFill(Color.RED);
+                storage[row][num].setOpacity(1.0);
             }
         }
     }
@@ -149,7 +156,7 @@ public class Viewer extends Application {
     void decodeFloor(String positions) {
         for(int i = 1; i < positions.length(); i++) {
             char code = positions.charAt(i);
-            int num = positions.charAt(i+2) - 48;
+
             if(code == 'a'){
                 //Also need to cover the color method
             } else if(code == 'b'){
