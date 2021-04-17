@@ -84,11 +84,11 @@ public class Factory {
             for(int k = 0;k<d.length();k=k+2){
                 D.add(d.substring(k,k+2));
             }
-            for(int i=0;i<5;i++){
+            loop1: for(int i=0;i<5;i++){
                 F.add(""+i);
 
 
-                for (int j=0;j<4;j++){
+                 for (int j=0;j<4;j++){
                     int num = 0;
                     for (String s : B) {
                         if (s.equals("00")) {
@@ -156,6 +156,9 @@ public class Factory {
                     }
                     if(tile!='Z'){
                         F.add(""+tile);
+                    }
+                    else{
+                        break loop1;
                     }
                     gameState[0] = "F"+String.join("", F)+a.substring(indexC,indexB)+"B"+String.join("", B)+"D"+String.join("",D);
                 }
