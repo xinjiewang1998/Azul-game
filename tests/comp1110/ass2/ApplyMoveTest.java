@@ -47,7 +47,7 @@ public class ApplyMoveTest {
                 String[] next = FULL_GAME_WITH_MOVES[i + 1];
                 String[] prevState = {previous[0], previous[1]};
                 String[] nextState = {next[0], next[1]};
-                String[] out = Azul.applyMove(prevState, move);
+                String[] out = Azul.applyMove(prevState.clone(), move);
                 String errorMessagePrefix = errorPrefix(prevState, move);
                 assertEquals(Arrays.toString(nextState), Arrays.toString(out), errorMessagePrefix);
             }
@@ -66,7 +66,7 @@ public class ApplyMoveTest {
                 String[] next = FULL_GAME_WITH_MOVES[i + 1];
                 String[] prevState = {previous[0], previous[1]};
                 String[] nextState = {next[0], next[1]};
-                String[] out = Azul.applyMove(prevState, move);
+                String[] out = Azul.applyMove(prevState.clone(), move);
                 String errorMessagePrefix = errorPrefix(prevState, move);
                 assertEquals(Arrays.toString(nextState), Arrays.toString(out), errorMessagePrefix);
             }
