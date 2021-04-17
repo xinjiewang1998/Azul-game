@@ -72,7 +72,7 @@ public class Viewer extends Application {
         int indexB = boardState.indexOf('B',indexC +1);
         int indexD = boardState.indexOf('D',indexB +1);
 
-        //Decode the status of player a.
+        //Decode the status of player a
         if(state[0].length()>=1){
             String substringAM = playerAStr.substring(indexAM, indexAS);
             decodeMosaicB(substringAM);
