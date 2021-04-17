@@ -1,13 +1,7 @@
 package comp1110.ass2;
 
 import comp1110.ass2.board.Board;
-import comp1110.ass2.board.Floor;
-import comp1110.ass2.board.Mosaic;
-import comp1110.ass2.board.Score;
-import comp1110.ass2.board.Storage;
-import comp1110.ass2.common.Centre;
 import comp1110.ass2.common.Common;
-import comp1110.ass2.common.Discard;
 import comp1110.ass2.common.Factory;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -17,39 +11,29 @@ public class Player {
 
     boolean isFirstPlayer;
     Player nextPlayer;
-    Floor floor;
-
-
-    String playerState;
-    Factory[] factories;
-    Centre centre;
-
-    //new
-    Board board;
-    Common common;
-
     Tile firstPlayer;
 
+    private char id;
+    private Board board;
+    private Common common;
 
-    public Player(Factory[] factories, Centre centre, Discard discard) {
-
-        this.mosaic = new Mosaic();
-        this.floor = new Floor();
-        this.storage = new Storage(this.mosaic, this.floor, discard);
-
-        this.factories = factories;
-        this.centre = centre;
-
-        this.score = new Score(0);
-
+    public Player(char id) {
+        this.id = id;
+        this.board = new Board();
     }
 
-    public Player() {
-        this.mosaic = new Mosaic();
-        this.floor = new Floor();
-        this.storage = new Storage();
-        this.score = new Score(0);
+    public Player(Common common, boolean isFirstPlayer){
+        this.board = new Board();
+        this.common = common;
+        this.isFirstPlayer = isFirstPlayer;
+        if (isFirstPlayer){
+            //acquire tile from centre
+            ArrayList<Tile> tiles = common.getCentre().takeTilesFromCentre("firstPlayer");
+            this.firstPlayer = tiles.get(0);
+        }
     }
+
+
 
     public boolean getFirstPlayer() {
         return isFirstPlayer;
@@ -64,7 +48,7 @@ public class Player {
         Deque<Tile> tiles = new ArrayDeque<>();
 
         if (fromFactory) {
-            Factory factory = factories[factoryIndex];
+            Factory factory = this.common.getFactories()[factoryIndex];
             ArrayList<Tile> factoryTiles = factory.getTiles();
             int count = 0;
 
@@ -73,12 +57,12 @@ public class Player {
                 if(tile != null && tile.getColor().equals(color)) {
                     tiles.push(tile);
                 } else {
-                    this.centre.addTileToCentre(tile);
+                    this.common.getCentre().addTileToCentre(tile);
                 }
                 factoryTiles.clear();
             }
         } else {
-            ArrayList<Tile> centreTiles = centre.getTiles();
+            ArrayList<Tile> centreTiles = this.common.getCentre().getTiles();
             for (int i = 0; i < centreTiles.size(); i++) {
                 Tile tile = centreTiles.get(i);
                 if(tile != null && tile.getColor().equals(color)) {
@@ -91,7 +75,7 @@ public class Player {
     }
 
     public int calculateScore() {
-        return this.score.addScore(this.mosaic.getBonus()).getScore();
+        return this.board.getScore().addScore(this.board.getMosaic().getBonus()).getScore();
     }
 
     public boolean play() {
@@ -101,34 +85,17 @@ public class Player {
         Deque tiles = drawTiles("blue", true, 0);
 
         // placing
-        this.storage.putTiles(tiles, "blue", tiles.size(), 4);
+        this.board.getStorage().putTiles(tiles, "blue", tiles.size(), 4);
 
         // tiling & scoring
-        this.score.addScore(this.storage.tileAndScore());
-        this.score.subtractScore(this.floor.score());
+        this.board.getScore().addScore(this.board.getStorage().tileAndScore());
+        this.board.getScore().subtractScore(this.board.getFloor().score());
 
         // check completes a row
-        return this.mosaic.hasCompleteRow();
+        return this.board.getMosaic().hasCompleteRow();
     }
 
     public void decodeStateString( String playerState) {
-    }
-
-
-
-    public Player(Common common, boolean isFirstPlayer){
-        this.board = new Board();
-        this.common = common;
-        this.isFirstPlayer = isFirstPlayer;
-        if (isFirstPlayer){
-            //acquire tile from centre
-            ArrayList<Tile> tiles = common.getCentre().takeTilesFromCentre("firstPlayer");
-            this.firstPlayer = tiles.get(0);
-        }
-    }
-
-    public void setPlayerState(String playerState){
-        this.playerState = playerState;
     }
 
     public void setNextPlayer(Player nextPlayer){
@@ -138,6 +105,39 @@ public class Player {
     public Player getNextPlayer(){
         return this.nextPlayer;
     }
+
+    public boolean isFirstPlayer() {
+        return isFirstPlayer;
+    }
+
+    public void setFirstPlayer(Tile firstPlayer) {
+        this.firstPlayer = firstPlayer;
+    }
+
+    public char getId() {
+        return id;
+    }
+
+    public void setId(char id) {
+        this.id = id;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Common getCommon() {
+        return common;
+    }
+
+    public void setCommon(Common common) {
+        this.common = common;
+    }
+
 
     /**
      * decode playerStateString.
@@ -172,5 +172,13 @@ public class Player {
     public int getScore(){
         //fixme
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.id);
+        stringBuilder.append(this.board.toString());
+        return stringBuilder.toString();
     }
 }

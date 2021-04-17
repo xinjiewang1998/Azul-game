@@ -14,10 +14,17 @@ public class Storage {
     private final int NUM_ROWS = 5;
     private final int[] MAX_LENGTH = new int[]{1, 2, 3, 4, 5};
 
+    // ArrayList is better for access each elements,
+    // and ArrayDeque has convenient pop methods.
+    // better use ArrayDeque when all elements has same color.
+    private ArrayList<ArrayDeque<Tile>> triangle;
 
-    final int STORAGE_LENGTH = 5;
-
-    List<Deque<Tile>> ladder;
+    public Storage() {
+        triangle = new ArrayList<>();
+        for (int i = 0; i < NUM_ROWS; i++) {
+            triangle.add(new ArrayDeque<>());
+        }
+    }
 
     Mosaic mosaic;
     Floor floor;
@@ -25,9 +32,9 @@ public class Storage {
     Discard discard;
 
     public Storage(Mosaic mosaic, Floor floor, Discard discard) {
-        ladder = new ArrayList<>();
-        for (int i = 0; i < STORAGE_LENGTH; i++)  {
-            ladder.add(new ArrayDeque<>());
+        triangle = new ArrayList<>();
+        for (int i = 0; i < NUM_ROWS; i++)  {
+            triangle.add(new ArrayDeque<>());
         }
 
         this.mosaic = mosaic;
@@ -42,7 +49,7 @@ public class Storage {
     // num : the num of tiles user would like to put on the ladder,
     //       if num == 0; all tiles will throw to floor.
     public boolean putTiles(Deque<Tile> tiles, String color, int num, int rowNum) {
-        Deque<Tile> row = ladder.get(rowNum);
+        Deque<Tile> row = triangle.get(rowNum);
         Tile firstTile = row.getFirst();
         if (firstTile != null) {
             if (!firstTile.getColor().equals(color)) {
@@ -69,8 +76,8 @@ public class Storage {
     public int tileAndScore() {
         int total = 0;
         // tiling
-        for (int i = 0; i < STORAGE_LENGTH; i++) {
-            Deque<Tile> row = ladder.get(i);
+        for (int i = 0; i < NUM_ROWS; i++) {
+            Deque<Tile> row = triangle.get(i);
             if (MAX_LENGTH[i] == row.size()) {
 
                 // tiling
@@ -85,17 +92,15 @@ public class Storage {
     }
 
 
-    // ArrayList is better for access each elements,
-    // and ArrayDeque has convenient pop methods.
-    // better use ArrayDeque when all elements has same color.
-    private ArrayList<ArrayDeque<Tile>> triangle;
-
-    public Storage() {
-        triangle = new ArrayList<>();
-        for (int i = 0; i < NUM_ROWS; i++) {
-            triangle.add(new ArrayDeque<>());
+    public boolean hasCompleteRow() {
+        for (int i  = 0; i< triangle.size(); i++) {
+            if (triangle.get(i).size() == i + 1) {
+                return true;
+            }
         }
+        return false;
     }
+
 
     /**
      * Rules to place the tiles.
@@ -167,9 +172,26 @@ public class Storage {
         return true;
     }
 
+    public void fillFrom(String storageToken) {
+        for(int i = 0; i < storageToken.length(); i+=3) {
+            int row = storageToken.charAt(i) - 48;
+            int num = storageToken.charAt(i+2) - 48;
+            for(int j = 0; j < num; j++) {
+                triangle.get(row).add(Tile.from(storageToken.charAt(i+1)));
+            }
+        }
+    }
+
     @Override
     public String toString() {
-        // FIXME
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < NUM_ROWS; i++) {
+            if(triangle.get(i).size() != 0) {
+                stringBuilder.append(i);
+                stringBuilder.append(triangle.get(i).getFirst().getColorCode());
+                stringBuilder.append(triangle.get(i).size());
+            }
+        }
+        return stringBuilder.toString();
     }
 }

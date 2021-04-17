@@ -139,9 +139,18 @@ public class Azul {
      * TASK 5
      */
     public static char drawTileFromBag(String[] gameState) {
-        Bag bag = new Bag();
-        return bag.drawTile(gameState);
+
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+//        game.reconstructBoardsFrom(gameState[1]);
+        Tile tile = game.getCommon().getBag().drawTile(game.getCommon().getDiscard());
+        if (tile == null) {
+            return 'Z';
+        } else {
+            return tile.getColorCode();
+        }
     }
+
 
     /**
      * Given a state, refill the factories with tiles.
@@ -153,9 +162,27 @@ public class Azul {
      * TASK 6
      */
     public static String[] refillFactories(String[] gameState) {
-       Factory factory = new Factory();
 
-        return factory.addTilesFromBag(gameState);
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        Factory[] factories = game.common.getFactories();
+        if (game.common.getCentre().getTiles().size() > 0 &&
+                !(game.common.getCentre().getTiles().size() == 1 &&
+                        game.common.getCentre().getTiles().get(0).getColorCode() == 'f') ) {
+            return gameState;
+        }
+
+        for(int i = 0; i < factories.length; i++) {
+            if (factories[i].getTiles().size() != 0) {
+                return gameState;
+            }
+        }
+        for(int i = 0; i < factories.length; i++) {
+            factories[i].drawTiles(game.common.getBag(), game.common.getDiscard());
+        }
+        gameState[0] = game.turn + game.common.toString();
+
+        return gameState;
     }
 
     /**
@@ -169,8 +196,14 @@ public class Azul {
      * TASK 7
      */
     public static int getBonusPoints(String[] gameState, char player) {
-        Mosaic M = new Mosaic();
-        return M.calculateBonusScore(gameState,player);
+//        Mosaic M = new Mosaic();
+//        return M.calculateBonusScore(gameState,player);
+
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        game.reconstructBoardsFrom(gameState[1]);
+        return game.getPlayers()[player - 'A'].getBoard().getMosaic().getBonus();
+
     }
 
     /**
@@ -190,9 +223,67 @@ public class Azul {
      */
     public static String[] nextRound(String[] gameState) {
         // FIXME TASK 8
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        game.reconstructBoardsFrom(gameState[1]);
+
+        Factory[] factories = game.common.getFactories();
+        if (game.common.getCentre().getTiles().size() > 0 &&
+                !(game.common.getCentre().getTiles().size() == 1 &&
+                        game.common.getCentre().getTiles().get(0).getColorCode() == 'f') ) {
+            return gameState;
+        }
+
+        for(int i = 0; i < factories.length; i++) {
+            if (factories[i].getTiles().size() != 0) {
+                return gameState;
+            }
+        }
+
+        for(int i = 0; i <  game.getPlayers().length; i++) {
+            if (game.getPlayers()[i].getBoard().getStorage().hasCompleteRow()) {
+                return gameState;
+            }
+        }
+
+        for(int i = 0; i <  game.getPlayers().length; i++) {
+            if (game.getPlayers()[i].getBoard().getFloor().hasFirstPlayerTile()) {
+                game.turn = String.valueOf(game.getPlayers()[i].getId());
+            }
+        }
+
+        for(int i = 0; i < game.getPlayers().length; i++) {
+            Player player = game.getPlayers()[i];
+            player.getBoard().getFloor().calculatePenalty(player.getBoard().getScore());
+            player.getBoard().getScore().addScore(player.getBoard().getMosaic().getBonus());
+            player.getBoard().getFloor().clearTiles(game.common.getDiscard(), game.common.getCentre());
+        }
+
+        gameState[0] = game.turn + game.getCommon().toString();
+        StringBuilder stringBuilder1 = new StringBuilder();
+        for(int i = 0; i < game.getPlayers().length; i++) {
+            stringBuilder1.append(game.getPlayers()[i].toString());
+        }
+        gameState[1] = stringBuilder1.toString();
 
 
-        return null;
+        for(int i = 0; i <  game.getPlayers().length; i++) {
+            if (game.getPlayers()[i].getBoard().getMosaic().hasCompleteRow()) {
+                return gameState;
+            }
+        }
+
+        for(int i = 0; i < factories.length; i++) {
+            factories[i].drawTiles(game.common.getBag(), game.common.getDiscard());
+        }
+
+        gameState[0] = game.turn + game.getCommon().toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i = 0; i < game.getPlayers().length; i++) {
+            stringBuilder.append(game.getPlayers()[i].toString());
+        }
+        gameState[1] = stringBuilder.toString();
+        return gameState;
     }
 
     /**

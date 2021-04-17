@@ -7,6 +7,7 @@ public class Centre {
     private final int PLAYER_LIMIT = 1;
 
     private ArrayList<Tile> tiles = new ArrayList<>();
+    private Tile firstPlayerTile;
 
     //constructor
     public Centre() {
@@ -22,6 +23,11 @@ public class Centre {
 
     public void addTileToCentre(Tile tile) {
         this.tiles.add(tile);
+    }
+
+
+    public void addFirstPlayerTile(Tile firstPlayerTile) {
+        this.firstPlayerTile = firstPlayerTile;
     }
 
     /**
@@ -82,7 +88,11 @@ public class Centre {
 
     public void fillFrom(String centreState) {
         for(int i = 0; i < centreState.length(); i++) {
-            this.tiles.add(Tile.from(centreState.charAt(i)));
+            if (centreState.charAt(i) == 'f') {
+                this.firstPlayerTile = Tile.from('f');
+            } else {
+                tiles.add(Tile.from(centreState.charAt(i)));
+            }
         }
     }
 
@@ -92,6 +102,10 @@ public class Centre {
         for(int i = 0; i < tiles.size(); i++) {
             stringBuilder.append(tiles.get(i).getColorCode());
         }
+        if(firstPlayerTile != null) {
+            stringBuilder.append('f');
+        }
         return stringBuilder.toString();
     }
+
 }

@@ -79,7 +79,14 @@ public class Board {
 
     @Override
     public String toString() {
-        // FIXME
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.score.toString());
+        stringBuilder.append('M');
+        stringBuilder.append(this.mosaic.toString());
+        stringBuilder.append('S');
+        stringBuilder.append(this.storage.toString());
+        stringBuilder.append('F');
+        stringBuilder.append(this.floor.toString());
+        return stringBuilder.toString();
     };
 }

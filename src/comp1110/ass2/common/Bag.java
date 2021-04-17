@@ -99,57 +99,74 @@ public class Bag {
      *
      * @return a Array contains four tiles.
      */
-    public char drawTile(String[] gameState) {
-        ArrayList<String> B = new ArrayList<>();
-        int indexF = gameState[0].indexOf('F', 0);
-        int indexC = gameState[0].indexOf('C', indexF + 1);
-        int indexB = gameState[0].indexOf('B', indexC + 1);
-        int indexD = gameState[0].indexOf('D', indexB + 1);
-        this.bag = gameState[0].substring(indexB + 1, indexD);
-        this.discard = gameState[0].substring(indexD + 1);
-        for (int i = 0; i < this.bag.length() - 1; i = i + 2) {
-            B.add(this.bag.substring(i, i + 2));
-        }
-        int num = 0;
-        for (String s : B) {
-            if (s.equals("00")) {
-                num++;
+    public Tile drawTile(Discard discard) {
+//        ArrayList<String> B = new ArrayList<>();
+//        int indexF = gameState[0].indexOf('F', 0);
+//        int indexC = gameState[0].indexOf('C', indexF + 1);
+//        int indexB = gameState[0].indexOf('B', indexC + 1);
+//        int indexD = gameState[0].indexOf('D', indexB + 1);
+//        this.bag = gameState[0].substring(indexB + 1, indexD);
+//        this.discard = gameState[0].substring(indexD + 1);
+//        for (int i = 0; i < this.bag.length() - 1; i = i + 2) {
+//            B.add(this.bag.substring(i, i + 2));
+//        }
+//
+//        // count number of 00 in bag
+//        int num = 0;
+//        for (String s : B) {
+//            if (s.equals("00")) {
+//                num++;
+//            }
+//        }
+
+        int num = tiles.size();
+        if (num == 0) {
+            tiles.addAll(discard.getTiles());
+            discard.clear();
+            if (this.tiles.size() == 0) {
+                return null;
             }
         }
+        Collections.shuffle(tiles);
+        return tiles.remove(tiles.size()-1);
+
+        // refill everything in discard to bag
         //String b = gameState[0].substring(indexD + 1);
-        ArrayList<String> D = new ArrayList<>();
-        if (num == B.size()) {
-            for (int i = 0; i < this.discard.length(); i = i + 2) {
-                D.add(this.discard.substring(i, i + 2));
-            }
-            //refill the Bag from Discard
+//        ArrayList<String> D = new ArrayList<>();
+//        if (num == B.size()) {
+//            for (int i = 0; i < this.discard.length(); i = i + 2) {
+//                D.add(this.discard.substring(i, i + 2));
+//            }
+//            //refill the Bag from Discard
+//
+//
+//            B = refill(B,D);
+//            for (int n =0;n<D.size();n=n+1){
+//                D.set(n,"00");}
+//            int numB=0;
+//            for (String s : B) {
+//                if (s.equals("00")) {
+//                    numB++;
+//                }
+//            }
+//            if (numB==B.size()) {
+//
+//            }
+//
+//        }
 
-
-            B = refill(B,D);
-            for (int n =0;n<D.size();n=n+1){
-                D.set(n,"00");}
-            int numB=0;
-            for (String s : B) {
-                if (s.equals("00")) {
-                    numB++;
-                }
-            }
-            if (numB==B.size()) {
-                return 'Z';
-            }
-
-        }
-        Random r = new Random();
-        char result = ' ';
-        char[] tile = {'a', 'b', 'c', 'd', 'e'};
-        ArrayList<Character> Bag = new ArrayList<>();
-        for(int i = 0;i<B.size(); i++){
-            for(int j =0;j<Integer.parseInt(B.get(i));j++){
-                Bag.add(tile[i]);
-            }
-        }
-            int position = r.nextInt(Bag.size());
-            result = Bag.get(position);
+        //
+//        Random r = new Random();
+//        char result = ' ';
+//        char[] tile = {'a', 'b', 'c', 'd', 'e'};
+//        ArrayList<Character> Bag = new ArrayList<>();
+//        for(int i = 0;i<B.size(); i++){
+//            for(int j =0;j<Integer.parseInt(B.get(i));j++){
+//                Bag.add(tile[i]);
+//            }
+//        }
+//            int position = r.nextInt(Bag.size());
+//            result = Bag.get(position);
 
         //while (true) {
             //int position = r.nextInt(5);
@@ -163,7 +180,7 @@ public class Bag {
            // }
         //}
 
-        return result;
+//        return result;
     }
 
     /**
@@ -225,6 +242,7 @@ public class Bag {
             for(int j = 0; j < amount; j++) {
                 this.tiles.add(Tile.from((char) ('a' + i/2)));
             }
+            Collections.shuffle(this.tiles);
 //            this.tiles.add(Tile.from(centreState.charAt(i)));
         }
     }

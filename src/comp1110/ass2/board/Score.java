@@ -20,7 +20,7 @@ public class Score {
      * @return the score
      */
     public Score addScore(int otherScore) {
-        // FIXME
+        this.score = Math.max(0, this.score + otherScore);
         return this;
     }
 
@@ -30,7 +30,7 @@ public class Score {
      * @return the score
      */
     public Score addScore(Score otherScore) {
-        // FIXME
+        this.score = Math.max(0, this.score + otherScore.getScore());
         return this;
     }
 
@@ -69,9 +69,19 @@ public class Score {
         this.score = score;
     }
 
+    //////////////////NEW//////////////////////////////////
+
+
+    public void fillFrom(String scoreToken) {
+        this.score = Integer.parseInt(scoreToken);
+    }
+
+
     @Override
     public String toString() {
         // FIXME
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.score);
+        return stringBuilder.toString();
     }
 }

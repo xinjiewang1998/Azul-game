@@ -7,6 +7,14 @@ import java.util.HashMap;
 
 public class Discard {
 
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(ArrayList<Tile> tiles) {
+        this.tiles = tiles;
+    }
+
     ArrayList<Tile> tiles;
 
     public Discard() {
@@ -25,6 +33,9 @@ public class Discard {
         tiles.clear();
     }
 
+    public void clear() {
+        this.tiles.clear();
+    }
     /**
      * Empty any row that no longer has a tile in the rightmost space and place all remaining tiles in the discard pile.
      * Any tiles that remain in incomplete rows on your board remain for the next round.
@@ -32,7 +43,7 @@ public class Discard {
      * @param leftTiles tiles left in storage.
      */
     public void addTilesToDiscard(ArrayList<Tile> leftTiles) {
-        //FIXME
+        this.tiles.addAll(leftTiles);
     }
 
 

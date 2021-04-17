@@ -22,14 +22,33 @@ public class Game {
     //player state
     Player[] players;
 
+    String turn;
+
     public Game() {
         this.common = new Common();
         this.players = new Player[2];
+        this.turn = "A";
 
         for (int i = 0; i < this.players.length; i++) {
-            this.players[i] = new Player();
+            this.players[i] = new Player((char) ('A' + i));
         }
 
+    }
+
+    public Common getCommon() {
+        return common;
+    }
+
+    public void setCommon(Common common) {
+        this.common = common;
+    }
+
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Player[] players) {
+        this.players = players;
     }
 
     public boolean isSharedStateWellFormed(String sharedState) {
@@ -148,7 +167,7 @@ public class Game {
         Matcher matcher = pattern.matcher(sharedState);
         boolean matchFound = matcher.find();
         if(matchFound) {
-//            System.out.println(matcher.group(0));
+            System.out.println("Found Common: " + matcher.group(0));
 //            System.out.println(matcher.group(1));
 //            System.out.println(matcher.group(2));
 //            System.out.println(matcher.group(3));
@@ -159,19 +178,28 @@ public class Game {
 //            System.out.println(matcher.group(8));
 
             String turnState = matcher.group(1);
+            this.turn = turnState;
 
             String factoryStates = matcher.group(2);
             String centreState = matcher.group(4);
             String bagState = matcher.group(5);
             String discardState = matcher.group(7);
 
-            System.out.println("///////////////");
+            Factory[] factories = new Factory[5];
+            for (int i = 0; i < 5; i++) {
+                Factory factory = new Factory();
+                factory.setId(i);
+                factories[i] = factory;
+            }
+
+//            System.out.println("///////////////");
             for (int i = 0; i < factoryStates.length(); i+=5) {
                 String factoryState = factoryStates.substring(i, i+5);
                 Factory factory = new Factory();
                 factory.fillFrom(factoryState);
-                this.common.getFactories()[factory.getId()] = factory;
+                factories[factory.getId()] = factory;
             }
+            this.common.setFactories(factories);
 
             Centre centre = new Centre();
             centre.fillFrom(centreState);
@@ -185,10 +213,11 @@ public class Game {
             discard.fillFrom(discardState);
             this.common.setDiscard(discard);
 
-            System.out.println(matcher.group(0).substring(1));
-            System.out.println(this.common.toString());
+//            System.out.println(matcher.group(0).substring(1));
+//            System.out.println(this.common.toString());
 
         } else {
+            System.out.println("Not Found Common: " + sharedState);
         }
     }
 
@@ -297,7 +326,7 @@ public class Game {
             Matcher matcher = pattern.matcher(playerState);
             matchFound = matcher.find();
             if (matchFound) {
-//                System.out.println(matcher.group(0));
+                System.out.println("Found Player: " + matcher.group(0));
 //                System.out.println(matcher.group(1));
 //                System.out.println(matcher.group(2));
 //                System.out.println(matcher.group(3));
@@ -313,22 +342,44 @@ public class Game {
                 String storageToken = matcher.group(5);
                 String floorToken = matcher.group(7);
 
-                for (int i = 0; i < players.length; i++) {
-                    if(players[i].getId )
-                }
+                Player player = players[playerToken.charAt(0) - 'A'];
+//
                 Score score = new Score();
                 score.fillFrom(scoreToken);
-                this.board.
+                player.getBoard().setScore(score);
+
+                Mosaic mosaic = new Mosaic();
+                mosaic.fillFrom(mosaicToken);
+                player.getBoard().setMosaic(mosaic);
+
+                Storage storage = new Storage();
+                storage.fillFrom(storageToken);
+                player.getBoard().setStorage(storage);
+
+                Floor floor = new Floor();
+                floor.fillFrom(floorToken);
+                player.getBoard().setFloor(floor);
 
                 playerState = playerState.substring(matcher.group(0).length());
             }
         }
     }
+
+    public void toggleTurn() {
+        if (turn.equals("A")) {
+            this.turn = "B";
+        } else {
+            this.turn = "A";
+        }
+    }
+
+
     public static void main(String[] args) {
         Game game = new Game();
-//        game.reconstructCommonFrom("AF0cdde1bbbe2abde3cdee4bcceCfB1915161614D0000000000");
-        game.reconstructBoardsFrom("A20Ma02a13b00e42S2a13e44a1FaabbeB30Mc01b11d21S0e12b2F");
-
+        game.reconstructCommonFrom("AFCB1207080506D0107030805");
+        game.reconstructBoardsFrom("A21Md00c01b02a03e04d11a12c13a21c22a30d34a44S2b2FeeeefB24Md00c02a03e04a10c11d12e13b14c20e22b23b32c34e40S4d2Fcc");
+        int result = game.getPlayers()[0].getBoard().getMosaic().getBonus();
+        System.out.println(result);
         // run first turn
         // run second turn
         // ...
