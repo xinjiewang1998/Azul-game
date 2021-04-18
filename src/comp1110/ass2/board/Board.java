@@ -10,18 +10,10 @@ public class Board {
     private Mosaic mosaic;
     private Floor floor;
 
-    public Board()  {
+    public Board() {
+        init();
     }
 
-    /**
-     * Initialize the board with correct prams.
-     */
-    public void init() {
-        this.score = new Score(0);
-        this.storage = new Storage();
-        this.mosaic = new Mosaic();
-        this.floor = new Floor();
-    }
 
     public Score getScore() {
         return score;
@@ -57,11 +49,20 @@ public class Board {
 
 
     /**
-     * 0. decode instruction
-     * 1. add tiles to storage
-     * 2. move complete row to mosaic
-     * 3. bring back score
-     * @param tiles the tiles goes to the storage
+     * Initialize the board with correct prams.
+     */
+    public void init() {
+        this.score = new Score();
+        this.storage = new Storage();
+        this.mosaic = new Mosaic();
+        this.floor = new Floor();
+    }
+
+    /**
+     * 0. decode instruction 1. add tiles to storage 2. move complete row to mosaic 3. bring back
+     * score
+     *
+     * @param tiles       the tiles goes to the storage
      * @param instruction the instruction of operation
      * @return the score
      */
@@ -88,5 +89,5 @@ public class Board {
         stringBuilder.append('F');
         stringBuilder.append(this.floor.toString());
         return stringBuilder.toString();
-    };
+    }
 }

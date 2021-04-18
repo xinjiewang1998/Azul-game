@@ -1,182 +1,48 @@
 package comp1110.ass2.common;
 
 import comp1110.ass2.Tile;
-
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-import static comp1110.ass2.Azul.drawTileFromBag;
-
 public class Factory {
-    private String factory;
-    private String bag;
-    private String discard;
 
-    Bag bagg;
-
-    ////////////////////////////////////////////////////
     private int id;
     private ArrayList<Tile> tiles;
-
 
     public Factory() {
         tiles = new ArrayList<>();
     }
 
-    // old
-    public Factory (Bag bag) {
-        //this.bag = bag;
+    public Factory(int id) {
+        this.id = id;
         tiles = new ArrayList<>();
     }
 
     public void setTiles(ArrayList<Tile> tiles) {
         this.tiles = tiles;
     }
+
     public ArrayList<Tile> getTiles() {
         return this.tiles;
     }
 
-    public void setId(int id) {this.id = id;}
-    public int getId() {return this.id;}
-
-
-    public void drawTiles(Bag bag, Discard discard){
-        for(int i = 0; i < 4; i++) {
-            Tile tile = bag.drawTile(discard);
-            if (tile != null) {
-                tiles.add(tile);
-            }
-        }
+    public void setId(int id) {
+        this.id = id;
     }
 
-    // new
-    public String getFactory() {
-        return factory;
-    }
-
-    public void setFactory(String factory) {
-        this.factory = factory;
+    public int getId() {
+        return this.id;
     }
 
 
     /**
      * Each factory is filled with exactly four tiles drawn randomly from the bag.
      *
-     * @param gameState a array contains four tiles.
+     * @param bag     the bag to draw
+     * @param discard the discard if bag is empty
      */
-    public String[] addTilesFromBag(String[] gameState, Bag bag, Discard discard) {
-
-//        int indexF = gameState[0].indexOf('F', 0);
-//        int indexC = gameState[0].indexOf('C', indexF + 1);
-//        int indexB = gameState[0].indexOf('B', indexC + 1);
-//        int indexD = gameState[0].indexOf('D', indexB + 1);
-//        String f =gameState[0].substring(indexF+1,indexC);
-//        String b = gameState[0].substring(indexB+1,indexD);
-//        String a =gameState[0];
-//
-//        ArrayList<String> B = new ArrayList<>();
-//        ArrayList<String> F = new ArrayList<>();
-//
-//        for(int i = 0;i<b.length()-1;i=i+2){
-//            B.add(b.substring(i,i+2));
-//        }
-//
-//        int index = 0;
-//        if(f.length()!=0){
-//            return gameState;
-//        }
-//        else{
-//            String d =gameState[0].substring(indexD+1);
-//            ArrayList<String> D = new ArrayList<>();
-//            for(int k = 0;k<d.length();k=k+2){
-//                D.add(d.substring(k,k+2));
-//            }
-//
-//            loop1: for(int i=0;i<5;i++){
-//                F.add(""+i);
-//
-//
-//                 for (int j=0;j<4;j++){
-//                    int num = 0;
-//                    for (String s : B) {
-//                        if (s.equals("00")) {
-//                            num++;
-//                        }
-//                    }
-//                    if(num ==B.size()){
-//                        int numD=0;
-//                        for (String s : D) {
-//                            if (s.equals("00")) {
-//                                numD++;
-//                            }
-//                        }
-//                        if(numD==D.size()){
-//                            return gameState;
-//                        }
-//                        else{
-//                            for (int n =0;n<B.size();n=n+1){
-//                                B.set(n, D.get(n));
-//                                //if(Integer.parseInt(D.get(i))<10){
-//                                //B.add(i,"0");
-//                                //}
-//                                D.set(n,"00");
-//                            }
-//                            gameState[0] = "F"+String.join("", F)+a.substring(indexC,indexB)+"B"+String.join("", B)+"D"+String.join("",D);
-//                        }}
-//
-//
-//                    char tile;
-//                     Tile tilet = bag.drawTile(discard);
-//                     tile = (tilet == null) ? 'Z' : tilet.getColorCode();
-//
-//                    if(tile=='a'){
-//                        if(Integer.parseInt(B.get(0)) -1<10){
-//                            B.set(0,"0"+(Integer.parseInt(B.get(0)) -1));
-//                        }else{
-//                            B.set(0,""+(Integer.parseInt(B.get(0)) -1));
-//                        }
-//                    }
-//                    if(tile=='b'){
-//                        if(Integer.parseInt(B.get(1)) -1<10){
-//                            B.set(1,"0"+(Integer.parseInt(B.get(1)) -1));}
-//                        else{
-//                            B.set(1,""+(Integer.parseInt(B.get(1)) -1));
-//                        }
-//                    }
-//                    if(tile=='c'){
-//                        if(Integer.parseInt(B.get(2)) -1<10){
-//                            B.set(2,"0"+(Integer.parseInt(B.get(2)) -1));
-//                        }else{
-//                            B.set(2,""+(Integer.parseInt(B.get(2)) -1));
-//                        }
-//                    }
-//                    if(tile=='d'){
-//                        if(Integer.parseInt(B.get(3)) -1<10){
-//                            B.set(3,"0"+(Integer.parseInt(B.get(3)) -1));
-//                        }else{
-//                            B.set(3,""+(Integer.parseInt(B.get(3)) -1));
-//                        }
-//                    }
-//                    if(tile=='e'){
-//                        if(Integer.parseInt(B.get(4)) -1<10){
-//                            B.set(4,"0"+(Integer.parseInt(B.get(4)) -1));
-//                        }else{
-//                            B.set(4,""+(Integer.parseInt(B.get(4)) -1));
-//                        }
-//                    }
-//                    if(tile!='Z'){
-//                        F.add(""+tile);
-//                    }
-//                    else{
-//                        break loop1;
-//                    }
-//                    gameState[0] = "F"+String.join("", F)+a.substring(indexC,indexB)+"B"+String.join("", B)+"D"+String.join("",D);
-//                }
-//            }
-//        }
-        //gameState[0] = "F"+String.join("", F)+gameState[0].substring(indexC,indexB)+"B"+String.join("", B)+gameState[0].substring(indexD);
-        // FIXME Task 6
-        //FIXME
-        return gameState;
+    public void refillTiles(Bag bag, Discard discard) {
+        tiles.addAll(bag.drawTiles(discard));
     }
 
     /**
@@ -185,32 +51,83 @@ public class Factory {
      * @param color the color player chose.
      * @return a array contains all tiles of the color in this factory.
      */
-    public ArrayList<Tile> takeTilesFromFactory(String color) {
-        //FIXME
-        return new ArrayList<Tile>();
+    public ArrayDeque<Tile> drawTiles(String color, Centre centre) {
+        ArrayDeque<Tile> returnTiles = new ArrayDeque<>();
+        for (int i = 0; i < tiles.size(); i++) {
+            Tile tile = tiles.get(i);
+            if (tile != null && tile.getColor().equals(color)) {
+                returnTiles.push(tile);
+            } else {
+                centre.placeTile(tile);
+            }
+            tiles.clear();
+        }
+        return returnTiles;
     }
 
+    /**
+     * The factories substring begins with an 'F' and is followed by a collection of *up to* 5
+     * 5-character factory strings representing each factory. Each factory string is defined in the
+     * following way: 1st character is a sequential digit '0' to '4' - representing the factory
+     * number. 2nd - 5th characters are 'a' to 'e', alphabetically - representing the tiles. A
+     * factory may have between 0 and 4 tiles. If a factory has 0 tiles, it does not appear in the
+     * factories string. Factory strings are ordered by factory number. For example: given the
+     * string "F1aabc2abbb4ddee": Factory 1 has tiles 'aabc', Factory 2 has tiles 'abbb', Factory 4
+     * has tiles 'ddee', and Factories 0 and 4 are empty.
+     *
+     * @param token the factory string
+     * @return true if is well formed factory string
+     */
+    public static boolean isWellFormedFactoryString(String token) {
+        if (token.length() == 0) {
+            return true;
+        }
+        // only 01234 possible
+        char index = token.charAt(0);
+        if (index != '0' && index != '1' && index != '2' && index != '3' && index != '4') {
+            return false;
+        }
 
-    /////////////////////////////NEW////////////////////////////
+        // only abcde possible
+        for (int i = 1; i < token.length(); i++) {
+            char color = token.charAt(i);
+            if (color != 'a' && color != 'b' && color != 'c' && color != 'd' && color != 'e') {
+                return false;
+            }
+        }
+        // check unique and strictly increase
+        for (int i = 1; i < token.length() - 1; i++) {
+            int curr = token.charAt(i);
+            int next = token.charAt(i + 1);
+            if (next < curr) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    /**
+     * reconstruct internal state from string
+     *
+     * @param token the string representation of floor state
+     */
+    public void reconstructFromString(String token) {
+        tiles = new ArrayList<>();
 
-
-    public void fillFrom(String factoryState) {
-        this.id = factoryState.charAt(0) - 48;
-        for(int i = 1; i < factoryState.length(); i++) {
-            this.tiles.add(Tile.from(factoryState.charAt(i)));
+        this.id = token.charAt(0) - 48;
+        for (int i = 1; i < token.length(); i++) {
+            this.tiles.add(Tile.from(token.charAt(i)));
         }
     }
 
 
     @Override
     public String toString() {
-        //FIXME
         StringBuilder stringBuilder = new StringBuilder();
         if (tiles.size() != 0) {
             stringBuilder.append(id);
-            for (int i = 0; i < tiles.size(); i++) {
-                stringBuilder.append(tiles.get(i).getColorCode());
+            for (Tile tile : tiles) {
+                stringBuilder.append(tile.getColorCode());
             }
         }
         return stringBuilder.toString();

@@ -1,13 +1,14 @@
 package comp1110.ass2.common;
 
 public class Common {
+
     private Bag bag;
     private Centre centre;
     private Discard discard;
     private Factory[] factories;
 
     public Common() {
-        factories = new Factory[5];
+        init();
     }
 
     public Bag getBag() {
@@ -46,12 +47,12 @@ public class Common {
      * Initialize the Common area.
      */
     public void init() {
-        //this.bag = new Bag();
+        this.bag = new Bag();
         this.centre = new Centre();
         this.discard = new Discard();
         this.factories = new Factory[5];
-        for (int i = 0;i<5;i++){
-            //factories[i] = new Factory();
+        for (int i = 0; i < 5; i++) {
+            factories[i] = new Factory('A' + i);
         }
     }
 
@@ -66,8 +67,8 @@ public class Common {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('F');
-        for(int i = 0; i <  this.factories.length; i++) {
-            stringBuilder.append(this.factories[i].toString());
+        for (Factory factory : this.factories) {
+            stringBuilder.append(factory.toString());
         }
         stringBuilder.append('C');
         stringBuilder.append(this.centre);

@@ -5,7 +5,6 @@ import comp1110.ass2.common.Centre;
 import comp1110.ass2.common.Discard;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 
 public class Floor {
 
@@ -16,43 +15,48 @@ public class Floor {
         this.tiles = new ArrayList<>();
     }
 
+
+    /**
+     * check if floor contains first player tile
+     *
+     * @return true if has first player tile
+     */
+    public boolean hasFirstPlayerTile() {
+        return firstPlayerTile != null;
+    }
+
+    /**
+     * place first player tile
+     *
+     * @param firstPlayerTile
+     */
+    public void placeFirstPlayerTile(Tile firstPlayerTile) {
+        this.firstPlayerTile = firstPlayerTile;
+    }
+
+
     /**
      * Add all other tiles to our tiles.
      *
      * @param otherTiles the other tiles
      */
-    public void addTiles(ArrayDeque<Tile> otherTiles) {
-        // FIXME
-    }
-
-    public void putTiles(Deque tiles) {
-        this.tiles.addAll(tiles);
-        tiles.clear();
-    }
-
-    public int score() {
-        return switch (tiles.size()) {
-            case 0 -> 0;
-            case 1 -> -1;
-            case 2 -> -2;
-            case 3 -> -4;
-            case 4 -> -6;
-            case 5 -> -8;
-            case 6 -> -11;
-            default -> -14;
-        };
+    public void placeTiles(ArrayDeque<Tile> otherTiles) {
+        this.tiles.addAll(otherTiles);
     }
 
     /**
-     * Clear all tiles, and send back to discard
+     * Clear all tiles including first player tile, and send back to discard and centre.
+     *
+     * @param discard the discard to have normal colored tiles
+     * @param centre  the centre to have first player tile
      */
     public void clearTiles(Discard discard, Centre centre) {
-        discard.addTilesToDiscard(this.tiles);
-        if(this.firstPlayerTile != null) {
-            centre.addFirstPlayerTile(this.firstPlayerTile);
+        discard.placeTiles(this.tiles);
+        if (this.firstPlayerTile != null) {
+            centre.setFirstPlayerTile(this.firstPlayerTile);
             this.firstPlayerTile = null;
         }
-        this.tiles = new ArrayList<>();
+        this.tiles.clear();
     }
 
     /**
@@ -60,7 +64,7 @@ public class Floor {
      *
      * @return the penalty score
      */
-    public Score calculatePenalty(Score score) {
+    public Score calculatePenalty() {
         int size = tiles.size();
         if (firstPlayerTile != null) {
             size += 1;
@@ -75,63 +79,54 @@ public class Floor {
             case 6 -> -11;
             default -> -14;
         };
-        score.addScore(penalty);
-        return score;
+        return new Score(penalty);
     }
 
     /**
-     * check if floor contains first player tile
-     *
-     * @return true if has first player tile
-     */
-    public boolean hasFirstPlayerTile() {
-        return firstPlayerTile != null;
-    }
-
-    /**
-     * return first player tile to centre
-     *
-     * @param centre the shared centre
-     */
-    public void returnFirstPlayerTile(Centre centre) {
-
-    }
-
-
-    /**
-     * 5. [floor] The Floor substring begins with an 'F' and is followed by *up to* 7 characters in
+     * The Floor substring begins with an 'F' and is followed by *up to* 7 characters in
      * alphabetical order. Each character is 'a' to 'f' - where 'f' represents the first player
      * token. There is only one first player token.
+     *
+     * @param token the floor string
+     * @return true if is well formed floor string
      */
-    public static boolean isFloorWellFormedString(ArrayList<Character> floor) {
-        if (floor.size() > 7) {
+    public static boolean isWellFormedFloorString(String token) {
+        if (token.length() > 7) {
             return false;
         }
         int countF = 0;
-        for (int i = 0; i < floor.size(); i++) {
-            char c = floor.get(i);
+        for (int i = 0; i < token.length(); i++) {
+            char c = token.charAt(i);
+            // only abcedf allowed
             if (c != 'a' && c != 'b' && c != 'c' && c != 'd' && c != 'e' && c != 'f') {
                 return false;
             }
-            if (i != 0 && (c - floor.get(i - 1) < 0)) {
+            // alphabetical order
+            if (i != 0 && (c - token.charAt(i - 1) < 0)) {
                 return false;
             }
             if (c == 'f') {
                 countF += 1;
             }
         }
-        if (countF > 1) {
-            return false;
-        }
-        return true;
+        // only one f
+        return countF <= 1;
     }
 
-    public void fillFrom(String floorToken) {
-        for (int i = 0; i < floorToken.length(); i++) {
-            if (floorToken.charAt(i) == 'f') {
-                this.firstPlayerTile = Tile.from('f');
+    /**
+     * reconstruct internal state from string
+     *
+     * @param token the string representation of floor state
+     */
+    public void reconstructFromString(String token) {
+        firstPlayerTile = null;
+        tiles = new ArrayList<>();
+
+        for (int i = 0; i < token.length(); i++) {
+            if (token.charAt(i) == 'f') {
+                firstPlayerTile = Tile.from('f');
             } else {
-                tiles.add(Tile.from(floorToken.charAt(i)));
+                tiles.add(Tile.from(token.charAt(i)));
             }
         }
     }
@@ -139,10 +134,10 @@ public class Floor {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i =0; i < tiles.size(); i++) {
+        for (int i = 0; i < tiles.size(); i++) {
             stringBuilder.append(tiles.get(i).getColorCode());
         }
-        if(firstPlayerTile != null) {
+        if (firstPlayerTile != null) {
             stringBuilder.append('f');
         }
         return stringBuilder.toString();

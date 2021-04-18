@@ -1,33 +1,37 @@
 package comp1110.ass2.common;
 
 import comp1110.ass2.Tile;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class Centre {
-    private final int PLAYER_LIMIT = 1;
 
-    private ArrayList<Tile> tiles = new ArrayList<>();
+    private ArrayList<Tile> tiles;
     private Tile firstPlayerTile;
 
-    //constructor
     public Centre() {
-
+        tiles = new ArrayList<>();
     }
 
     public ArrayList<Tile> getTiles() {
         return tiles;
     }
+
     public void setTiles(ArrayList<Tile> centre) {
         this.tiles = centre;
     }
 
-    public void addTileToCentre(Tile tile) {
-        this.tiles.add(tile);
+    public void setFirstPlayerTile(Tile firstPlayerTile) {
+        this.firstPlayerTile = firstPlayerTile;
     }
 
-
-    public void addFirstPlayerTile(Tile firstPlayerTile) {
-        this.firstPlayerTile = firstPlayerTile;
+    /**
+     * place one tile to the centre.
+     *
+     * @param tile the tile to be placed
+     */
+    public void placeTile(Tile tile) {
+        this.tiles.add(tile);
     }
 
     /**
@@ -35,8 +39,8 @@ public class Centre {
      *
      * @param otherTiles a array contains remaining tiles on this factory
      */
-    public void addTilesToCentre(ArrayList<Tile> otherTiles) {
-        //FIXME
+    public void placeTiles(ArrayList<Tile> otherTiles) {
+        tiles.addAll(otherTiles);
     }
 
 
@@ -46,37 +50,42 @@ public class Centre {
      * @param color the color player chose.
      * @return a array contains all tiles of the same color player chose.
      */
-    public ArrayList<Tile> takeTilesFromCentre(String color) {
-        //FIXME
-        return new ArrayList<>();
+    public ArrayDeque<Tile> drawTiles(String color) {
+        ArrayDeque<Tile> returnTiles = new ArrayDeque<>();
+        for (int i = 0; i < tiles.size(); i++) {
+            Tile tile = tiles.get(i);
+            if (tile != null && tile.getColor().equals(color)) {
+                returnTiles.push(tile);
+                tiles.set(i, null);
+            }
+        }
+        return returnTiles;
     }
 
-    /////////////////////////////NEW////////////////////////////
-
     /**
-     * 2. [centre] The centre substring starts with a 'C'
-     * This is followed by *up to* 15 characters.
-     * Each character is 'a' to 'e', alphabetically - representing a tile
-     * in the centre.
-     * The centre string is sorted alphabetically.
-     * For example: "Caaabcdde" The Centre contains three 'a' tiles, one 'b'
-     * tile, one 'c' tile, two 'd' tile and one 'e' tile.
+     * The centre substring starts with a 'C' This is followed by *up to* 15 characters. Each
+     * character is 'a' to 'e', alphabetically - representing a tile in the centre. The centre
+     * string is sorted alphabetically. For example: "Caaabcdde" The Centre contains three 'a'
+     * tiles, one 'b' tile, one 'c' tile, two 'd' tile and one 'e' tile.
+     *
+     * @param token the centre string
+     * @return true if is well formed centre string
      */
-    public static boolean isWellFormedCentreString(ArrayList<Character> chars) {
-        if (chars.size() > 15) {
+    public static boolean isWellFormedCentreString(String token) {
+        if (token.length() > 15) {
             return false;
         }
         int fCount = 0;
-        for (int i = 0; i < chars.size(); i++) {
-            char c = chars.get(i);
-            char prevChar, currChar;
+        for (int i = 0; i < token.length(); i++) {
+            char c = token.charAt(i);
+            // alphabetical order
             if (c == 'a' || c == 'b' || c == 'c' || c == 'd' || c == 'e') {
-                if (i != 0 && (c - chars.get(i-1) < 0)) {
+                if (i != 0 && (c - token.charAt(i - 1) < 0)) {
                     return false;
                 }
             } else if (c == 'f') {
                 fCount++;
-                if(fCount > 1) {
+                if (fCount > 1) {
                     return false;
                 }
             } else {
@@ -86,12 +95,20 @@ public class Centre {
         return true;
     }
 
-    public void fillFrom(String centreState) {
-        for(int i = 0; i < centreState.length(); i++) {
-            if (centreState.charAt(i) == 'f') {
-                this.firstPlayerTile = Tile.from('f');
+    /**
+     * reconstruct internal state from string
+     *
+     * @param token the string representation of floor state
+     */
+    public void reconstructFromString(String token) {
+        firstPlayerTile = null;
+        tiles = new ArrayList<>();
+
+        for (int i = 0; i < token.length(); i++) {
+            if (token.charAt(i) == 'f') {
+                firstPlayerTile = Tile.from('f');
             } else {
-                tiles.add(Tile.from(centreState.charAt(i)));
+                tiles.add(Tile.from(token.charAt(i)));
             }
         }
     }
@@ -99,10 +116,10 @@ public class Centre {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < tiles.size(); i++) {
+        for (int i = 0; i < tiles.size(); i++) {
             stringBuilder.append(tiles.get(i).getColorCode());
         }
-        if(firstPlayerTile != null) {
+        if (firstPlayerTile != null) {
             stringBuilder.append('f');
         }
         return stringBuilder.toString();
