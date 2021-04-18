@@ -3,7 +3,6 @@ package comp1110.ass2.board;
 import comp1110.ass2.Tile;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class Mosaic {
 
@@ -11,30 +10,52 @@ public class Mosaic {
     private final ArrayList<String> DEFAULT_COLORS = new ArrayList<>(
             Arrays.asList("blue", "green", "orange", "purple", "red"));
 
-    // simple [][] is enough for use.
     private Tile[][] square;
     private int[] colorCount;
-    private HashMap<String, Integer> colorMap;
 
 
     public Mosaic() {
-        this.square = new Tile[NUM_ROWS][NUM_ROWS];
+        square = new Tile[NUM_ROWS][NUM_ROWS];
         colorCount = new int[]{0, 0, 0, 0, 0};
-        colorMap = new HashMap<>();
-        for (String color : DEFAULT_COLORS) {
-            colorMap.put(color, 0);
-        }
-        ;
     }
 
+    /**
+     * calculate the column number according to the color and row number.
+     *
+     * @param color the target color
+     * @param row   the target row number
+     * @return the column number
+     */
+    public int calculateColumn(String color, int row) {
+        return (row + DEFAULT_COLORS.indexOf(color)) % NUM_ROWS;
+    }
 
-    // no safety guarantee, please call hasColor first if required.
-    public int putTile(Tile t, int row) {
-        int index = DEFAULT_COLORS.indexOf(t.getColor());
+    /**
+     * tells whether a colored tile has occupied that row. if it is true, cannot put tile with same
+     * color on that row again.
+     *
+     * @param color the target color
+     * @param row   the target row
+     * @return true if the color exists in mosaic
+     */
+    public boolean hasColor(String color, int row) {
+        int column = (row + DEFAULT_COLORS.indexOf(color)) % NUM_ROWS;
+        return (square[row][column] != null);
+    }
+
+    /**
+     * find the correct position and place the tile
+     *
+     * @param tile the tile to be placed
+     * @param row  the target row
+     * @return the score earned for this move
+     */
+    public Score placeTile(Tile tile, int row) {
+        int index = DEFAULT_COLORS.indexOf(tile.getColor());
         int column = (row + index) % NUM_ROWS;
 
-        square[row][column] = t;
-        colorCount[index]++;
+        square[row][column] = tile;
+//        colorCount[index]++;
 
         int count = 1;
         boolean hasHorizontallyLinkedTiles = false;
@@ -75,89 +96,8 @@ public class Mosaic {
                 break;
             }
         }
-        return (hasHorizontallyLinkedTiles && hasVerticallyLinkedTiles) ? count + 1 : count;
-    }
-
-
-    public int getBonus() {
-        int total = 0;
-        for (int i = 0; i < NUM_ROWS; i++) {
-            boolean rowFilled = true;
-            boolean colFilled = true;
-            for (int j = 0; j < NUM_ROWS; j++) {
-                if (square[i][j] == null) {
-                    rowFilled = false;
-                    break;
-                }
-            }
-            if (rowFilled) {
-                total += 2;
-            }
-            for (int j = 0; j < NUM_ROWS; j++) {
-                if (square[j][i] == null) {
-                    colFilled = false;
-                    break;
-                }
-            }
-            if (colFilled) {
-                total += 7;
-            }
-        }
-
-        for (int i = 0; i < NUM_ROWS; i++) {
-            for (int j = 0; j < NUM_ROWS; j++) {
-                Tile tile = square[i][j];
-                if (tile != null) {
-                    colorMap.put(tile.getColor(), colorMap.get(tile.getColor()) + 1);
-                }
-            }
-        }
-        for (String color : DEFAULT_COLORS) {
-            if (colorMap.get(color) == NUM_ROWS) {
-                total += 10;
-            }
-        }
-
-//        for (int i = 0; i < NUM_ROWS; i++) {
-//            if (colorCount[i] == NUM_ROWS) {
-//                total += 10;
-//            }
-//        }
-        return total;
-    }
-
-    /**
-     * calculate the column number according to the color and row number.
-     *
-     * @param color the target color
-     * @param row   the target row number
-     * @return the column number
-     */
-    public int calculateColumn(String color, int row) {
-        return (row + DEFAULT_COLORS.indexOf(color)) % NUM_ROWS;
-    }
-
-    /**
-     * tells whether a colored tile has occupied that row. if it is true, cannot put tile with same
-     * color on that row again.
-     *
-     * @param color the target color
-     * @param row   the target row
-     * @return true if the color exists in mosaic
-     */
-    public boolean hasColor(String color, int row) {
-        int column = (row + DEFAULT_COLORS.indexOf(color)) % NUM_ROWS;
-        return (square[row][column] != null);
-    }
-
-    /**
-     * find the correct position and place the tile
-     *
-     * @param tile the tile to be placed
-     * @param row  the target row
-     */
-    public void addTile(Tile tile, int row) {
-        // FIXME
+        return (hasHorizontallyLinkedTiles && hasVerticallyLinkedTiles) ? new Score(count + 1) :
+                new Score(count);
     }
 
     /**
@@ -190,220 +130,105 @@ public class Mosaic {
      *
      * @return the Bonus Score
      */
-    public int calculateBonusScore(String[] gameState, char player) {
-        int indexA = gameState[1].indexOf('A', 0);
-        int indexB = gameState[1].indexOf('B', indexA + 1);
-        //int indexC = gameState[1].indexOf('C', indexB + 1);
-        String a = gameState[1].substring(indexA, indexB);
-        String b = gameState[1].substring(indexB);
-        ArrayList<String> AM = new ArrayList<>();
-        ArrayList<String> BM = new ArrayList<>();
-        int indexAM = a.indexOf('M', 0);
-        int indexAA = a.indexOf('A', 0);
-        int indexBM = b.indexOf('M', 0);
-        int indexBB = b.indexOf('B', 0);
-        int indexAS = a.indexOf('S', 0);
-        int indexBS = b.indexOf('S', 0);
-        String am = a.substring(indexAM + 1, indexAS);
-        String bm = b.substring(indexBM + 1, indexBS);
-        for (int i = 0; i < am.length(); i = i + 1) {
-            AM.add(am.substring(i, i + 1));
-        }
-        for (int i = 0; i < bm.length(); i = i + 1) {
-            BM.add(bm.substring(i, i + 1));
-        }
-        int ScoreA = 0;
-        int ScoreB = 0;
-        int Score = 0;
-        if (player == 'A') {
-            int countA = 0;
-            int countB = 0;
-            int countC = 0;
-            int countD = 0;
-            int countE = 0;
-            for (int i = 0; i < AM.size() - 1; i++) {
-
-                if (AM.get(i).equals("a")) {
-                    countA++;
-                } else if (AM.get(i).equals("b")) {
-                    countB++;
-                } else if (AM.get(i).equals("c")) {
-                    countC++;
-                } else if (AM.get(i).equals("d")) {
-                    countD++;
-                } else if (AM.get(i).equals("e")) {
-                    countE++;
+    public Score calculateBonusScore() {
+        int total = 0;
+        for (int i = 0; i < NUM_ROWS; i++) {
+            boolean rowFilled = true;
+            boolean colFilled = true;
+            for (int j = 0; j < NUM_ROWS; j++) {
+                if (square[i][j] == null) {
+                    rowFilled = false;
+                    break;
                 }
             }
-            if (countA == 5) {
-                ScoreA += 10;
+            if (rowFilled) {
+                total += 2;
             }
-            if (countB == 5) {
-                ScoreA += 10;
-            }
-            if (countC == 5) {
-                ScoreA += 10;
-            }
-            if (countD == 5) {
-                ScoreA += 10;
-            }
-            if (countE == 5) {
-                ScoreA += 10;
-            }
-
-            ArrayList<String> pos = new ArrayList<String>();
-            for (int i = 1; i < am.length(); i += 3) {
-                pos.add(am.substring(i, i + 2));
-            }
-            for (int i = 0; i < 5; i++) {
-                int num = 0;
-                for (int j = 0; j < 5; j++) {
-                    for (int k = 0; k < pos.size(); k++) {
-                        String aa = "" + i + j;
-                        if (pos.get(k).equals(aa)) {
-                            num++;
-                            break;
-                        }
-                    }
-                }
-                if (num == 5) {
-                    ScoreA += 2;
+            for (int j = 0; j < NUM_ROWS; j++) {
+                if (square[j][i] == null) {
+                    colFilled = false;
+                    break;
                 }
             }
-            for (int i = 0; i < 5; i++) {
-                int num_1 = 0;
-                for (int j = 0; j < 5; j++) {
-                    for (String po : pos) {
-                        String aa = "" + j + i;
-                        if (po.equals(aa)) {
-                            num_1++;
-                            break;
-                        }
-                    }
-                }
-                if (num_1 == 5) {
-                    ScoreA += 7;
-                }
+            if (colFilled) {
+                total += 7;
             }
-            Score = ScoreA;
-        }
-        if (player == 'B') {
-            int countA = 0;
-            int countB = 0;
-            int countC = 0;
-            int countD = 0;
-            int countE = 0;
-            for (int i = 0; i < BM.size() - 1; i++) {
-
-                if (BM.get(i).equals("a")) {
-                    countA++;
-                } else if (BM.get(i).equals("b")) {
-                    countB++;
-                } else if (BM.get(i).equals("c")) {
-                    countC++;
-                } else if (BM.get(i).equals("d")) {
-                    countD++;
-                } else if (BM.get(i).equals("e")) {
-                    countE++;
-                }
-            }
-            if (countA == 5) {
-                ScoreB += 10;
-            }
-            if (countB == 5) {
-                ScoreB += 10;
-            }
-            if (countC == 5) {
-                ScoreB += 10;
-            }
-            if (countD == 5) {
-                ScoreB += 10;
-            }
-            if (countE == 5) {
-                ScoreB += 10;
-            }
-
-            ArrayList<String> pos = new ArrayList<String>();
-            for (int i = 1; i < bm.length(); i += 3) {
-                pos.add(bm.substring(i, i + 2));
-            }
-            for (int i = 0; i < 5; i++) {
-                int num = 0;
-                for (int j = 0; j < 5; j++) {
-                    for (int k = 0; k < pos.size(); k++) {
-                        String bb = "" + i + j;
-                        if (pos.get(k).equals(bb)) {
-                            num++;
-                            break;
-                        }
-                    }
-                }
-                if (num == 5) {
-                    ScoreB += 2;
-                }
-            }
-            for (int i = 0; i < 5; i++) {
-                int num_1 = 0;
-                for (int j = 0; j < 5; j++) {
-                    for (String po : pos) {
-                        String bb = "" + j + i;
-                        if (po.equals(bb)) {
-                            num_1++;
-                            break;
-                        }
-                    }
-                }
-                if (num_1 == 5) {
-                    ScoreB += 7;
-                }
-            }
-            Score = ScoreB;
         }
 
-        return Score;
+        for (int i = 0; i < NUM_ROWS; i++) {
+            for (int j = 0; j < NUM_ROWS; j++) {
+                Tile tile = square[i][j];
+                if (tile != null) {
+                    colorCount[DEFAULT_COLORS.indexOf(tile.getColor())] += 1;
+                }
+            }
+        }
+        for (int count : colorCount) {
+            if (count == NUM_ROWS) {
+                total += 10;
+            }
+        }
+
+        return new Score(total);
     }
 
 
     /**
-     * 3. [mosaic] The Mosaic substring begins with a 'M' Which is followed by *up to* 25
-     * 3-character strings. Each 3-character string is defined as follows: 1st character is 'a' to
-     * 'e' - representing the tile colour. 2nd character is '0' to '4' - representing the row. 3rd
-     * character is '0' to '4' - representing the column. The Mosaic substring is ordered first by
-     * row, then by column. That is, "a01" comes before "a10".
+     * The Mosaic substring begins with a 'M' Which is followed by *up to* 25 3-character strings.
+     * Each 3-character string is defined as follows: 1st character is 'a' to 'e' - representing the
+     * tile colour. 2nd character is '0' to '4' - representing the row. 3rd character is '0' to '4'
+     * - representing the column. The Mosaic substring is ordered first by row, then by column. That
+     * is, "a01" comes before "a10".
+     *
+     * @param token the mosaic string
+     * @return true if is well formed mosaic string
      */
-    public static boolean isMosaicWellFormedString(ArrayList<Character> mosaic) {
-        if (mosaic.size() % 3 != 0 || mosaic.size() > 75) {
+    public static boolean isWellFormedMosaicString(String token) {
+        if (token.length() % 3 != 0 || token.length() > 25 * 3) {
             return false;
         }
 
-        for (int i = 0; i < mosaic.size(); i++) {
-            char first = mosaic.get(i);
-            char second = mosaic.get(++i);
-            char third = mosaic.get(++i);
-            if (first != 'a' && first != 'b' && first != 'c' && first != 'd' && first != 'e') {
+        for (int i = 0; i < token.length(); i++) {
+            char color = token.charAt(i);
+            char row = token.charAt(++i);
+            char column = token.charAt(++i);
+            // only five different colors
+            if (color != 'a' && color != 'b' && color != 'c' && color != 'd' && color != 'e') {
                 return false;
             }
-            if (second != '0' && second != '1' && second != '2' && second != '3' && second != '4') {
+            // only five possible rows
+            if (row != '0' && row != '1' && row != '2' && row != '3' && row != '4') {
                 return false;
             }
-            if (third != '0' && third != '1' && third != '2' && third != '3' && third != '4') {
+            // only five possible columns
+            if (column != '0' && column != '1' && column != '2' && column != '3' && column != '4') {
                 return false;
             }
-            if (i > 3 && (second - mosaic.get(i - 4) < 0)) {
+            // order first by row
+            if (i > 3 && (row - token.charAt(i - 4) < 0)) {
                 return false;
             }
-            if (i > 3 && second == mosaic.get(i - 4) && third - mosaic.get(i - 3) < 0) {
+            // order second by column
+            if (i > 3 && row == token.charAt(i - 4) && column - token.charAt(i - 3) < 0) {
                 return false;
             }
         }
         return true;
     }
 
-    public void fillFrom(String mosaicToken) {
-        for (int i = 0; i < mosaicToken.length(); i += 3) {
-            Tile tile = Tile.from(mosaicToken.charAt(i));
-            int row = mosaicToken.charAt(i + 1) - 48;
-            int col = mosaicToken.charAt(i + 2) - 48;
+    /**
+     * reconstruct internal state from string
+     *
+     * @param token the string representation of mosaic state
+     */
+    public void reconstructFromString(String token) {
+        square = new Tile[NUM_ROWS][NUM_ROWS];
+        colorCount = new int[]{0, 0, 0, 0, 0};
+
+        for (int i = 0; i < token.length(); i += 3) {
+            Tile tile = Tile.from(token.charAt(i));
+            int row = token.charAt(i + 1) - 48;
+            int col = token.charAt(i + 2) - 48;
             square[row][col] = tile;
         }
     }

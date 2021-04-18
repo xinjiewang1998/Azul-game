@@ -2,20 +2,27 @@ package comp1110.ass2.board;
 
 public class Score {
 
-
     private int score;
+
+    public Score() {
+        this.score = 0;
+    }
 
     public Score(int score) {
         this.score = score;
     }
 
-    public Score() {
-        score = 0;
+    public int getScore() {
+        return this.score;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
 
     /**
      * add other score
+     *
      * @param otherScore the other score with type int
      * @return the score
      */
@@ -26,6 +33,7 @@ public class Score {
 
     /**
      * add other score
+     *
      * @param otherScore the other score with type Score
      * @return the score
      */
@@ -34,52 +42,18 @@ public class Score {
         return this;
     }
 
-    public void minus (int anotherNum) {
-        if (score > anotherNum) {
-            this.score -= anotherNum;
-        } else {
-            this.score = 0;
-        }
-    }
-
     /**
-     * subtract other score
-     * !NOTE: a score cannot goes below 0
-     * @param otherScore the other score with type int
+     * reconstruct internal state from string
+     *
+     * @param token the string representation of score state
      */
-    public void subtractScore(int otherScore) {
-        // FIXME
-    }
-
-    /**
-     * subtract other score
-     * !NOTE: a score cannot goes below 0
-     * @param otherScore the other score with type Score
-     */
-    public void subtractScore(Score otherScore) {
-        // FIXME
-    }
-
-
-    public int getScore() {
-        return this.score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    //////////////////NEW//////////////////////////////////
-
-
-    public void fillFrom(String scoreToken) {
-        this.score = Integer.parseInt(scoreToken);
+    public void reconstructFromString(String token) {
+        this.score = Integer.parseInt(token);
     }
 
 
     @Override
     public String toString() {
-        // FIXME
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(this.score);
         return stringBuilder.toString();
