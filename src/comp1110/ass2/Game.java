@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+import comp1110.ass2.board.Board;
 import comp1110.ass2.board.Floor;
 import comp1110.ass2.board.Mosaic;
 import comp1110.ass2.board.Storage;
@@ -8,11 +9,14 @@ import comp1110.ass2.common.Centre;
 import comp1110.ass2.common.Common;
 import comp1110.ass2.common.Discard;
 import comp1110.ass2.common.Factory;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Game {
 
+    private final String COMMON_REGEX = "^([A-D])F((\\d\\w{4}){0,5})C([a-e]{0,15}f?)B((\\d{2}){5})D((\\d{2}){5})$";
+    private final String PLAYER_REGEX = "([AB])(\\d{0,3})M(([a-e]\\d{2})*)S((\\d[a-e]\\d)*)F([a-f]*)";
     //shared state
     Common common;
 
@@ -48,9 +52,7 @@ public class Game {
     }
 
     public boolean isSharedStateWellFormed(String sharedState) {
-
-        String regex = "^([A-D])F((\\d\\w{4}){0,5})C([a-e]{0,15}f?)B((\\d{2}){5})D((\\d{2}){5})$";
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(COMMON_REGEX);
         Matcher matcher = pattern.matcher(sharedState);
         boolean matchFound = matcher.find();
         if (matchFound) {
@@ -76,18 +78,14 @@ public class Game {
         }
     }
 
-
     public void reconstructCommonFrom(String sharedState) {
-        // refill common
-        String regex = "^([A-D])F((\\d\\w{4}){0,5})C([a-e]{0,15}f?)B((\\d{2}){5})D((\\d{2}){5})$";
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(COMMON_REGEX);
         Matcher matcher = pattern.matcher(sharedState);
         boolean matchFound = matcher.find();
         if (matchFound) {
 //            System.out.println("Found Common: " + matcher.group(0));
 
-            String turnState = matcher.group(1);
-            this.turn = turnState;
+            this.turn = matcher.group(1);
 
             String factoryStates = matcher.group(2);
             String centreState = matcher.group(4);
@@ -110,8 +108,7 @@ public class Game {
     }
 
     public boolean isPlayerStateWellFormed(String playerState) {
-        String regex = "([AB])(\\d{0,3})M(([a-e]\\d{2})*)S((\\d[a-e]\\d)*)F([a-f]*)";
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(PLAYER_REGEX);
         boolean matchFound = true;
         int fullLength = playerState.length();
         int length = 0;
@@ -138,9 +135,7 @@ public class Game {
     }
 
     public void reconstructBoardsFrom(String playerState) {
-        // refill boards
-        String regex = "([AB])(\\d{0,3})M(([a-e]\\d{2})*)S((\\d[a-e]\\d)*)F([a-f]*)";
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(PLAYER_REGEX);
         boolean matchFound = true;
         while (matchFound && !playerState.equals("")) {
             Matcher matcher = pattern.matcher(playerState);
@@ -167,6 +162,106 @@ public class Game {
 //                System.out.println("Not Found Player: " + playerState);
             }
         }
+    }
+
+    public char drawTileFromBag(String[] gameState) {
+        this.reconstructCommonFrom(gameState[0]);
+        Tile tile = common.getBag().drawTile(common.getDiscard());
+        if (tile == null) {
+            return 'Z';
+        } else {
+            return tile.getColorCode();
+        }
+    }
+
+    public String[] refillFactories(String[] gameState) {
+        this.reconstructCommonFrom(gameState[0]);
+        Factory[] factories = common.getFactories();
+        ArrayList<Tile> centreTiles = common.getCentre().getTiles();
+        if (centreTiles.size() > 0 &&
+                !(centreTiles.size() == 1 && centreTiles.get(0).getColorCode() == 'f')) {
+            return gameState;
+        }
+
+        for (Factory factory : factories) {
+            if (factory.getTiles().size() != 0) {
+                return gameState;
+            }
+        }
+        for (Factory factory : factories) {
+            factory.refillTiles(common.getBag(), common.getDiscard());
+        }
+        gameState[0] = turn + common.toString();
+
+        return gameState;
+    }
+
+    public int getBonusPoints(String[] gameState, char player) {
+        this.reconstructCommonFrom(gameState[0]);
+        this.reconstructBoardsFrom(gameState[1]);
+        return players[player - 'A'].getBoard().getMosaic().calculateBonusScore().getScore();
+    }
+
+    public String[] nextRound(String[] gameState) {
+        reconstructCommonFrom(gameState[0]);
+        reconstructBoardsFrom(gameState[1]);
+
+        Factory[] factories = common.getFactories();
+        ArrayList<Tile> centreTiles = common.getCentre().getTiles();
+        if (centreTiles.size() > 0 &&
+                !(centreTiles.size() == 1 && centreTiles.get(0).getColorCode() == 'f')) {
+            return gameState;
+        }
+
+        for (Factory factory : factories) {
+            if (factory.getTiles().size() != 0) {
+                return gameState;
+            }
+        }
+
+        for (Player player : players) {
+            if (player.getBoard().getStorage().hasCompleteRow()) {
+                return gameState;
+            }
+        }
+
+        for (Player player : players) {
+            if (player.getBoard().getFloor().hasFirstPlayerTile()) {
+                turn = String.valueOf(player.getId());
+            }
+        }
+
+        for (Player player : players) {
+            Board playerBoard = player.getBoard();
+            playerBoard.getScore().addScore(playerBoard.getFloor().calculatePenalty());
+            playerBoard.getScore().addScore(playerBoard.getMosaic().calculateBonusScore());
+            playerBoard.getFloor().clearTiles(common.getDiscard(), common.getCentre());
+        }
+
+        gameState[0] = turn + common.toString();
+        StringBuilder stringBuilder1 = new StringBuilder();
+        for (Player value : players) {
+            stringBuilder1.append(value.toString());
+        }
+        gameState[1] = stringBuilder1.toString();
+
+        for (Player value : players) {
+            if (value.getBoard().getMosaic().hasCompleteRow()) {
+                return gameState;
+            }
+        }
+
+        for (Factory factory : factories) {
+            factory.refillTiles(common.getBag(), common.getDiscard());
+        }
+
+        gameState[0] = turn + common.toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Player player : players) {
+            stringBuilder.append(player.toString());
+        }
+        gameState[1] = stringBuilder.toString();
+        return gameState;
     }
 
     public static void main(String[] args) {
