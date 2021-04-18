@@ -4,11 +4,8 @@ import comp1110.ass2.board.Board;
 import comp1110.ass2.board.Floor;
 import comp1110.ass2.board.Mosaic;
 import comp1110.ass2.board.Storage;
-import comp1110.ass2.common.Bag;
-import comp1110.ass2.common.Centre;
-import comp1110.ass2.common.Common;
-import comp1110.ass2.common.Discard;
-import comp1110.ass2.common.Factory;
+import comp1110.ass2.common.*;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,6 +49,7 @@ public class Game {
     }
 
     public boolean isSharedStateWellFormed(String sharedState) {
+        //task 2
         Pattern pattern = Pattern.compile(COMMON_REGEX);
         Matcher matcher = pattern.matcher(sharedState);
         boolean matchFound = matcher.find();
@@ -108,6 +106,7 @@ public class Game {
     }
 
     public boolean isPlayerStateWellFormed(String playerState) {
+        //task 3
         Pattern pattern = Pattern.compile(PLAYER_REGEX);
         boolean matchFound = true;
         int fullLength = playerState.length();
@@ -165,6 +164,7 @@ public class Game {
     }
 
     public char drawTileFromBag(String[] gameState) {
+        //task 5
         this.reconstructCommonFrom(gameState[0]);
         Tile tile = common.getBag().drawTile(common.getDiscard());
         if (tile == null) {
@@ -175,6 +175,7 @@ public class Game {
     }
 
     public String[] refillFactories(String[] gameState) {
+        //task 6
         this.reconstructCommonFrom(gameState[0]);
         Factory[] factories = common.getFactories();
         ArrayList<Tile> centreTiles = common.getCentre().getTiles();
@@ -197,12 +198,14 @@ public class Game {
     }
 
     public int getBonusPoints(String[] gameState, char player) {
+        //task 7
         this.reconstructCommonFrom(gameState[0]);
         this.reconstructBoardsFrom(gameState[1]);
         return players[player - 'A'].getBoard().getMosaic().calculateBonusScore().getScore();
     }
 
     public String[] nextRound(String[] gameState) {
+        //task 8
         reconstructCommonFrom(gameState[0]);
         reconstructBoardsFrom(gameState[1]);
 

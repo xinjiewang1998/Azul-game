@@ -258,6 +258,7 @@ public class Viewer extends Application {
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
         //create five factories，each factory has four tiles.
+
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 2; j++) {
                 for (int k = 0; k < 2; k++) {
@@ -436,7 +437,6 @@ public class Viewer extends Application {
         Text FloorText2 = new Text(850, 490, "Floor");
         FloorText2.setFill(Color.BLACK);
         root.getChildren().add(FloorText2);
-
 
 
         root.getChildren().add(controls);
