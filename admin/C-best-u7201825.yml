@@ -6,8 +6,8 @@
 
   # I wish to submit the following methods as entirely my own (remove this if
   # you want to just submit classes):
-  method: Game.drawTileFromBag,  Bag.drawTile
-    -  Game.refillFactories,  Factory.refillTiles
+  method: Game.drawTileFromBag
+    -  Game.refillFactories
     - Game.getBonusPoints,  Mosaic.calculateBonusScore
 
   # sign *your* name and uid here
