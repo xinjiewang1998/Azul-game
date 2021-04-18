@@ -1,9 +1,5 @@
 package comp1110.ass2;
 
-import comp1110.ass2.board.Board;
-import comp1110.ass2.common.Factory;
-import java.util.ArrayList;
-
 public class Azul {
     /**
      * Given a shared state string, determine if it is well-formed.
@@ -136,13 +132,7 @@ public class Azul {
      */
     public static char drawTileFromBag(String[] gameState) {
         Game game = new Game();
-        game.reconstructCommonFrom(gameState[0]);
-        Tile tile = game.getCommon().getBag().drawTile(game.getCommon().getDiscard());
-        if (tile == null) {
-            return 'Z';
-        } else {
-            return tile.getColorCode();
-        }
+        return game.drawTileFromBag(gameState);
     }
 
 
@@ -157,25 +147,7 @@ public class Azul {
      */
     public static String[] refillFactories(String[] gameState) {
         Game game = new Game();
-        game.reconstructCommonFrom(gameState[0]);
-        Factory[] factories = game.common.getFactories();
-        ArrayList<Tile> centreTiles = game.common.getCentre().getTiles();
-        if (centreTiles.size() > 0 &&
-                !(centreTiles.size() == 1 && centreTiles.get(0).getColorCode() == 'f') ) {
-            return gameState;
-        }
-
-        for (Factory factory : factories) {
-            if (factory.getTiles().size() != 0) {
-                return gameState;
-            }
-        }
-        for (Factory factory : factories) {
-            factory.refillTiles(game.common.getBag(), game.common.getDiscard());
-        }
-        gameState[0] = game.turn + game.common.toString();
-
-        return gameState;
+        return game.refillFactories(gameState);
     }
 
     /**
@@ -190,10 +162,7 @@ public class Azul {
      */
     public static int getBonusPoints(String[] gameState, char player) {
         Game game = new Game();
-        game.reconstructCommonFrom(gameState[0]);
-        game.reconstructBoardsFrom(gameState[1]);
-        return game.getPlayers()[player - 'A'].getBoard().getMosaic().calculateBonusScore().getScore();
-
+        return game.getBonusPoints(gameState, player);
     }
 
     /**
@@ -213,67 +182,7 @@ public class Azul {
      */
     public static String[] nextRound(String[] gameState) {
         Game game = new Game();
-        game.reconstructCommonFrom(gameState[0]);
-        game.reconstructBoardsFrom(gameState[1]);
-
-        Factory[] factories = game.common.getFactories();
-        ArrayList<Tile> centreTiles = game.common.getCentre().getTiles();
-        if (centreTiles.size() > 0 &&
-                !(centreTiles.size() == 1 && centreTiles.get(0).getColorCode() == 'f') ) {
-            return gameState;
-        }
-
-        for (Factory factory : factories) {
-            if (factory.getTiles().size() != 0) {
-                return gameState;
-            }
-        }
-
-        for(int i = 0; i <  game.getPlayers().length; i++) {
-            if (game.getPlayers()[i].getBoard().getStorage().hasCompleteRow()) {
-                return gameState;
-            }
-        }
-
-        for(int i = 0; i <  game.getPlayers().length; i++) {
-            if (game.getPlayers()[i].getBoard().getFloor().hasFirstPlayerTile()) {
-                game.turn = String.valueOf(game.getPlayers()[i].getId());
-            }
-        }
-
-        for(int i = 0; i < game.getPlayers().length; i++) {
-            Player player = game.getPlayers()[i];
-            Board playerBoard = player.getBoard();
-            playerBoard.getScore().addScore(playerBoard.getFloor().calculatePenalty());
-            playerBoard.getScore().addScore(playerBoard.getMosaic().calculateBonusScore());
-            playerBoard.getFloor().clearTiles(game.common.getDiscard(), game.common.getCentre());
-        }
-
-        gameState[0] = game.turn + game.common.toString();
-        StringBuilder stringBuilder1 = new StringBuilder();
-        for(int i = 0; i < game.getPlayers().length; i++) {
-            stringBuilder1.append(game.getPlayers()[i].toString());
-        }
-        gameState[1] = stringBuilder1.toString();
-
-
-        for(int i = 0; i <  game.getPlayers().length; i++) {
-            if (game.getPlayers()[i].getBoard().getMosaic().hasCompleteRow()) {
-                return gameState;
-            }
-        }
-
-        for (Factory factory : factories) {
-            factory.refillTiles(game.common.getBag(), game.common.getDiscard());
-        }
-
-        gameState[0] = game.turn + game.getCommon().toString();
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < game.getPlayers().length; i++) {
-            stringBuilder.append(game.getPlayers()[i].toString());
-        }
-        gameState[1] = stringBuilder.toString();
-        return gameState;
+        return game.nextRound(gameState);
     }
 
     /**

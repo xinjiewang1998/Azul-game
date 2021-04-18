@@ -58,7 +58,7 @@ public class Player {
      * @param fromFactory  true if from factory, otherwise from centre
      * @param factoryIndex the factory index
      * @param common       the common area
-     * @return
+     * @return the tiles picked
      */
     public Deque<Tile> drawTiles(String color, boolean fromFactory, int factoryIndex,
             Common common) {
@@ -73,7 +73,7 @@ public class Player {
     /**
      * according to the instruction string given, pass it to board.performInstruction method.
      *
-     * @param instruction
+     * @param instruction the move instruction
      */
     public void play(String instruction) {
 //        // drafting

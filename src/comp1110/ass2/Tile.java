@@ -1,4 +1,4 @@
-package  comp1110.ass2;
+package comp1110.ass2;
 
 public enum Tile {
     Blue('a', "blue"),
@@ -18,6 +18,7 @@ public enum Tile {
 
     /**
      * decode color code, and return the corresponding Tile.
+     *
      * @param code the color code 'a' to 'f'
      * @return the corresponding tile
      */
@@ -32,6 +33,7 @@ public enum Tile {
 
     /**
      * Getter method for color.
+     *
      * @return return the color string
      */
     public String getColor() {
@@ -40,6 +42,7 @@ public enum Tile {
 
     /**
      * Getter method for code.
+     *
      * @return return the color code character
      */
     public char getColorCode() {

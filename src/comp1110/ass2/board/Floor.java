@@ -28,7 +28,7 @@ public class Floor {
     /**
      * place first player tile
      *
-     * @param firstPlayerTile
+     * @param firstPlayerTile the firstPlayerTile
      */
     public void placeFirstPlayerTile(Tile firstPlayerTile) {
         this.firstPlayerTile = firstPlayerTile;
@@ -134,8 +134,8 @@ public class Floor {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < tiles.size(); i++) {
-            stringBuilder.append(tiles.get(i).getColorCode());
+        for (Tile tile : tiles) {
+            stringBuilder.append(tile.getColorCode());
         }
         if (firstPlayerTile != null) {
             stringBuilder.append('f');
