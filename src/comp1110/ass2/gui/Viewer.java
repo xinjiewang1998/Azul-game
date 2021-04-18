@@ -53,9 +53,9 @@ public class Viewer extends Application {
     void displayState(String[] state) {
 
         // Example Board: AF1bbbe2abde3cdee4bcceCfadB1915161614D1103100920
-
         // Example Player:
         // A21Ma00b01c02d03e04a11b12c13e21a22c30b34a44S2b2FaaaafB24Ma00c02d03e04e10a11b12c13d14d20a22b23e32b34b40S4d2Fdd
+        changeState();
 
         //////////////////////////// PLAYER STATE /////////////////////////////////////
         String playerState = state[0];
@@ -133,7 +133,7 @@ public class Viewer extends Application {
             char code = positions.charAt(i + 1);
             int num = positions.charAt(i + 2) - 48;
             for (int q = 4; q > 3 - row + num - 1; q--) {
-                storage[row][q].setFill(fillcolor(code));
+                storage[row][q].setFill(fillColor(code));
             }
 
         }
@@ -142,7 +142,7 @@ public class Viewer extends Application {
     private void decodeFloor(String positions, Rectangle[] floor) {
         for (int i = 1; i < positions.length(); i++) {
             char code = positions.charAt(i);
-            floor[i - 1].setFill(fillcolor(code));
+            floor[i - 1].setFill(fillColor(code));
         }
     }
 
@@ -153,7 +153,7 @@ public class Viewer extends Application {
                 char code = substringF.charAt(n + m + 1);
                 int column = m / 2 + x * 2 + 2;
                 int row = m % 2;
-                factories[row][column].setFill(fillcolor(code));
+                factories[row][column].setFill(fillColor(code));
             }
         }
     }
@@ -161,7 +161,7 @@ public class Viewer extends Application {
     private void decodeCentre(String substringC, Rectangle[][] centre) {
         for (int i = 1; i < substringC.length(); i++) {
             char code = substringC.charAt(i);
-            centre[(i - 1) % 4][(i - 1) / 4].setFill(fillcolor(code));
+            centre[(i - 1) % 4][(i - 1) / 4].setFill(fillColor(code));
         }
     }
 
@@ -183,14 +183,14 @@ public class Viewer extends Application {
         int d = Integer.parseInt(substring.substring(7, 9));
         int e = Integer.parseInt(substring.substring(9));
 
-        fillcolor(a, 0, test, Color.BLUE);
-        fillcolor(b, 2, test, Color.GREEN);
-        fillcolor(c, 4, test, Color.ORANGE);
-        fillcolor(d, 6, test, Color.PURPLE);
-        fillcolor(e, 8, test, Color.RED);
+        fillColor(a, 0, test, Color.BLUE);
+        fillColor(b, 2, test, Color.GREEN);
+        fillColor(c, 4, test, Color.ORANGE);
+        fillColor(d, 6, test, Color.PURPLE);
+        fillColor(e, 8, test, Color.RED);
     }
 
-    private void fillcolor(int a, int p, Rectangle[][] test, Color color) {
+    private void fillColor(int a, int p, Rectangle[][] test, Color color) {
         if (a <= 10) {
             for (int i = p; i < p + 1; i++) {
                 for (int j = 0; j < a; j++) {
@@ -212,7 +212,7 @@ public class Viewer extends Application {
         }
     }
 
-    private Color fillcolor(char code) {
+    private Color fillColor(char code) {
         return switch (code) {
             case 'a' -> Color.BLUE;
             case 'b' -> Color.GREEN;
@@ -252,13 +252,9 @@ public class Viewer extends Application {
         controls.getChildren().add(hb);
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Azul Viewer");
-        Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
+    private void changeState(){
 
         //create five factories，each factory has four tiles.
-
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 2; j++) {
                 for (int k = 0; k < 2; k++) {
@@ -437,8 +433,13 @@ public class Viewer extends Application {
         Text FloorText2 = new Text(850, 490, "Floor");
         FloorText2.setFill(Color.BLACK);
         root.getChildren().add(FloorText2);
+    }
 
-
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Azul Viewer");
+        Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
+        changeState();
         root.getChildren().add(controls);
         makeControls();
         primaryStage.setScene(scene);
