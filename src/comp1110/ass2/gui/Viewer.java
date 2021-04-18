@@ -51,7 +51,7 @@ public class Viewer extends Application {
     void displayState(String[] state) {
         // FIXME Task 4: implement the simple state viewer
         // A20Ma02a13b00e42S2a13e44a1Faabbe
-        //
+        //AF1bbbe2abde3cdee4bcceCfadB1915161614D1103100920
         // A21Ma00b01c02d03e04a11b12c13e21a22c30b34a44S2b2FaaaafB24Ma00c02d03e04e10a11b12c13d14d20a22b23e32b34b40S4d2Fdd
 
         // A20 M a02 a13 b00 e42 S 2a1 3e4 4a1 F aabbe
@@ -67,7 +67,7 @@ public class Viewer extends Application {
         } else {
             playerAStr = playerState.substring(indexA);
         }
-        System.out.println(playerAStr);
+//        System.out.println(playerAStr);
 
         int indexAM = playerAStr.indexOf('M', 0);
         int indexAS = playerAStr.indexOf('S', indexAM + 1);
@@ -85,7 +85,7 @@ public class Viewer extends Application {
 
 
         String playerBStr = playerState.substring(indexB);
-        System.out.println(playerBStr);
+//        System.out.println(playerBStr);
 
         int indexBM = playerBStr.indexOf('M', 0);
         int indexBS = playerBStr.indexOf('S', indexBM + 1);
@@ -98,6 +98,20 @@ public class Viewer extends Application {
         String substringBF = playerBStr.substring(indexBF);
         decodeFloor(substringBF, floorB);
 
+        String boardState = state[1];
+        int indexF = boardState.indexOf('F',0);
+        int indexC = boardState.indexOf('C',indexF +1);
+        int indexB2 = boardState.indexOf('B',indexC +1);
+        int indexD = boardState.indexOf('D',indexB2 +1);
+
+        String substringF = boardState.substring(indexF, indexC);
+        decodeFactories(substringF,factories);
+        String substringC = boardState.substring(indexC, indexB2);
+        decodeCentre(substringC,centre);
+        String substringB = boardState.substring(indexB2, indexD);
+        decodeBag(substringB,bag);
+        String substringD = boardState.substring(indexD);
+        decodeDiscard(substringD,discard);
     }
 
 
@@ -113,29 +127,16 @@ public class Viewer extends Application {
 
 
 
-//    String boardState = state[1];
 //
 //    ArrayList<String> playerA = new ArrayList<>();
 //    ArrayList<String> playerB = new ArrayList<>();
 
 
-//
-//
-//    int indexF = boardState.indexOf('F',0);
-//    int indexC = boardState.indexOf('C',indexF +1);
-//    int indexB = boardState.indexOf('B',indexC +1);
-//    int indexD = boardState.indexOf('D',indexB +1);
+
 
 //
-//
-//        //Decode the status of player a
-//
-//
-//        //Decode the state of player B.
-
-//
-//        //Decode the boardState
-//        if(state[1].length()>=1){
+////        //Decode the boardState
+////        if(state[1].length()>=1){
 //            String substringF = boardState.substring(indexF, indexC);
 //            decodeFactories(substringF);
 //            String substringC = boardState.substring(indexC, indexB);
@@ -143,7 +144,7 @@ public class Viewer extends Application {
 //            String substringB = boardState.substring(indexB, indexD);
 //            decodeBag(substringB);
 //            String substringD = boardState.substring(indexD);
-//            decodeDiscard(substringD);
+//            decodeDiscard(substringD,Rectangle[][] discard);
 //        }
 //    }
 
@@ -207,44 +208,169 @@ public class Viewer extends Application {
                 case 'f' -> Color.FIREBRICK;
                 default -> Color.GREY ;
             };
-
             floor[i-1].setFill(color);
         }
     }
 
-    //The example diagram only shows squares and words，do we need to display different color tiles decoded?
-    private void decodeDiscard(String substringD) {
-        //Record the number of tiles of various colors in the discard
-        String a = substringD.substring(1,3);
-        String b = substringD.substring(3,5);
-        String c = substringD.substring(5,7);
-        String d = substringD.substring(7,9);
-        String e = substringD.substring(9);
-    }
-
-    private void decodeBag(String substringB) {
-        //This is used to record the number of tiles of various colors in bag。
-        String a = substringB.substring(1,3);
-        String b = substringB.substring(3,5);
-        String c = substringB.substring(5,7);
-        String d = substringB.substring(7,9);
-        String e = substringB.substring(9);
-    }
-
-    private void decodeCentre(String substringC) {
-
-    }
-
-    private void decodeFactories(String substringF) {
-        for(int i = 1; i < substringF.length(); i++) {
-            char code = substringF.charAt(i);
-            if(code == 'a'||code == 'b'||code == 'c'||code == 'd'||code == 'e'){
-                //If it's ceramic tile, it still needs to be covered
-            }else if(code == '0'||code == '1'||code == '2'||code == '3'||code == '4'){
-                //Locate in which factors and draw
+    private void decodeFactories(String substringF, Rectangle[][] factories) {
+        System.out.println(substringF);
+        for (int n = 1 ; n<substringF.length();n=n+5 ){
+            int x = (substringF.charAt(n) - 48)%5-1;
+            for (int m = 0 ; m<4 ; m++){
+                char code = substringF.charAt(n+m+1);
+                Color color = switch (code) {
+                    case 'a' -> Color.BLUE;
+                    case 'b' -> Color.GREEN;
+                    case 'c' -> Color.ORANGE;
+                    case 'd' -> Color.PURPLE;
+                    case 'e' -> Color.RED;
+                    case 'f' -> Color.FIREBRICK;
+                    default -> Color.GREY ;
+                };
+                factories[1][1].setFill(color);
             }
         }
     }
+
+
+    private void decodeCentre(String substringC, Rectangle[][] centre) {
+        for (int i = 1 ; i<substringC.length();i++ ){
+                char code = substringC.charAt(i);
+                Color color = switch (code) {
+                    case 'a' -> Color.BLUE;
+                    case 'b' -> Color.GREEN;
+                    case 'c' -> Color.ORANGE;
+                    case 'd' -> Color.PURPLE;
+                    case 'e' -> Color.RED;
+                    case 'f' -> Color.FIREBRICK;
+                    default -> Color.GREY ;
+                };
+                centre[i%4-1][i/4].setFill(color);
+            }
+    }
+
+
+
+    //The example diagram only shows squares and words，do we need to display different color tiles decoded?
+    void decodeDiscard(String substringD,Rectangle[][] discard) {
+        //Record the number of tiles of various colors in the discard
+        fillBagAndDis(substringD,discard);
+    }
+
+    private void decodeBag(String substringB, Rectangle[][] bag) {
+        //This is used to record the number of tiles of various colors in bag。
+        fillBagAndDis(substringB,bag);
+    }
+
+    void fillBagAndDis(String substring,Rectangle[][] test){
+        int a = Integer.parseInt(substring.substring(1,3));
+        int b = Integer.parseInt(substring.substring(3,5));
+        int c = Integer.parseInt(substring.substring(5,7));
+        int d = Integer.parseInt(substring.substring(7,9));
+        int e = Integer.parseInt(substring.substring(9));
+
+        if(a <= 10){
+            for(int i = 0; i < 1; i++) {
+                for(int j=0 ; j < a; j++){
+                    test[j][i].setFill(Color.BLUE);
+                }
+            }
+        }else if (a > 10){
+            for(int i = 0; i < 2; i++) {
+                if (i == 0){
+                    for(int j=0 ; j < 10; j++){
+                        test[j][i].setFill(Color.BLUE);
+                    }
+                } else {
+                    for(int j=0 ; j < (a-10); j++){
+                        test[j][i].setFill(Color.BLUE);
+                    }
+                }
+            }
+        }
+
+        if(b <= 10){
+            for(int i = 2; i < 3; i++) {
+                for(int j=0 ; j < b; j++){
+                    test[j][i].setFill(Color.GREEN);
+                }
+            }
+        }else if (b > 10){
+            for(int i = 2; i < 4; i++) {
+                if (i == 2){
+                    for(int j=0 ; j < 10; j++){
+                        test[j][i].setFill(Color.GREEN);
+                    }
+                } else {
+                    for(int j=0 ; j < (b-10); j++){
+                        test[j][i].setFill(Color.GREEN);
+                    }
+                }
+            }
+        }
+
+        if(c <= 10){
+            for(int i = 4; i < 5; i++) {
+                for(int j=0 ; j < c; j++){
+                    test[j][i].setFill(Color.ORANGE);
+                }
+            }
+        }else if (c > 10){
+            for(int i = 4; i < 6; i++) {
+                if (i == 4){
+                    for(int j=0 ; j < 10; j++){
+                        test[j][i].setFill(Color.ORANGE);
+                    }
+                } else {
+                    for(int j=0 ; j < (c-10); j++){
+                        test[j][i].setFill(Color.ORANGE);
+                    }
+                }
+            }
+        }
+
+        if(d <= 10){
+            for(int i = 6; i < 7; i++) {
+                for(int j=0 ; j < d; j++){
+                    test[j][i].setFill(Color.PURPLE);
+                }
+            }
+        }else if (d > 10){
+            for(int i = 6; i < 8; i++) {
+                if (i == 6){
+                    for(int j=0 ; j < 10; j++){
+                        test[j][i].setFill(Color.PURPLE);
+                    }
+                } else {
+                    for(int j=0 ; j < (d-10); j++){
+                        test[j][i].setFill(Color.PURPLE);
+                    }
+                }
+            }
+        }
+
+        if(e <= 10){
+            for(int i = 8; i < 9; i++) {
+                for(int j=0 ; j < e; j++){
+                    test[j][i].setFill(Color.RED);
+                }
+            }
+        }else if (e > 10){
+            for(int i = 8; i < 10; i++) {
+                if (i == 8){
+                    for(int j=0 ; j < 10; j++){
+                        test[j][i].setFill(Color.RED);
+                    }
+                } else {
+                    for(int j=0 ; j < (e-10); j++){
+                        test[j][i].setFill(Color.RED);
+                    }
+                }
+            }
+        }
+
+    }
+
 
 
     /**
@@ -286,11 +412,13 @@ public class Viewer extends Application {
                     Rectangle factoriesRect = new Rectangle(10 + i * 90 + j * 33, 10 + k * 33, 30, 30);
                     factoriesRect.setFill(Color.LIGHTGREY);
                     root.getChildren().add(factoriesRect);
+                    factories[j][i*2+k] = factoriesRect;
                 }
             }
             Text text = new Text(40 + i * 90 , 10 + 75, String.valueOf(i));
             text.setFill(Color.BLACK);
             root.getChildren().add(text);
+
         }
 
         //create a Centre area
@@ -306,6 +434,7 @@ public class Viewer extends Application {
                 Rectangle CentreRect2 = new Rectangle(510 + i * 20 , 25 + j * 20, 18, 18);
                 CentreRect2.setFill(Color.LIGHTGREY);
                 root.getChildren().add(CentreRect2);
+                centre[i][j] = CentreRect2;
             }
         }
         Text CentreText = new Text(530 , 10, "Centre");
@@ -324,6 +453,7 @@ public class Viewer extends Application {
                 Rectangle BagRect2 = new Rectangle(510 + i * 18 , 140 + j * 18, 17, 17);
                 BagRect2.setFill(Color.LIGHTGREY);
                 root.getChildren().add(BagRect2);
+                bag[i][j] = BagRect2;
             }
         }
         Text BagText = new Text(590 , 125, "Bag");
@@ -342,6 +472,7 @@ public class Viewer extends Application {
                 Rectangle DiscardRect2 = new Rectangle(510 + i * 18 , 355 + j * 18, 17, 17);
                 DiscardRect2.setFill(Color.LIGHTGREY);
                 root.getChildren().add(DiscardRect2);
+                discard[i][j] = DiscardRect2;
             }
         }
         Text DiscardText = new Text(590 , 340, "Discard");
