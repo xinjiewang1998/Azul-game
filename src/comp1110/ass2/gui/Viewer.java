@@ -437,6 +437,8 @@ public class Viewer extends Application {
         FloorText2.setFill(Color.BLACK);
         root.getChildren().add(FloorText2);
 
+
+
         root.getChildren().add(controls);
         makeControls();
         primaryStage.setScene(scene);
