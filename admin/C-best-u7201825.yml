@@ -4,12 +4,12 @@
     is entirely my own work.
 
 
-      # I wish to submit the following methods as entirely my own (remove this if
-    # you want to just submit classes):
-  method: game.drawTileFromBag
-    -  game.refillFactories
-    - game.getBonusPoints
+  # I wish to submit the following methods as entirely my own (remove this if
+  # you want to just submit classes):
+  method: Game.drawTileFromBag,  Bag.drawTile
+    -  Game.refillFactories,  Factory.refillTiles
+    - Game.getBonusPoints,  Mosaic.calculateBonusScore
 
-    # sign *your* name and uid here
+  # sign *your* name and uid here
   name: Xinjie Wang
   uid: u7201825
