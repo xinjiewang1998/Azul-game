@@ -6,9 +6,9 @@
 
   # I wish to submit the following methods as entirely my own (remove this if
   # you want to just submit classes):
-  method: Game.drawTileFromBag
+  method: Game.drawTileFromBag，Bag.drawTile
     -  Game.refillFactories
-    - Game.getBonusPoints,  Mosaic.calculateBonusScore
+    -  Mosaic.calculateBonusScore
 
   # sign *your* name and uid here
   name: Xinjie Wang
