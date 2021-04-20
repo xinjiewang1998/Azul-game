@@ -42,7 +42,7 @@ public class ExampleGames {
      * Invalid States
      */
     public static final String[] NOT_WELL_FORMED_SHARED_STATE = {
-            "AF0aace1acdd2abce3bbee4cdeCB1617161714D0000000000", // factory contains 3 tiles
+            "AF0aace1acdd2abce3bbee4cdegCB1617161714D0000000000", // factory contains non-existent tile
             "BF0aace1acdd2abce3bbeee4cdeeCB1617161714D0000000000", // factory contains > 4 tiles.
             "BF0aace1acdd2abce3bbee4cedCB1617161714D0000000000", // tiles in factory not alphabetical
             "AF0aace1acdd2abce3bbee4cdeCB3117163714D0000000000", // greater than 20 tiles (one colour) in bag.
