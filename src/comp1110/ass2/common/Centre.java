@@ -64,6 +64,13 @@ public class Centre {
                 tiles.set(i, null);
             }
         }
+        ArrayList<Tile> temp = new ArrayList<>();
+        for (Tile tile : tiles) {
+            if (tile != null) {
+                temp.add(tile);
+            }
+        }
+        tiles = temp;
         return returnTiles;
     }
 

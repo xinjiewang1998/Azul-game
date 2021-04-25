@@ -62,10 +62,16 @@ public class Storage {
      * @param rowNum   the row number to place tiles
      * @param mosaic   the mosaic to check allowance
      * @param floor    the floor to have the remaining tiles.
+     * @param discard  the discard if floor was full.
      * @return true is successfully place tiles
      */
     public boolean placeTiles(ArrayDeque<Tile> tiles, String color, int tilesNum, int rowNum,
-            Mosaic mosaic, Floor floor) {
+            Mosaic mosaic, Floor floor, Discard discard) {
+        if(tilesNum == 0) {
+            floor.placeTiles(tiles, discard);
+            return true;
+        }
+
         ArrayDeque<Tile> row = triangle.get(rowNum);
         Tile firstTile = row.peekFirst();
         if (firstTile != null) {
@@ -84,7 +90,7 @@ public class Storage {
             row.push(tiles.pop());
         }
         if (tiles.size() != 0) {
-            floor.placeTiles(tiles);
+            floor.placeTiles(tiles, discard);
         }
         return true;
     }
@@ -112,6 +118,23 @@ public class Storage {
                 // scoring
                 total.addScore(score);
             }
+        }
+        return total;
+    }
+
+    public Score tileAndScore(int rowNum, int columnNum, Mosaic mosaic, Discard discard) {
+        Score total = new Score(0);
+
+        ArrayDeque<Tile> row = triangle.get(rowNum);
+        if (MAX_LENGTH[rowNum] == row.size() && !mosaic.hasTile(rowNum, columnNum)) {
+
+            // tiling
+            Score score = mosaic.placeTile(row.pop(), rowNum, columnNum);
+            discard.placeTiles(row);
+            row.clear();
+
+            // scoring
+            total.addScore(score);
         }
         return total;
     }

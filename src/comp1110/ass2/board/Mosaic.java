@@ -60,6 +60,16 @@ public class Mosaic {
     }
 
     /**
+     * check if has tile at specific position
+     * @param rowNum row number
+     * @param columnNum column number
+     * @return true if it has tile at that position
+     */
+    public boolean hasTile(int rowNum, int columnNum) {
+        return square[rowNum][columnNum] != null;
+    }
+
+    /**
      * find the correct position and place the tile
      *
      * @param tile the tile to be placed
@@ -68,7 +78,12 @@ public class Mosaic {
      */
     public Score placeTile(Tile tile, int row) {
         int index = DEFAULT_COLORS.indexOf(tile.getColor());
-        int column = (row + index) % NUM_ROWS;
+        return placeTile(tile, row, (row + index) % NUM_ROWS);
+    }
+
+
+
+    public Score placeTile(Tile tile, int row, int column) {
 
         square[row][column] = tile;
 //        colorCount[index]++;
