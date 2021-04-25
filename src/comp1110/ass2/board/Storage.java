@@ -66,7 +66,7 @@ public class Storage {
      */
     public boolean placeTiles(ArrayDeque<Tile> tiles, String color, int tilesNum, int rowNum,
             Mosaic mosaic, Floor floor, Discard discard) {
-        if(tilesNum == 0) {
+        if (tilesNum == 0) {
             floor.placeTiles(tiles, discard);
             return true;
         }
@@ -150,7 +150,7 @@ public class Storage {
      * @return true if is well formed storage string
      */
     public static boolean isWellFormedStorageString(String token) {
-        if (token.length() % 3 != 0 || token.length() > 5 * 3) {
+        if (token == null || token.length() % 3 != 0 || token.length() > 5 * 3) {
             return false;
         }
 
@@ -185,6 +185,10 @@ public class Storage {
      * @param token the string representation of storage state
      */
     public void reconstructFromString(String token) {
+        if (!isWellFormedStorageString(token)) {
+            return;
+        }
+
         triangle = new ArrayList<>();
         for (int i = 0; i < NUM_ROWS; i++) {
             triangle.add(new ArrayDeque<>());

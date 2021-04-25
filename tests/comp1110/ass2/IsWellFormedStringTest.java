@@ -222,7 +222,7 @@ public class IsWellFormedStringTest {
     @Test
     public void testTooManyCentreString() {
         assertFalse(Centre.isWellFormedCentreString(
-                "aaabbbcccdddeeee"));
+                "aaabbbcccdddeeeee"));
     }
 
     @Test

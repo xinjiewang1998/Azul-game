@@ -33,8 +33,9 @@ public class Floor {
     }
 
     private int getSize() {
-        return (firstPlayerTile != null) ? tiles.size() + 1: tiles.size();
+        return (firstPlayerTile != null) ? tiles.size() + 1 : tiles.size();
     }
+
     /**
      * check if floor contains first player tile
      *
@@ -51,7 +52,7 @@ public class Floor {
      */
     public void placeFirstPlayerTile(Tile firstPlayerTile, Discard discard) {
         this.firstPlayerTile = firstPlayerTile;
-        if(tiles.size() == 7) {
+        if (tiles.size() == 7) {
             discard.placeTile(tiles.pop());
         }
     }
@@ -63,10 +64,10 @@ public class Floor {
      * @param otherTiles the other tiles
      */
     public void placeTiles(ArrayDeque<Tile> otherTiles, Discard discard) {
-        while(otherTiles.size() != 0 && getSize() <= 7) {
+        while (otherTiles.size() != 0 && getSize() <= 7) {
             tiles.add(otherTiles.pop());
         }
-        if(otherTiles.size() > 0) {
+        if (otherTiles.size() > 0) {
             discard.placeTiles(otherTiles);
         }
     }
@@ -137,10 +138,12 @@ public class Floor {
         return countF <= 1;
     }
 
-    public static boolean isFloorValid(String floor){
+    public static boolean isFloorValid(String floor) {
         if (floor.length() > 7) {
             return false;
-        } else {return true;}
+        } else {
+            return true;
+        }
     }
 
     /**

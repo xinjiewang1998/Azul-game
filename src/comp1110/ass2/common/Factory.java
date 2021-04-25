@@ -116,7 +116,7 @@ public class Factory {
      * @param token the string representation of floor state
      */
     public void reconstructFromString(String token) {
-        if(!isWellFormedFactoryString(token)) {
+        if (!isWellFormedFactoryString(token)) {
             return;
         }
 

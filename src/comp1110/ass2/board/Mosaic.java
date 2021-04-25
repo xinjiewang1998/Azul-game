@@ -13,8 +13,6 @@ public class Mosaic {
             Arrays.asList("blue", "green", "orange", "purple", "red"));
 
 
-
-
     private Tile[][] square;
     private int[] colorCount;
 
@@ -66,7 +64,8 @@ public class Mosaic {
 
     /**
      * check if has tile at specific position
-     * @param rowNum row number
+     *
+     * @param rowNum    row number
      * @param columnNum column number
      * @return true if it has tile at that position
      */
@@ -85,7 +84,6 @@ public class Mosaic {
         int index = DEFAULT_COLORS.indexOf(tile.getColor());
         return placeTile(tile, row, (row + index) % NUM_ROWS);
     }
-
 
 
     public Score placeTile(Tile tile, int row, int column) {
@@ -252,19 +250,20 @@ public class Mosaic {
         return true;
     }
 
-    public static boolean isMosaicValid(String mosaic){
+    public static boolean isMosaicValid(String mosaic) {
         ArrayList<String> Mosaic = new ArrayList<String>();
-        for (int i = 0 ;i<mosaic.length();i= i+3){
-            Mosaic.add(mosaic.substring(i+1,i+3));
+        for (int i = 0; i < mosaic.length(); i = i + 3) {
+            Mosaic.add(mosaic.substring(i + 1, i + 3));
         }
         Set<String> s = new HashSet<String>();
         s.addAll(Mosaic);
-        if(Mosaic.size()-s.size()>=1){
+        if (Mosaic.size() - s.size() >= 1) {
             return false;
         } else {
             return true;
         }
     }
+
     /**
      * reconstruct internal state from string
      *

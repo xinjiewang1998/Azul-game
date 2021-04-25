@@ -4,7 +4,6 @@ import comp1110.ass2.board.Board;
 import comp1110.ass2.common.Common;
 import comp1110.ass2.common.Factory;
 import java.util.ArrayDeque;
-import java.util.Deque;
 
 public class Player {
 

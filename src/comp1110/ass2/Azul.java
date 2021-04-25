@@ -220,7 +220,6 @@ public class Azul {
      * TASK 9
      */
     public static boolean isStateValid(String[] gameState) {
-        // FIXME Task 9
         Game game = new Game();
         return game.isStateValid(gameState);
     }
@@ -251,9 +250,8 @@ public class Azul {
      * TASK 10
      */
     public static boolean isMoveValid(String[] gameState, String move) {
-        // FIXME Task 10
         Game game = new Game();
-        return game.isMoveValid( gameState,move);
+        return game.isMoveValid(gameState, move);
     }
 
     /**
@@ -276,7 +274,6 @@ public class Azul {
      * TASK 11
      */
     public static String[] applyMove(String[] gameState, String move) {
-        // FIXME Task 11
         Game game = new Game();
         return game.applyMove(gameState, move);
     }

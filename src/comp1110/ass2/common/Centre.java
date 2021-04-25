@@ -107,22 +107,23 @@ public class Centre {
         return true;
     }
 
-    public static boolean isCentreValid(String centre, String factories){
+    public static boolean isCentreValid(String centre, String factories) {
         int tilesNum = 0;
         int empty = 0;
-        for (int i = 0 ; i<centre.length();i++){
-            if (centre.charAt(i)=='a'||centre.charAt(i)=='b'||centre.charAt(i)=='c'||
-                    centre.charAt(i)=='d'||centre.charAt(i)=='e'){
-                tilesNum ++ ;
+        for (int i = 0; i < centre.length(); i++) {
+            if (centre.charAt(i) == 'a' || centre.charAt(i) == 'b' || centre.charAt(i) == 'c' ||
+                    centre.charAt(i) == 'd' || centre.charAt(i) == 'e') {
+                tilesNum++;
             }
         }
-        for (int i = 0 ;i<factories.length();i++){
-            if (factories.charAt(i) == '0'||factories.charAt(i) == '1'||factories.charAt(i) == '2'||
-                    factories.charAt(i) == '3'||factories.charAt(i) == '4'){
-                empty ++ ;
+        for (int i = 0; i < factories.length(); i++) {
+            if (factories.charAt(i) == '0' || factories.charAt(i) == '1'
+                    || factories.charAt(i) == '2' ||
+                    factories.charAt(i) == '3' || factories.charAt(i) == '4') {
+                empty++;
             }
         }
-        if (tilesNum > (3*empty)){
+        if (tilesNum > (3 * empty)) {
             return false;
         } else {
             return true;
