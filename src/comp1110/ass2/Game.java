@@ -343,27 +343,40 @@ public class Game {
             else{
 
                 for(int i = 0;i<5;i++){
+                    if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).size()==0){
+                        return false;
+                    }
                     char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).getFirst().getColorCode();
                     if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][i]!=null){
                         if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][i].getColorCode()==code){
                             return true;
                         }}
                 }
-                boolean result = false;
+
                 for(int i = 0;i<5;i++){
+                    boolean result = false;
                     char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).getFirst().getColorCode();
                     if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][i]==null){
+                        int time = 0;
+                        int num = 0;
                         for(int j=0;j<5;j++){
+
                             if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[j][i]!=null){
-                                if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[j][i].getColorCode()==code){
-                                    return true;
+                                num++;
+                                if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[j][i].getColorCode()!=code){
+                                    time++;
                                 }}
+
+                            }
+                        if(num==time){
+                            return false;
+                        }
                         }
                     }
+
                 }
-                return false;
             }
-        }
+
 
 
         return true;
