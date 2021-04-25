@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Centre {
 
+
     private ArrayList<Tile> tiles;
     private Tile firstPlayerTile;
 
@@ -19,6 +20,10 @@ public class Centre {
 
     public void setTiles(ArrayList<Tile> centre) {
         this.tiles = centre;
+    }
+
+    public Tile getFirstPlayerTile() {
+        return firstPlayerTile;
     }
 
     public void setFirstPlayerTile(Tile firstPlayerTile) {
@@ -72,7 +77,7 @@ public class Centre {
      * @return true if is well formed centre string
      */
     public static boolean isWellFormedCentreString(String token) {
-        if (token.length() > 15) {
+        if (token == null || token.length() > 15) {
             return false;
         }
         int fCount = 0;
@@ -101,6 +106,10 @@ public class Centre {
      * @param token the string representation of floor state
      */
     public void reconstructFromString(String token) {
+        if(!isWellFormedCentreString(token)) {
+            return;
+        }
+
         firstPlayerTile = null;
         tiles = new ArrayList<>();
 

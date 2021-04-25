@@ -61,7 +61,7 @@ public class Discard {
      * @return true if is well formed discard string
      */
     public static boolean isWellFormedDiscardString(String token) {
-        if (token.length() != 10) {
+        if (token == null || token.length() != 10) {
             return false;
         } else {
             for (int i = 0; i < 10; i++) {
@@ -86,6 +86,10 @@ public class Discard {
      * @param token the string representation of score state
      */
     public void reconstructFromString(String token) {
+        if(!isWellFormedDiscardString(token)) {
+            return;
+        }
+
         tiles = new ArrayList<>();
 
         for (int i = 0; i < token.length(); i += 2) {

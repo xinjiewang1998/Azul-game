@@ -16,6 +16,21 @@ public class Floor {
     }
 
 
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(ArrayList<Tile> tiles) {
+        this.tiles = tiles;
+    }
+
+    public Tile getFirstPlayerTile() {
+        return firstPlayerTile;
+    }
+
+    public void setFirstPlayerTile(Tile firstPlayerTile) {
+        this.firstPlayerTile = firstPlayerTile;
+    }
     /**
      * check if floor contains first player tile
      *
@@ -91,7 +106,7 @@ public class Floor {
      * @return true if is well formed floor string
      */
     public static boolean isWellFormedFloorString(String token) {
-        if (token.length() > 7) {
+        if (token == null || token.length() > 7) {
             return false;
         }
         int countF = 0;
@@ -119,6 +134,10 @@ public class Floor {
      * @param token the string representation of floor state
      */
     public void reconstructFromString(String token) {
+        if(token == null || token.length() > 8) {
+            return;
+        }
+
         firstPlayerTile = null;
         tiles = new ArrayList<>();
 
