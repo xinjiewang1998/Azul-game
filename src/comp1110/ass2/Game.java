@@ -3,9 +3,11 @@ package comp1110.ass2;
 import comp1110.ass2.board.Board;
 import comp1110.ass2.board.Floor;
 import comp1110.ass2.board.Mosaic;
+import comp1110.ass2.board.Score;
 import comp1110.ass2.board.Storage;
 import comp1110.ass2.common.*;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -381,6 +383,82 @@ public class Game {
 
         return true;
     }
+
+    public String[] applyMove(String[] gameState, String move) {
+
+        this.reconstructCommonFrom(gameState[0]);
+        this.reconstructBoardsFrom(gameState[1]);
+
+        if (move.length() == 3) {
+            Board board = this.players[move.charAt(0) - 'A'].getBoard();
+            int row = move.charAt(1) - '0';
+            int column = move.charAt(2) - '0';
+            Score score =
+                    board.getStorage().tileAndScore(
+                            row,
+                            column,
+                            board.getMosaic(),
+                            common.getDiscard());
+            board.getScore().addScore(score);
+        } else if (move.length() == 4) {
+            Player player = this.players[move.charAt(0) - 'A'];
+            Board board = player.getBoard();
+            char colorCode = move.charAt(2);
+            String color = Tile.from(colorCode).getColor();
+            int row = move.charAt(3) - '0';
+            if (move.charAt(1) == 'C') {
+                // draw tiles from centre
+                ArrayDeque<Tile> tiles = player.drawTiles(color, false, 0, common);
+                if (move.charAt(3) == 'F') {
+                    // place tiles on floor
+                    board.getStorage().placeTiles(tiles, color, 0, row
+                            , board.getMosaic(), board.getFloor()
+                            , common.getDiscard());
+
+                    // transfer first player tile
+                    board.getFloor().placeFirstPlayerTile(common.getCentre().getFirstPlayerTile(),
+                            common.getDiscard());
+                    common.getCentre().setFirstPlayerTile(null);
+                } else {
+                    // place tiles on storage
+                    board.getStorage().placeTiles(tiles, color, tiles.size(), row
+                            , board.getMosaic(), board.getFloor()
+                            , common.getDiscard());
+                }
+            } else {
+                // draw tiles from factory
+                int factoryNum = move.charAt(1) - '0';
+                ArrayDeque<Tile> tiles = player.drawTiles(color, true, factoryNum, common);
+                if (move.charAt(3) == 'F') {
+                    // place tiles on floor
+                    board.getStorage().placeTiles(tiles, color, 0, row
+                            , board.getMosaic(), board.getFloor()
+                            , common.getDiscard());
+
+                    // transfer first player tile
+                    board.getFloor().placeFirstPlayerTile(common.getCentre().getFirstPlayerTile(),
+                            common.getDiscard());
+                    common.getCentre().setFirstPlayerTile(null);
+                } else {
+                    // place tiles on storage
+                    board.getStorage().placeTiles(tiles, color, tiles.size(), row
+                            , board.getMosaic(), board.getFloor()
+                            , common.getDiscard());
+                }
+            }
+        }
+        turn = (turn.equals("A")) ?"B" : "A";
+        // rebuild state
+        gameState = new String[2];
+        gameState[0] = turn + common.toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Player player : players) {
+            stringBuilder.append(player.toString());
+        }
+        gameState[1] = stringBuilder.toString();
+        return gameState;
+    }
+
     public static void main(String[] args) {
         Game game = new Game();
         game.reconstructCommonFrom("AF0CB1207080506D0107030805");

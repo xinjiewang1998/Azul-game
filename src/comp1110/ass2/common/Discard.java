@@ -34,12 +34,12 @@ public class Discard {
     }
 
     /**
-     * Empty the floor and place all remaining tiles in the discard pile.
+     * Add extra tile to discard pile.
      *
-     * @param leftTiles tiles left in storage.
+     * @param extraTile extraTile
      */
-    public void placeTiles(ArrayList<Tile> leftTiles) {
-        this.tiles.addAll(leftTiles);
+    public void placeTile(Tile extraTile) {
+        this.tiles.add(extraTile);
     }
 
     /**

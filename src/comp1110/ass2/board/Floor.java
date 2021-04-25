@@ -8,19 +8,19 @@ import java.util.ArrayList;
 
 public class Floor {
 
-    private ArrayList<Tile> tiles;
+    private ArrayDeque<Tile> tiles;
     private Tile firstPlayerTile;
 
     public Floor() {
-        this.tiles = new ArrayList<>();
+        this.tiles = new ArrayDeque<>();
     }
 
 
-    public ArrayList<Tile> getTiles() {
+    public ArrayDeque<Tile> getTiles() {
         return tiles;
     }
 
-    public void setTiles(ArrayList<Tile> tiles) {
+    public void setTiles(ArrayDeque<Tile> tiles) {
         this.tiles = tiles;
     }
 
@@ -32,6 +32,9 @@ public class Floor {
         this.firstPlayerTile = firstPlayerTile;
     }
 
+    private int getSize() {
+        return (firstPlayerTile != null) ? tiles.size() + 1: tiles.size();
+    }
     /**
      * check if floor contains first player tile
      *
@@ -46,8 +49,11 @@ public class Floor {
      *
      * @param firstPlayerTile the firstPlayerTile
      */
-    public void placeFirstPlayerTile(Tile firstPlayerTile) {
+    public void placeFirstPlayerTile(Tile firstPlayerTile, Discard discard) {
         this.firstPlayerTile = firstPlayerTile;
+        if(tiles.size() == 7) {
+            discard.placeTile(tiles.pop());
+        }
     }
 
 
@@ -56,8 +62,13 @@ public class Floor {
      *
      * @param otherTiles the other tiles
      */
-    public void placeTiles(ArrayDeque<Tile> otherTiles) {
-        this.tiles.addAll(otherTiles);
+    public void placeTiles(ArrayDeque<Tile> otherTiles, Discard discard) {
+        while(otherTiles.size() != 0 && getSize() <= 7) {
+            tiles.add(otherTiles.pop());
+        }
+        if(otherTiles.size() > 0) {
+            discard.placeTiles(otherTiles);
+        }
     }
 
     /**
@@ -81,10 +92,7 @@ public class Floor {
      * @return the penalty score
      */
     public Score calculatePenalty() {
-        int size = tiles.size();
-        if (firstPlayerTile != null) {
-            size += 1;
-        }
+        int size = getSize();
         int penalty = switch (size) {
             case 0 -> 0;
             case 1 -> -1;
@@ -146,7 +154,7 @@ public class Floor {
         }
 
         firstPlayerTile = null;
-        tiles = new ArrayList<>();
+        tiles = new ArrayDeque<>();
 
         for (int i = 0; i < token.length(); i++) {
             if (token.charAt(i) == 'f') {
