@@ -221,8 +221,8 @@ public class Azul {
      */
     public static boolean isStateValid(String[] gameState) {
         // FIXME Task 9
-
-        return false;
+        Game game = new Game();
+        return game.isStateValid(gameState);
     }
 
     /**
