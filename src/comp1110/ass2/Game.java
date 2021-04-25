@@ -375,5 +375,36 @@ public class Game {
                 "A21Md00c01b02a03e04d11a12c13a21c22a30d34a44S2b2FeeeefB24Md00c02a03e04a10c11d12e13b14c20e22b23b32c34e40S4d2Fcc");
     }
 
+    public boolean isStateValid(String[] gameState){
+        if (isSharedStateWellFormed(gameState[0]) || isPlayerStateWellFormed(gameState[1])){
+            Pattern patternCommon = Pattern.compile(COMMON_REGEX);
+            Matcher matcher = patternCommon.matcher(gameState[0]);
+            Pattern patternPlayer = Pattern.compile(COMMON_REGEX);
+            Matcher matcherPlayer = patternPlayer.matcher(gameState[1]);
+
+            boolean matchFoundCommon = matcher.find();
+            boolean matchFoundPlayer = matcherPlayer.find();
+            if (matchFoundCommon && matchFoundPlayer ) {
+                String factoriesToken = matcher.group(2);
+                String centreToken =matcher.group(4);
+                String bagToken = matcher.group(5);
+                String discardToken = matcher.group(7);
+
+                String playerToken = matcherPlayer.group(1);
+                String scoreToken = matcherPlayer.group(2);
+                String mosaicToken = matcherPlayer.group(3);
+                String storageToken = matcherPlayer.group(5);
+                String floorToken = matcherPlayer.group(7);
+
+                if (Mosaic.isMosaicValid(mosaicToken)){
+                    return true;
+                }
+            };
+
+
+          return true;
+        }
+        return false;
+    }
 
 }
