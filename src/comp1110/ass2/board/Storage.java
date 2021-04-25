@@ -1,8 +1,8 @@
 package comp1110.ass2.board;
 
 import comp1110.ass2.Tile;
-
 import comp1110.ass2.common.Discard;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
@@ -90,6 +90,13 @@ public class Storage {
         }
         if (tiles.size() != 0) {
             floor.placeTiles(tiles, discard);
+        }
+        return true;
+    }
+
+    public boolean hasTileSameColor(int row, char code) {
+        if (this.getTriangle().get(row).getFirst().getColorCode() != code) {
+            return false;
         }
         return true;
     }

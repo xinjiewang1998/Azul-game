@@ -65,6 +65,14 @@ public class Factory {
         return returnTiles;
     }
 
+    public boolean hasTile(char code){
+        for (int i=0;i<this.getTiles().size();i++){
+            if(this.getTiles().get(i).getColorCode()==code){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * The factories substring begins with an 'F' and is followed by a collection of *up to* 5
      * 5-character factory strings representing each factory. Each factory string is defined in the
