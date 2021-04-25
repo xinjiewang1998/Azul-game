@@ -79,6 +79,10 @@ public class Factory {
      * @return true if is well formed factory string
      */
     public static boolean isWellFormedFactoryString(String token) {
+        if (token == null || token.length() > 5) {
+            return false;
+        }
+
         if (token.length() == 0) {
             return true;
         }
@@ -112,6 +116,10 @@ public class Factory {
      * @param token the string representation of floor state
      */
     public void reconstructFromString(String token) {
+        if (!isWellFormedFactoryString(token)) {
+            return;
+        }
+
         tiles = new ArrayList<>();
 
         this.id = token.charAt(0) - 48;

@@ -27,6 +27,22 @@ public class Mosaic {
         colorCount = new int[]{0, 0, 0, 0, 0};
     }
 
+    public Tile[][] getSquare() {
+        return square;
+    }
+
+    public void setSquare(Tile[][] square) {
+        this.square = square;
+    }
+
+    public int[] getColorCount() {
+        return colorCount;
+    }
+
+    public void setColorCount(int[] colorCount) {
+        this.colorCount = colorCount;
+    }
+
     /**
      * calculate the column number according to the color and row number.
      *
@@ -192,7 +208,7 @@ public class Mosaic {
      * @return true if is well formed mosaic string
      */
     public static boolean isWellFormedMosaicString(String token) {
-        if (token.length() % 3 != 0 || token.length() > 25 * 3) {
+        if (token == null || token.length() % 3 != 0 || token.length() > 25 * 3) {
             return false;
         }
 
@@ -230,6 +246,10 @@ public class Mosaic {
      * @param token the string representation of mosaic state
      */
     public void reconstructFromString(String token) {
+        if (!isWellFormedMosaicString(token)) {
+            return;
+        }
+
         square = new Tile[NUM_ROWS][NUM_ROWS];
         colorCount = new int[]{0, 0, 0, 0, 0};
 

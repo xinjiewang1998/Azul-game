@@ -99,7 +99,7 @@ public class Bag {
      * @return true if is well formed bag string
      */
     public static boolean isWellFormedBagString(String token) {
-        if (token.length() != 10) {
+        if (token == null || token.length() != 10) {
             return false;
         } else {
             for (int i = 0; i < 10; i++) {
@@ -124,6 +124,10 @@ public class Bag {
      * @param token the string representation of bag state
      */
     public void reconstructFromString(String token) {
+        if (!isWellFormedBagString(token)) {
+            return;
+        }
+
         tiles = new ArrayList<>();
 
         for (int i = 0; i < token.length(); i += 2) {
