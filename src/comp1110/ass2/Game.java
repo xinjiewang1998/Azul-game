@@ -269,7 +269,7 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.reconstructCommonFrom("AFCB1207080506D0107030805");
+        game.reconstructCommonFrom("AF0CB1207080506D0107030805");
         game.reconstructBoardsFrom(
                 "A21Md00c01b02a03e04d11a12c13a21c22a30d34a44S2b2FeeeefB24Md00c02a03e04a10c11d12e13b14c20e22b23b32c34e40S4d2Fcc");
     }
