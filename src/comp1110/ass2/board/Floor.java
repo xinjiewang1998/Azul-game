@@ -129,6 +129,12 @@ public class Floor {
         return countF <= 1;
     }
 
+    public static boolean isFloorValid(String floor){
+        if (floor.length() > 7) {
+            return false;
+        } else {return true;}
+    }
+
     /**
      * reconstruct internal state from string
      *
