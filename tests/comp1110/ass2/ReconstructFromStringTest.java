@@ -44,7 +44,7 @@ public class ReconstructFromStringTest {
         assertNotNull(floor.getFirstPlayerTile());
         assertEquals('f', floor.getFirstPlayerTile().getColorCode());
         for (int i = 0; i < 5; i++) {
-            Tile tile = floor.getTiles().get(i);
+            Tile tile = floor.getTiles().pop();
             assertEquals('a' + i, tile.getColorCode());
         }
     }

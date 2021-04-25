@@ -277,7 +277,8 @@ public class Azul {
      */
     public static String[] applyMove(String[] gameState, String move) {
         // FIXME Task 11
-        return null;
+        Game game = new Game();
+        return game.applyMove(gameState, move);
     }
 
     /**

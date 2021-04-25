@@ -3,6 +3,7 @@ package comp1110.ass2;
 import comp1110.ass2.board.Board;
 import comp1110.ass2.common.Common;
 import comp1110.ass2.common.Factory;
+import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class Player {
@@ -60,7 +61,7 @@ public class Player {
      * @param common       the common area
      * @return the tiles picked
      */
-    public Deque<Tile> drawTiles(String color, boolean fromFactory, int factoryIndex,
+    public ArrayDeque<Tile> drawTiles(String color, boolean fromFactory, int factoryIndex,
             Common common) {
         if (fromFactory) {
             Factory factory = common.getFactories()[factoryIndex];
