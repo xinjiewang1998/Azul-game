@@ -399,6 +399,12 @@ public class Game {
                 if (Mosaic.isMosaicValid(mosaicToken)){
                     return true;
                 }
+                if (Floor.isFloorValid(floorToken)){
+                    return true;
+                }
+                if(Centre.isCentreValid(centreToken,factoriesToken)){
+                    return true;
+                }
             };
 
 
