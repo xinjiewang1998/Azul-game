@@ -21,9 +21,9 @@ public class NextRoundTest {
             new String[]{"BFCB0907091213D0000000000", "A19Me00a01c03b04b10e11d12a14d20c21a22b23e24a30d31c32b42c44S4e2FbbbbbccB11Ma00c01e02d04b11d12e13a14d20a22b24c30d31b33a41d43S3a3Fbcccf"},
             new String[]{"BFCB0805060805D0405030709", "A36Me01d02c03b04a10d11b12e13c14c20b21d23e30S2e13c14a2FabbbfB12Mc00e02a03d04a10e11b12c14c21a22b24d42b43S3c3Fabc"},
             new String[]{"AFCB0001040100D1210051208", "A0Mc00d02e03a04b10e11c13b22c24a30b31e40d44S1a13c34a1FbbdeeeeB18Mc00b01a02d03e04d10b12a13c14e22c23a24e33e41c42b44S1e12b13a1Fcddf"},
-            new String[]{"BFCB0000060103D1111050511", "A15Ma00c01e02d03b04b12e13a14d20b21a23e24e30c33d34c40S1c12c1FaaafB7Mb00c01e02a04d10b12c14c20e21a23b24d33a40d41c42S3b3Fddddddd"},
+            new String[]{"BFCB0000060103D1111050611", "A15Ma00c01e02d03b04b12e13a14d20b21a23e24e30c33d34c40S1c12c1FaaafB7Mb00c01e02a04d10b12c14c20e21a23b24d33a40d41c42S3b3Fddddddd"},
             new String[]{"AFCB0703080106D0411011105", "A7Md00a02b03e04d11e13a20c24c30e40S1c12b2FaaaaB11Ma00c01b02d03e04c12a13b14d20b21c23a32S1e13c34e4Fccddddf"},
-            new String[]{"BFCB0606060308D0407080801", "A29Me00a01c02b04d10c11e13a14b20d22a23c24a40S3e24b2FafB12Ma00d01b02e04b10a11c12e13d14d23b24c43S3e14e4Faaacdddd"},
+            new String[]{"BFCB0606060308D0407080901", "A29Me00a01c02b04d10c11e13a14b20d22a23c24a40S3e24b2FafB12Ma00d01b02e04b10a11c12e13d14d23b24c43S3e14e4Faaacddd"},
             new String[]{"AFCB0201050507D1011040204", "A7Mb01c02e03a04e10a12b13d21b22c23d30c31c44S1c13b14d4FaaadddfB14Mc00e01d02b03a04a11d13d20c22a23b24e34d41e43S1c13c14c2Fbbeeee"},
             new String[]{"AFCB1207080506D0107030805", "A21Md00c01b02a03e04d11a12c13a21c22a30d34a44S2b2FeeeefB24Md00c02a03e04a10c11d12e13b14c20e22b23b32c34e40S4d2Fcc"},
     };
@@ -34,7 +34,7 @@ public class NextRoundTest {
             new String[] {"BFCfB0907091213D0006050000", "A7Me00a01c03b04b10e11d12a14d20c21a22b23e24a30d31c32b42c44S4e2FB13Ma00c01e02d04b11d12e13a14d20a22b24c30d31b33a41d43S3a3F"},
             new String[] {"AFCfB0805060805D0609040709", "A30Me01d02c03b04a10d11b12e13c14c20b21d23e30S2e13c14a2FB8Mc00e02a03d04a10e11b12c14c21a22b24d42b43S3c3F"},
             new String[] {"BFCfB0001040100D1212061512", "A0Mc00d02e03a04b10e11c13b22c24a30b31e40d44S1a13c34a1FB14Mc00b01a02d03e04d10b12a13c14e22c23a24e33e41c42b44S1e12b13a1F"},
-            new String[] {"AFCfB0000060103D1411051211", "A11Ma00c01e02d03b04b12e13a14d20b21a23e24e30c33d34c40S1c12c1FB0Mb00c01e02a04d10b12c14c20e21a23b24d33a40d41c42S3b3F"},
+            new String[] {"AFCfB0000060103D1411051311", "A11Ma00c01e02d03b04b12e13a14d20b21a23e24e30c33d34c40S1c12c1FB0Mb00c01e02a04d10b12c14c20e21a23b24d33a40d41c42S3b3F"},
             new String[] {"BFCfB0703080106D0811031505", "A1Md00a02b03e04d11e13a20c24c30e40S1c12b2FB2Ma00c01b02d03e04c12a13b14d20b21c23a32S1e13c34e4F"},
             new String[] {"AFCfB0606060308D0807091201", "A27Me00a01c02b04d10c11e13a14b20d22a23c24a40S3e24b2FB2Ma00d01b02e04b10a11c12e13d14d23b24c43S3e14e4F"},
             new String[] {"AFCfB0201050507D1313040508", "A0Mb01c02e03a04e10a12b13d21b22c23d30c31c44S1c13b14d4FB5Mc00e01d02b03a04a11d13d20c22a23b24e34d41e43S1c13c14c2F"},
@@ -81,7 +81,7 @@ public class NextRoundTest {
 
             assertEquals(fc, outFc, errorMessagePrefix + "expected factories to be empty at the end of game.");
             assertEquals(bag, outBag, errorMessagePrefix + "expected bag to be unchanged at the end of game.");
-            assertEquals(outDiscard, discard, errorMessagePrefix + "expected discard to be updated with tiles from the floor.");
+            assertEquals(discard, outDiscard, errorMessagePrefix + "expected discard to be updated with tiles from the floor.");
 
         }
 
