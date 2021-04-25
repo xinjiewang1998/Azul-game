@@ -77,7 +77,7 @@ public class Centre {
      * @return true if is well formed centre string
      */
     public static boolean isWellFormedCentreString(String token) {
-        if (token == null || token.length() > 15) {
+        if (token == null || token.length() > 16) {
             return false;
         }
         int fCount = 0;
