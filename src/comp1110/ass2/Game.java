@@ -92,7 +92,7 @@ public class Game {
 
             for (int i = 0; i < factoryStates.length(); i += 5) {
                 String factoryState = factoryStates.substring(i, i + 5);
-                this.common.getFactories()[i / 5].reconstructFromString(factoryState);
+                this.common.getFactories()[factoryState.charAt(0)-48].reconstructFromString(factoryState);
             }
             this.common.getCentre().reconstructFromString(centreState);
             this.common.getBag().reconstructFromString(bagState);
@@ -267,6 +267,107 @@ public class Game {
         return gameState;
     }
 
+    public boolean isMoveValid(String[] gameState, String move){
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        game.reconstructBoardsFrom(gameState[1]);
+        if(!String.valueOf(move.charAt(0)).equals(game.turn)){
+            return false;
+        }
+        if(move.length()==4){
+            if(move.charAt(1)=='C'){
+                int num = 0;
+                for(Tile tile :game.getCommon().getCentre().getTiles()){
+                    if(tile.getColorCode() == move.charAt(2)){
+                        num++;
+                    }
+                }
+                if(num==0){
+                    return false;
+                }
+            }else{
+                int num = 0;
+                int a =(int)(move.charAt(1)-48);
+                for(Tile tile :game.getCommon().getFactories()[(int)(move.charAt(1)-48)].getTiles()){
+                    if(tile.getColorCode() == move.charAt(2)){
+                        num++;
+                    }}
+                if(num==0){
+                    return false;
+                }
+
+            }
+            if(move.charAt(3)!='F'){
+                int row = Integer.parseInt(String.valueOf(move.charAt(3)));
+
+                if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(row).size()!=0){
+                    if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(row).getLast().getColorCode()!=move.charAt(2)){
+                        return false;
+                    }}
+                for(int i =0;i<5;i++){
+                    if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getMosaic().getSquare()[row][i]!=null){
+                        if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getMosaic().getSquare()[row][i].getColorCode()==move.charAt(2)){
+                            return false;
+                        }}
+                }}
+            if(move.charAt(3)=='F'){
+                return true;
+            }}
+        if(move.length()==3) {
+            int row = Integer.parseInt(String.valueOf(move.charAt(1)));
+            if(move.charAt(2)!='F') {
+                int col = Integer.parseInt(String.valueOf(move.charAt(2)));
+
+
+                if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).size() != 0) {
+                    char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).getFirst().getColorCode();
+                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).size() < row + 1) {
+                        return false;
+                    }
+                    for (int i = 0; i < 5; i++) {
+                        if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[i][col] != null) {
+                            if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[i][col].getColorCode() == code) {
+                                return false;
+                            }
+                        }
+                    }
+                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][col] != null) {
+                        return false;
+                    }
+
+
+                } else {
+                    return false;
+                }
+            }
+            else{
+
+                for(int i = 0;i<5;i++){
+                    char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).getFirst().getColorCode();
+                    if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][i]!=null){
+                        if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][i].getColorCode()==code){
+                            return true;
+                        }}
+                }
+                boolean result = false;
+                for(int i = 0;i<5;i++){
+                    char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).getFirst().getColorCode();
+                    if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][i]==null){
+                        for(int j=0;j<5;j++){
+                            if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[j][i]!=null){
+                                if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[j][i].getColorCode()==code){
+                                    return true;
+                                }}
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+
+        return true;
+    }
     public static void main(String[] args) {
         Game game = new Game();
         game.reconstructCommonFrom("AF0CB1207080506D0107030805");

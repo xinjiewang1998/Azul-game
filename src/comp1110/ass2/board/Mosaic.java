@@ -10,6 +10,14 @@ public class Mosaic {
     private final ArrayList<String> DEFAULT_COLORS = new ArrayList<>(
             Arrays.asList("blue", "green", "orange", "purple", "red"));
 
+    public Tile[][] getSquare() {
+        return square;
+    }
+
+    public void setSquare(Tile[][] square) {
+        this.square = square;
+    }
+
     private Tile[][] square;
     private int[] colorCount;
 

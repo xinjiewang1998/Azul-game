@@ -12,6 +12,14 @@ public class Storage {
     private final int NUM_ROWS = 5;
     private final int[] MAX_LENGTH = new int[]{1, 2, 3, 4, 5};
 
+    public ArrayList<ArrayDeque<Tile>> getTriangle() {
+        return triangle;
+    }
+
+    public void setTriangle(ArrayList<ArrayDeque<Tile>> triangle) {
+        this.triangle = triangle;
+    }
+
     // ArrayList is better for access each elements,
     // and ArrayDeque has convenient pop methods.
     // better use ArrayDeque when all elements has same color.
