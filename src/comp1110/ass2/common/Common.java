@@ -52,7 +52,7 @@ public class Common {
         this.discard = new Discard();
         this.factories = new Factory[5];
         for (int i = 0; i < 5; i++) {
-            factories[i] = new Factory('A' + i);
+            factories[i] = new Factory(i);
         }
     }
 

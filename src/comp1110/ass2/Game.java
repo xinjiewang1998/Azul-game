@@ -94,7 +94,7 @@ public class Game {
 
             for (int i = 0; i < factoryStates.length(); i += 5) {
                 String factoryState = factoryStates.substring(i, i + 5);
-                this.common.getFactories()[i / 5].reconstructFromString(factoryState);
+                this.common.getFactories()[factoryState.charAt(0)-48].reconstructFromString(factoryState);
             }
             this.common.getCentre().reconstructFromString(centreState);
             this.common.getBag().reconstructFromString(bagState);
@@ -269,25 +269,121 @@ public class Game {
         return gameState;
     }
 
-    /**
-     * Given a gameState and a move, apply the move to the gameState. If the move is a Tiling move,
-     * you must also update the player's score. If the move is a Tiling move, you must also empty
-     * the remaining tiles into the discard.
-     * <p>
-     * If the move is a Drafting move, you must also move any remaining tiles from the specified
-     * factory into the centre. If the move is a Drafting move and you must put tiles onto the
-     * floor, any tiles that cannot fit on the floor are placed in the discard with the following
-     * exception: If the first player tile would be placed into the discard, it is instead swapped
-     * with the last tile in the floor, when the floor is sorted alphabetically.
-     *
-     * @param gameState the game state.
-     * @param move      A string representing a move.
-     * @return the updated gameState after the move has been applied. TASK 11
-     */
-    //The specified row in the Storage area is full.
-    //The specified column does not already contain a tile of the same colour.
-    //you must also update the player's score.
-    //you must also empty the remaining tiles.
+    public boolean isMoveValid(String[] gameState, String move){
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        game.reconstructBoardsFrom(gameState[1]);
+        if(!String.valueOf(move.charAt(0)).equals(game.turn)){
+            return false;
+        }
+        if(move.length()==4){
+            if(move.charAt(1)=='C'){
+                int num = 0;
+                for(Tile tile :game.getCommon().getCentre().getTiles()){
+                    if(tile.getColorCode() == move.charAt(2)){
+                        num++;
+                    }
+                }
+                if(num==0){
+                    return false;
+                }
+            }else{
+                int num = 0;
+                int a =(int)(move.charAt(1)-48);
+                for(Tile tile :game.getCommon().getFactories()[(int)(move.charAt(1)-48)].getTiles()){
+                    if(tile.getColorCode() == move.charAt(2)){
+                        num++;
+                    }}
+                if(num==0){
+                    return false;
+                }
+
+            }
+            if(move.charAt(3)!='F'){
+                int row = Integer.parseInt(String.valueOf(move.charAt(3)));
+
+                if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(row).size()!=0){
+                    if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(row).getLast().getColorCode()!=move.charAt(2)){
+                        return false;
+                    }}
+                for(int i =0;i<5;i++){
+                    if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getMosaic().getSquare()[row][i]!=null){
+                        if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getMosaic().getSquare()[row][i].getColorCode()==move.charAt(2)){
+                            return false;
+                        }}
+                }}
+            if(move.charAt(3)=='F'){
+                return true;
+            }}
+        if(move.length()==3) {
+            int row = Integer.parseInt(String.valueOf(move.charAt(1)));
+            if(move.charAt(2)!='F') {
+                int col = Integer.parseInt(String.valueOf(move.charAt(2)));
+
+
+                if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).size() != 0) {
+                    char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).getFirst().getColorCode();
+                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).size() < row + 1) {
+                        return false;
+                    }
+                    for (int i = 0; i < 5; i++) {
+                        if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[i][col] != null) {
+                            if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[i][col].getColorCode() == code) {
+                                return false;
+                            }
+                        }
+                    }
+                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][col] != null) {
+                        return false;
+                    }
+
+
+                } else {
+                    return false;
+                }
+            }
+            else{
+
+                for(int i = 0;i<5;i++){
+                    if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).size()==0){
+                        return false;
+                    }
+                    char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).getFirst().getColorCode();
+                    if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][i]!=null){
+                        if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][i].getColorCode()==code){
+                            return true;
+                        }}
+                }
+
+                for(int i = 0;i<5;i++){
+                    boolean result = false;
+                    char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().getTriangle().get(row).getFirst().getColorCode();
+                    if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[row][i]==null){
+                        int time = 0;
+                        int num = 0;
+                        for(int j=0;j<5;j++){
+
+                            if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[j][i]!=null){
+                                num++;
+                                if(game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic().getSquare()[j][i].getColorCode()!=code){
+                                    time++;
+                                }}
+
+                            }
+                        if(num==time){
+                            return false;
+                        }
+                        }
+                    }
+
+                }
+            }
+
+
+
+        return true;
+    }
+
     public String[] applyMove(String[] gameState, String move) {
 
         this.reconstructCommonFrom(gameState[0]);
@@ -363,13 +459,49 @@ public class Game {
         return gameState;
     }
 
-
     public static void main(String[] args) {
         Game game = new Game();
-        game.reconstructCommonFrom("AFCB1207080506D0107030805");
+        game.reconstructCommonFrom("AF0CB1207080506D0107030805");
         game.reconstructBoardsFrom(
                 "A21Md00c01b02a03e04d11a12c13a21c22a30d34a44S2b2FeeeefB24Md00c02a03e04a10c11d12e13b14c20e22b23b32c34e40S4d2Fcc");
     }
 
+    public boolean isStateValid(String[] gameState){
+        if (isSharedStateWellFormed(gameState[0]) || isPlayerStateWellFormed(gameState[1])){
+            Pattern patternCommon = Pattern.compile(COMMON_REGEX);
+            Matcher matcher = patternCommon.matcher(gameState[0]);
+            Pattern patternPlayer = Pattern.compile(COMMON_REGEX);
+            Matcher matcherPlayer = patternPlayer.matcher(gameState[1]);
+
+            boolean matchFoundCommon = matcher.find();
+            boolean matchFoundPlayer = matcherPlayer.find();
+            if (matchFoundCommon && matchFoundPlayer ) {
+                String factoriesToken = matcher.group(2);
+                String centreToken =matcher.group(4);
+                String bagToken = matcher.group(5);
+                String discardToken = matcher.group(7);
+
+                String playerToken = matcherPlayer.group(1);
+                String scoreToken = matcherPlayer.group(2);
+                String mosaicToken = matcherPlayer.group(3);
+                String storageToken = matcherPlayer.group(5);
+                String floorToken = matcherPlayer.group(7);
+
+                if (Mosaic.isMosaicValid(mosaicToken)){
+                    return true;
+                }
+                if (Floor.isFloorValid(floorToken)){
+                    return true;
+                }
+                if(Centre.isCentreValid(centreToken,factoriesToken)){
+                    return true;
+                }
+            };
+
+
+          return true;
+        }
+        return false;
+    }
 
 }

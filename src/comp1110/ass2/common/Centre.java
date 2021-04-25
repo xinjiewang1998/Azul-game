@@ -84,7 +84,7 @@ public class Centre {
      * @return true if is well formed centre string
      */
     public static boolean isWellFormedCentreString(String token) {
-        if (token == null || token.length() > 15) {
+        if (token == null || token.length() > 16) {
             return false;
         }
         int fCount = 0;
@@ -105,6 +105,28 @@ public class Centre {
             }
         }
         return true;
+    }
+
+    public static boolean isCentreValid(String centre, String factories){
+        int tilesNum = 0;
+        int empty = 0;
+        for (int i = 0 ; i<centre.length();i++){
+            if (centre.charAt(i)=='a'||centre.charAt(i)=='b'||centre.charAt(i)=='c'||
+                    centre.charAt(i)=='d'||centre.charAt(i)=='e'){
+                tilesNum ++ ;
+            }
+        }
+        for (int i = 0 ;i<factories.length();i++){
+            if (factories.charAt(i) == '0'||factories.charAt(i) == '1'||factories.charAt(i) == '2'||
+                    factories.charAt(i) == '3'||factories.charAt(i) == '4'){
+                empty ++ ;
+            }
+        }
+        if (tilesNum > (3*empty)){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**

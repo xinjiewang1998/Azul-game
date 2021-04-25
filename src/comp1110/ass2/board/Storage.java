@@ -12,6 +12,13 @@ public class Storage {
     private final int NUM_ROWS = 5;
     private final int[] MAX_LENGTH = new int[]{1, 2, 3, 4, 5};
 
+    public ArrayList<ArrayDeque<Tile>> getTriangle() {
+        return triangle;
+    }
+
+    public void setTriangle(ArrayList<ArrayDeque<Tile>> triangle) {
+        this.triangle = triangle;
+    }
 
     // ArrayList is better for access each elements,
     // and ArrayDeque has convenient pop methods.
@@ -23,14 +30,6 @@ public class Storage {
         for (int i = 0; i < NUM_ROWS; i++) {
             triangle.add(new ArrayDeque<>());
         }
-    }
-
-    public ArrayList<ArrayDeque<Tile>> getTriangle() {
-        return triangle;
-    }
-
-    public void setTriangle(ArrayList<ArrayDeque<Tile>> triangle) {
-        this.triangle = triangle;
     }
 
     /**
@@ -151,7 +150,7 @@ public class Storage {
      * @return true if is well formed storage string
      */
     public static boolean isWellFormedStorageString(String token) {
-        if (token == null || token.length() % 3 != 0 || token.length() > 5 * 3) {
+        if (token.length() % 3 != 0 || token.length() > 5 * 3) {
             return false;
         }
 
@@ -186,9 +185,6 @@ public class Storage {
      * @param token the string representation of storage state
      */
     public void reconstructFromString(String token) {
-        if (!isWellFormedStorageString(token)) {
-            return;
-        }
         triangle = new ArrayList<>();
         for (int i = 0; i < NUM_ROWS; i++) {
             triangle.add(new ArrayDeque<>());

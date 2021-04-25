@@ -3,12 +3,17 @@ package comp1110.ass2.board;
 import comp1110.ass2.Tile;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Mosaic {
 
     private final int NUM_ROWS = 5;
     private final ArrayList<String> DEFAULT_COLORS = new ArrayList<>(
             Arrays.asList("blue", "green", "orange", "purple", "red"));
+
+
+
 
     private Tile[][] square;
     private int[] colorCount;
@@ -247,6 +252,19 @@ public class Mosaic {
         return true;
     }
 
+    public static boolean isMosaicValid(String mosaic){
+        ArrayList<String> Mosaic = new ArrayList<String>();
+        for (int i = 0 ;i<mosaic.length();i= i+3){
+            Mosaic.add(mosaic.substring(i+1,i+3));
+        }
+        Set<String> s = new HashSet<String>();
+        s.addAll(Mosaic);
+        if(Mosaic.size()-s.size()>=1){
+            return false;
+        } else {
+            return true;
+        }
+    }
     /**
      * reconstruct internal state from string
      *
