@@ -276,23 +276,11 @@ public class Game {
         }
         if(move.length()==4){
             if(move.charAt(1)=='C'){
-                int num = 0;
-                for(Tile tile :game.getCommon().getCentre().getTiles()){
-                    if(tile.getColorCode() == move.charAt(2)){
-                        num++;
-                    }
-                }
-                if(num==0){
+                if (!game.getCommon().getCentre().hasTile(move.charAt(2))) {
                     return false;
                 }
             }else{
-                int num = 0;
-                int a =(int)(move.charAt(1)-48);
-                for(Tile tile :game.getCommon().getFactories()[(int)(move.charAt(1)-48)].getTiles()){
-                    if(tile.getColorCode() == move.charAt(2)){
-                        num++;
-                    }}
-                if(num==0){
+                if (!game.getCommon().getFactories()[move.charAt(1) - 48].hasTile(move.charAt(2))) {
                     return false;
                 }
 
@@ -301,7 +289,7 @@ public class Game {
                 int row = Integer.parseInt(String.valueOf(move.charAt(3)));
 
                 if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(row).size()!=0){
-                    if(game.getPlayers()[(int)(move.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(row).getLast().getColorCode()!=move.charAt(2)){
+                    if (!game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage().hasTileSameColor(row, move.charAt(2))) {
                         return false;
                     }}
                 for(int i =0;i<5;i++){

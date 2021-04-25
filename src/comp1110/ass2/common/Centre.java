@@ -67,6 +67,14 @@ public class Centre {
         return returnTiles;
     }
 
+    public boolean hasTile(char code){
+        for (int i=0;i<this.getTiles().size();i++){
+            if(this.getTiles().get(i).getColorCode()==code){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * The centre substring starts with a 'C' This is followed by *up to* 15 characters. Each
      * character is 'a' to 'e', alphabetically - representing a tile in the centre. The centre
