@@ -124,7 +124,7 @@ public class Bag {
      * @param token the string representation of bag state
      */
     public void reconstructFromString(String token) {
-        if(!isWellFormedBagString(token)) {
+        if (!isWellFormedBagString(token)) {
             return;
         }
 

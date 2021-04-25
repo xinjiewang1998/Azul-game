@@ -43,7 +43,7 @@ public class ReconstructFromStringTest {
         assertEquals(5, floor.getTiles().size());
         assertNotNull(floor.getFirstPlayerTile());
         assertEquals('f', floor.getFirstPlayerTile().getColorCode());
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             Tile tile = floor.getTiles().get(i);
             assertEquals('a' + i, tile.getColorCode());
         }
@@ -66,7 +66,8 @@ public class ReconstructFromStringTest {
     @Test
     public void testReconstructMosaicFromIncorrectString() {
         Mosaic mosaic = new Mosaic();
-        mosaic.reconstructFromString("a00b01c02d03e04b10c11d12e13a14c20d21e22a23b24d30e31a32b33c34e40a41b42c43d44a44");
+        mosaic.reconstructFromString(
+                "a00b01c02d03e04b10c11d12e13a14c20d21e22a23b24d30e31a32b33c34e40a41b42c43d44a44");
         assertEquals(5, mosaic.getSquare().length);
         for (Tile[] tiles : mosaic.getSquare()) {
             assertEquals(5, tiles.length);
@@ -97,7 +98,7 @@ public class ReconstructFromStringTest {
         Storage storage = new Storage();
         storage.reconstructFromString(null);
         assertEquals(5, storage.getTriangle().size());
-        for(ArrayDeque<Tile> row : storage.getTriangle()) {
+        for (ArrayDeque<Tile> row : storage.getTriangle()) {
             assertEquals(0, row.size());
         }
     }
@@ -107,7 +108,7 @@ public class ReconstructFromStringTest {
         Storage storage = new Storage();
         storage.reconstructFromString("f");
         assertEquals(5, storage.getTriangle().size());
-        for(ArrayDeque<Tile> row : storage.getTriangle()) {
+        for (ArrayDeque<Tile> row : storage.getTriangle()) {
             assertEquals(0, row.size());
         }
     }
@@ -117,7 +118,7 @@ public class ReconstructFromStringTest {
         Storage storage = new Storage();
         storage.reconstructFromString("0a11b22c33d44e5");
         assertEquals(5, storage.getTriangle().size());
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             ArrayDeque<Tile> row = storage.getTriangle().get(i);
             assertEquals(i + 1, row.size());
             assertEquals('a' + i, row.pop().getColorCode());
@@ -148,7 +149,7 @@ public class ReconstructFromStringTest {
         assertEquals(5, centre.getTiles().size());
         assertNotNull(centre.getFirstPlayerTile());
         assertEquals('f', centre.getFirstPlayerTile().getColorCode());
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             Tile tile = centre.getTiles().get(i);
             assertEquals('a' + i, tile.getColorCode());
         }
@@ -176,7 +177,7 @@ public class ReconstructFromStringTest {
         assertEquals(60, bag.getTiles().size());
         int end = 0;
         int[] count = new int[]{0, 0, 0, 0, 0};
-        for(int i = 0; i < 60; i++) {
+        for (int i = 0; i < 60; i++) {
             count[bag.getTiles().get(i).getColorCode() - 'a'] += 1;
         }
         assertArrayEquals(new int[]{4, 8, 12, 16, 20}, count);
@@ -203,11 +204,11 @@ public class ReconstructFromStringTest {
         discard.reconstructFromString("0408121620");
         assertEquals(60, discard.getTiles().size());
         int end = 0;
-        for(int i = 0; i < 5; i++) {
-            for (int j = 0; j < 4*(i+1); j++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 4 * (i + 1); j++) {
                 assertEquals('a' + i, discard.getTiles().get(end + j).getColorCode());
             }
-            end += 4*(i+1);
+            end += 4 * (i + 1);
         }
     }
 
@@ -231,7 +232,7 @@ public class ReconstructFromStringTest {
         Factory factory = new Factory();
         factory.reconstructFromString("1abcd");
         assertEquals(4, factory.getTiles().size());
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             assertEquals('a' + i, factory.getTiles().get(i).getColorCode());
         }
     }

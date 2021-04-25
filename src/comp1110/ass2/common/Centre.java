@@ -106,7 +106,7 @@ public class Centre {
      * @param token the string representation of floor state
      */
     public void reconstructFromString(String token) {
-        if(!isWellFormedCentreString(token)) {
+        if (!isWellFormedCentreString(token)) {
             return;
         }
 

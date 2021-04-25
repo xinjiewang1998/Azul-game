@@ -163,7 +163,7 @@ public class Storage {
      * @param token the string representation of storage state
      */
     public void reconstructFromString(String token) {
-        if(!isWellFormedStorageString(token)) {
+        if (!isWellFormedStorageString(token)) {
             return;
         }
         triangle = new ArrayList<>();

@@ -86,7 +86,7 @@ public class Discard {
      * @param token the string representation of score state
      */
     public void reconstructFromString(String token) {
-        if(!isWellFormedDiscardString(token)) {
+        if (!isWellFormedDiscardString(token)) {
             return;
         }
 

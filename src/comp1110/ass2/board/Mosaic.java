@@ -238,7 +238,7 @@ public class Mosaic {
      * @param token the string representation of mosaic state
      */
     public void reconstructFromString(String token) {
-        if(!isWellFormedMosaicString(token)) {
+        if (!isWellFormedMosaicString(token)) {
             return;
         }
 

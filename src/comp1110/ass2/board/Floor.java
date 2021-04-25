@@ -31,6 +31,7 @@ public class Floor {
     public void setFirstPlayerTile(Tile firstPlayerTile) {
         this.firstPlayerTile = firstPlayerTile;
     }
+
     /**
      * check if floor contains first player tile
      *
@@ -134,7 +135,7 @@ public class Floor {
      * @param token the string representation of floor state
      */
     public void reconstructFromString(String token) {
-        if(token == null || token.length() > 8) {
+        if (!isWellFormedFloorString(token)) {
             return;
         }
 
