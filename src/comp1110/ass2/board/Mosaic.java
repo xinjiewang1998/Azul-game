@@ -62,6 +62,16 @@ public class Mosaic {
         return (square[row][column] != null);
     }
 
+    public boolean columnHasSameColor(char code,int col){
+        for (int i = 0; i < 5; i++) {
+            if (this.getSquare()[i][col] != null) {
+                if (this.getSquare()[i][col].getColorCode() == code) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     /**
      * check if has tile at specific position
      *

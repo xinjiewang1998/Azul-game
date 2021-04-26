@@ -176,10 +176,9 @@ public class Game {
     public String[] refillFactories(String[] gameState) {
         //task 6
         this.reconstructCommonFrom(gameState[0]);
-        Factory[] factories = common.getFactories();
-        ArrayList<Tile> centreTiles = common.getCentre().getTiles();
-        if (centreTiles.size() > 0 &&
-                !(centreTiles.size() == 1 && centreTiles.get(0).getColorCode() == 'f')) {
+        Factory[] factories = this.getCommon().getFactories();
+        ArrayList<Tile> centreTiles = this.getCommon().getCentre().getTiles();
+        if (centreTiles.size() > 0 && !(centreTiles.size() == 1 && centreTiles.get(0).getColorCode() == 'f')) {
             return gameState;
         }
 
@@ -310,7 +309,7 @@ public class Game {
                 }
             }
             //the tile may be placed on the floor.
-            if (move.charAt(3) == 'F') {
+            else {
                 return true;
             }
         }
@@ -325,23 +324,17 @@ public class Game {
                         .getTriangle().get(row).size() != 0) {
                     char code = game.getPlayers()[move.charAt(0) - 'A'].getBoard()
                             .getStorage().getTriangle().get(row).getFirst().getColorCode();
-                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
-                            .getTriangle().get(row).size() < row + 1) {
+                    // The row of the Storage is full.
+                    if (!game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
+                            .hasCompleteRow()) {
                         return false;
                     }
                     //2. The specified column does not already contain a tile of the same colour.
-                    for (int i = 0; i < 5; i++) {
-                        if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
-                                .getSquare()[i][col] != null) {
-                            if (game.getPlayers()[move.charAt(0) - 'A'].getBoard()
-                                    .getMosaic().getSquare()[i][col].getColorCode() == code) {
-                                return false;
-                            }
-                        }
+                    if(game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic().columnHasSameColor(code,col)){
+                        return false;
                     }
                     //3. The specified location in the mosaic is empty.
-                    return game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
-                            .getSquare()[row][col] == null;
+                    return !game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic().hasTile(row, col);
 
 
                 } else {
@@ -351,12 +344,14 @@ public class Game {
             //4. If the specified column is 'F', no valid move exists from the specified row into the mosaic.
             else {
                 for (int i = 0; i < 5; i++) {
+                    // The row of Storage has Tiles.
                     if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
                             .getTriangle().get(row).size() == 0) {
                         return false;
                     }
                     char code = game.getPlayers()[move.charAt(0) - 'A'].getBoard()
                             .getStorage().getTriangle().get(row).getFirst().getColorCode();
+                    // The Mosaic has the same color.
                     if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
                             .getSquare()[row][i] != null) {
                         if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
@@ -364,12 +359,9 @@ public class Game {
                             return true;
                         }
                     }
-                }
-                for (int i = 0; i < 5; i++) {
-                    char code = game.getPlayers()[move.charAt(0) - 'A'].getBoard()
-                            .getStorage().getTriangle().get(row).getFirst().getColorCode();
-                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
-                            .getSquare()[row][i] == null) {
+                    // If the position has no tile determine whether column of it has tile with the same color.
+                    if (!game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                            .hasTile(row,i)) {
                         int time = 0;
                         int num = 0;
                         for (int j = 0; j < 5; j++) {
@@ -389,7 +381,6 @@ public class Game {
                         }
                     }
                 }
-
             }
         }
         return true;

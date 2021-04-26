@@ -95,10 +95,7 @@ public class Storage {
     }
 
     public boolean hasTileSameColor(int row, char code) {
-        if (this.getTriangle().get(row).getFirst().getColorCode() != code) {
-            return false;
-        }
-        return true;
+        return this.getTriangle().get(row).getFirst().getColorCode() == code;
     }
 
     /**
