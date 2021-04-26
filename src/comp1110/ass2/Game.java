@@ -1,10 +1,6 @@
 package comp1110.ass2;
 
-import comp1110.ass2.board.Board;
-import comp1110.ass2.board.Floor;
-import comp1110.ass2.board.Mosaic;
-import comp1110.ass2.board.Score;
-import comp1110.ass2.board.Storage;
+import comp1110.ass2.board.*;
 import comp1110.ass2.common.*;
 
 import java.util.ArrayDeque;
@@ -274,108 +270,114 @@ public class Game {
         Game game = new Game();
         game.reconstructCommonFrom(gameState[0]);
         game.reconstructBoardsFrom(gameState[1]);
+        //it is not your turn.
         if (!String.valueOf(move.charAt(0)).equals(game.turn)) {
             return false;
         }
-
+        //Drafting move
         if (move.length() == 4) {
+            //1. The specified factory/centre contains at least one tile of the specified colour.
             if (move.charAt(1) == 'C') {
                 if (!game.getCommon().getCentre().hasTile(move.charAt(2))) {
                     return false;
                 }
             } else {
+                //1. The specified factory/centre contains at least one tile of the specified colour.
                 if (!game.getCommon().getFactories()[move.charAt(1) - 48].hasTile(move.charAt(2))) {
                     return false;
                 }
 
             }
             if (move.charAt(3) != 'F') {
+                //2. The storage row the tile is being placed in does not already contain a different colour.
                 int row = Integer.parseInt(String.valueOf(move.charAt(3)));
-
-                if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage()
+                if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
                         .getTriangle().get(row).size() != 0) {
-                    if (!game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage()
+                    if (!game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
                             .hasTileSameColor(row, move.charAt(2))) {
                         return false;
                     }
                 }
+                //3. The corresponding mosaic row does not already contain a tile of that colour.
                 for (int i = 0; i < 5; i++) {
-                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic()
+                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
                             .getSquare()[row][i] != null) {
-                        if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic()
+                        if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
                                 .getSquare()[row][i].getColorCode() == move.charAt(2)) {
                             return false;
                         }
                     }
                 }
             }
+            //the tile may be placed on the floor.
             if (move.charAt(3) == 'F') {
                 return true;
             }
         }
+        //Tiling move 3 chars
         if (move.length() == 3) {
+            //1. The specified row in the Storage area is full.
             int row = Integer.parseInt(String.valueOf(move.charAt(1)));
             if (move.charAt(2) != 'F') {
                 int col = Integer.parseInt(String.valueOf(move.charAt(2)));
 
-                if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage()
+                if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
                         .getTriangle().get(row).size() != 0) {
-                    char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard()
+                    char code = game.getPlayers()[move.charAt(0) - 'A'].getBoard()
                             .getStorage().getTriangle().get(row).getFirst().getColorCode();
-                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage()
+                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
                             .getTriangle().get(row).size() < row + 1) {
                         return false;
                     }
+                    //2. The specified column does not already contain a tile of the same colour.
                     for (int i = 0; i < 5; i++) {
-                        if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic()
+                        if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
                                 .getSquare()[i][col] != null) {
-                            if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard()
+                            if (game.getPlayers()[move.charAt(0) - 'A'].getBoard()
                                     .getMosaic().getSquare()[i][col].getColorCode() == code) {
                                 return false;
                             }
                         }
                     }
-                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic()
-                            .getSquare()[row][col] != null) {
-                        return false;
-                    }
+                    //3. The specified location in the mosaic is empty.
+                    return game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                            .getSquare()[row][col] == null;
 
 
                 } else {
                     return false;
                 }
-            } else {
-
+            }
+            //4. If the specified column is 'F', no valid move exists from the specified row into the mosaic.
+            else {
                 for (int i = 0; i < 5; i++) {
-                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getStorage()
+                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
                             .getTriangle().get(row).size() == 0) {
                         return false;
                     }
-                    char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard()
+                    char code = game.getPlayers()[move.charAt(0) - 'A'].getBoard()
                             .getStorage().getTriangle().get(row).getFirst().getColorCode();
-                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic()
+                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
                             .getSquare()[row][i] != null) {
-                        if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic()
+                        if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
                                 .getSquare()[row][i].getColorCode() == code) {
                             return true;
                         }
                     }
                 }
-
                 for (int i = 0; i < 5; i++) {
-                    boolean result = false;
-                    char code = game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard()
+                    char code = game.getPlayers()[move.charAt(0) - 'A'].getBoard()
                             .getStorage().getTriangle().get(row).getFirst().getColorCode();
-                    if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard().getMosaic()
+                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
                             .getSquare()[row][i] == null) {
                         int time = 0;
                         int num = 0;
                         for (int j = 0; j < 5; j++) {
 
-                            if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard()
+                            if (game.getPlayers()[move.charAt(0) - 'A'].getBoard()
                                     .getMosaic().getSquare()[j][i] != null) {
                                 num++;
-                                if (game.getPlayers()[(int) (move.charAt(0) - 'A')].getBoard()
+                                if (game.getPlayers()[move.charAt(0) - 'A'].getBoard()
                                         .getMosaic().getSquare()[j][i].getColorCode() != code) {
                                     time++;
                                 }
@@ -390,7 +392,6 @@ public class Game {
 
             }
         }
-
         return true;
     }
 
