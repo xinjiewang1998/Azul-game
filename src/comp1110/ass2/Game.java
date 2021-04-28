@@ -427,10 +427,6 @@ public class Game {
         return false;
     }
 
-    // A1M e04    S 1b2 2c1 3a3 4a1 Fbeeee B0MS0c11b12e13d4Ff
-    // A2M e04b11 S     2c1 3a3 4a1 Fbeeee B0MS0c11b12e13d4Ff
-
-
     public String[] applyMove(String[] gameState, String move) {
 
         this.reconstructCommonFrom(gameState[0]);
