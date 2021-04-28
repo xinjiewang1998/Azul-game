@@ -182,6 +182,12 @@ public class Storage {
         return true;
     }
 
+//  * [Storage]
+//  * 1. The maximum number of tiles stored in a row must not exceed (row_number + 1).
+//  * (This part finish in mosaic)2. The colour of tile stored in a row must not be the same as a colour
+//  * already found in the corresponding row of the mosaic.
+//    Example "A1Mb41S0a21c32a33c24d1FaaaccfB1Mc13S0b11b12a33e44d2Fb", "0a2 1c3 2a3 3c2 4d1"
+
     public static boolean isStorageValid (String storage){
         boolean mosaicValid = true;
         for (int i = 0;i<storage.length();i=i+3){

@@ -118,6 +118,36 @@ public class Factory {
         return true;
     }
 
+
+//    [Factories]
+//     * 1. At most one factory has less than 4, but greater than 0 tiles.
+//     * Any factories with factory number greater than this factory must contain 0 tiles
+//     correct example"1aabc2abbb4ddee" error example "1aa2abb4ddee"
+
+    public static boolean factoryValid(String factories){
+        int tileNumber = 0;
+        int notFull = 0;
+        for(int i = 1 ; i<factories.length();i=i+tileNumber){
+            int a =0;
+            for(int j = 0; j<4;j++){
+                if(factories.charAt(i+j) == 'a' || factories.charAt(i+j) == 'b' ||factories.charAt(i+j) == 'c' ||
+                    factories.charAt(i+j) == 'd'|| factories.charAt(i+j) == 'e'){
+                    a++; } else {break;}
+                tileNumber =a;
+            }
+            if(tileNumber<4) {
+                notFull++;
+            }
+        }
+        if(notFull>1){
+            return false;
+        }else if (notFull==1){
+            return true;
+        }else{
+            return true;
+        }
+    }
+
     /**
      * reconstruct internal state from string
      *

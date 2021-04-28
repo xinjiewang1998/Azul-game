@@ -163,6 +163,9 @@ public class Floor {
         return countF <= 1;
     }
 
+//  * [Floor]
+//  * 1. There are no more than 7 tiles on a single player's floor.
+
     public static boolean isFloorValid(String floor) {
         if (floor.length() > 7) {
             return false;

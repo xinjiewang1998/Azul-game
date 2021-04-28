@@ -31,6 +31,31 @@ public enum Tile {
         return FirstPlayer;
     }
 
+    public static int tileNum(String string,char a){
+        int num = 0;
+        for (int i =0 ;i<string.length();i++){
+            if (string.charAt(i)==a){
+                num++;
+            }
+        }
+        return num;
+    }
+
+    public static int tileNum(String string,int i){
+        int num = Integer.parseInt(string.substring(i,i+2));
+        return num;
+    }
+
+    public static int tileNum(String string,char a,int i){
+        int num = 0;
+        for (int j =0 ;j<string.length();j++){
+            if (string.charAt(j)==a){
+                num= num + Integer.parseInt(string.substring(i+1,i+2));
+            }
+        }
+        return num;
+    }
+
     /**
      * Getter method for color.
      *

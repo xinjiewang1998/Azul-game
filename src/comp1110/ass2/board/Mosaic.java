@@ -272,6 +272,13 @@ public class Mosaic {
         return true;
     }
 
+//     * [Mosaic]
+//     * 1. No two tiles occupy the same location on a single player's mosaic.
+//     * 2. Each row contains only 1 of each colour of tile.
+//     * 3. Each column contains only 1 of each colour of tile.
+//     * 2. The colour of tile stored in a row must not be the same as a colour
+//     * already found in the corresponding row of the mosaic.
+
     public static boolean isMosaicValid(String mosaic,String storage) {
         // Example "A0Ma00S0a11c22a33c44b5FB0MS0e11a22b33d44e5Ff",mosaic = a00, storage = 0a11c22a33c44b5
         boolean mosaicValid = true;
@@ -280,6 +287,7 @@ public class Mosaic {
             char mosaicColor = mosaic.charAt(i);
             int mosaicRow = Integer.parseInt(mosaic.substring(i+1,i+2));
             int mosaicColumn = Integer.parseInt(mosaic.substring(i+2,i+3));
+            //Compare with other mosaic
             for (int k = 3 ; k<mosaic.length(); k = k+3){
                 char mosaicColor2 = mosaic.charAt(k);
                 int mosaicRow2 = Integer.parseInt(mosaic.substring(k+1,k+2));

@@ -413,13 +413,30 @@ public class Game {
             String storageToken = matcherPlayer.group(5);
             String floorToken = matcherPlayer.group(7);
 
-            if (!Mosaic.isMosaicValid(mosaicToken, storageToken)) {
+            int aNum= 0; int bNum = 0; int cNum = 0; int dNum =0; int eNum =0; int fNum =0;
+            aNum = Tile.tileNum(factoriesToken+centreToken,'a')+Tile.tileNum(bagToken,0)+Tile.tileNum(discardToken,0)
+                    +Tile.tileNum(mosaicToken,'a')+Tile.tileNum(storageToken,'a',0)+Tile.tileNum(floorToken,'a');
+            bNum = Tile.tileNum(factoriesToken+centreToken,'b')+Tile.tileNum(bagToken,2)+Tile.tileNum(discardToken,2)
+                    +Tile.tileNum(mosaicToken,'b')+Tile.tileNum(storageToken,'b',0)+Tile.tileNum(floorToken,'b');
+            cNum = Tile.tileNum(factoriesToken+centreToken,'c')+Tile.tileNum(bagToken,4)+Tile.tileNum(discardToken,4)
+                    +Tile.tileNum(mosaicToken,'c')+Tile.tileNum(storageToken,'c',0)+Tile.tileNum(floorToken,'c');
+            dNum = Tile.tileNum(factoriesToken+centreToken,'d')+Tile.tileNum(bagToken,6)+Tile.tileNum(discardToken,6)
+                    +Tile.tileNum(mosaicToken,'d')+Tile.tileNum(storageToken,'d',0)+Tile.tileNum(floorToken,'d');
+            eNum = Tile.tileNum(factoriesToken+centreToken,'e')+Tile.tileNum(bagToken,8)+Tile.tileNum(discardToken,8)
+                    +Tile.tileNum(mosaicToken,'e')+Tile.tileNum(storageToken,'e',0)+Tile.tileNum(floorToken,'e');
+            fNum = Tile.tileNum(centreToken+floorToken,'f');
+
+            if (aNum >20 || bNum >20 || cNum>20 || dNum >20 || eNum>20|| fNum>1){
                 isStateValid = false;
-            } else if (!Floor.isFloorValid(floorToken)) {
+            }else if (!Mosaic.isMosaicValid(mosaicToken, storageToken)) {
+                isStateValid = false;
+            } else if (!Storage.isStorageValid(storageToken)) {
+                isStateValid = false;
+            } else if (Floor.isFloorValid(floorToken)) {
                 isStateValid = false;
             } else if (!Centre.isCentreValid(centreToken, factoriesToken)) {
                 isStateValid = false;
-            } else if (!Storage.isStorageValid(storageToken)) {
+            }else if (!Factory.factoryValid(factoriesToken)) {
                 isStateValid = false;
             }
         }
