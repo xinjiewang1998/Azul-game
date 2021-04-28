@@ -387,41 +387,40 @@ public class Game {
     }
 
     public boolean isStateValid(String[] gameState) {
-        if (isSharedStateWellFormed(gameState[0]) || isPlayerStateWellFormed(gameState[1])) {
-            Pattern patternCommon = Pattern.compile(COMMON_REGEX);
-            Matcher matcher = patternCommon.matcher(gameState[0]);
-            Pattern patternPlayer = Pattern.compile(COMMON_REGEX);
-            Matcher matcherPlayer = patternPlayer.matcher(gameState[1]);
-
-            boolean matchFoundCommon = matcher.find();
-            boolean matchFoundPlayer = matcherPlayer.find();
-            if (matchFoundCommon && matchFoundPlayer) {
-                String factoriesToken = matcher.group(2);
-                String centreToken = matcher.group(4);
-                String bagToken = matcher.group(5);
-                String discardToken = matcher.group(7);
-
-                String playerToken = matcherPlayer.group(1);
-                String scoreToken = matcherPlayer.group(2);
-                String mosaicToken = matcherPlayer.group(3);
-                String storageToken = matcherPlayer.group(5);
-                String floorToken = matcherPlayer.group(7);
-
-                if (Mosaic.isMosaicValid(mosaicToken)) {
-                    return true;
-                }
-                if (Floor.isFloorValid(floorToken)) {
-                    return true;
-                }
-                if (Centre.isCentreValid(centreToken, factoriesToken)) {
-                    return true;
-                }
-            }
-            ;
-
-            return true;
+        boolean isStateValid = true;
+        if (!isSharedStateWellFormed(gameState[0]) || !isPlayerStateWellFormed(gameState[1])) {
+            isStateValid = false;
         }
-        return false;
+        Pattern patternCommon = Pattern.compile(COMMON_REGEX);
+        Matcher matcher = patternCommon.matcher(gameState[0]);
+        Pattern patternPlayer = Pattern.compile(COMMON_REGEX);
+        Matcher matcherPlayer = patternPlayer.matcher(gameState[1]);
+
+        boolean matchFoundCommon = matcher.find();
+        boolean matchFoundPlayer = matcherPlayer.find();
+        if (matchFoundCommon && matchFoundPlayer) {
+            String factoriesToken = matcher.group(2);
+            String centreToken = matcher.group(4);
+            String bagToken = matcher.group(5);
+            String discardToken = matcher.group(7);
+
+            String playerToken = matcherPlayer.group(1);
+            String scoreToken = matcherPlayer.group(2);
+            String mosaicToken = matcherPlayer.group(3);
+            String storageToken = matcherPlayer.group(5);
+            String floorToken = matcherPlayer.group(7);
+
+            if (!Mosaic.isMosaicValid(mosaicToken, storageToken)) {
+                isStateValid = false;
+            } else if (!Floor.isFloorValid(floorToken)) {
+                isStateValid = false;
+            } else if (!Centre.isCentreValid(centreToken, factoriesToken)) {
+                isStateValid = false;
+            } else if (!Storage.isStorageValid(storageToken)) {
+                isStateValid = false;
+            }
+        }
+        return isStateValid;
     }
 
     public String[] applyMove(String[] gameState, String move) {

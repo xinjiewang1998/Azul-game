@@ -183,6 +183,18 @@ public class Storage {
         return true;
     }
 
+    public static boolean isStorageValid (String storage){
+        boolean mosaicValid = true;
+        for (int i = 0;i<storage.length();i=i+3){
+            int storageRow = Integer.parseInt(storage.substring(i,i+1));
+            int storageNumber = Integer.parseInt(storage.substring(i+2,i+3));
+            if (storageNumber > (storageRow + 1)){
+                mosaicValid = false;
+            }
+        }
+        return mosaicValid;
+    }
+
     /**
      * reconstruct internal state from string
      *
