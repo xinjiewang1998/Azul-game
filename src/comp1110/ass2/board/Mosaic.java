@@ -59,10 +59,20 @@ public class Mosaic {
      * @param row   the target row
      * @return true if the color exists in mosaic
      */
-    public boolean hasColor(String color, int row) {
+    public boolean hasIndexedColor(String color, int row) {
         int column = (row + DEFAULT_COLORS.indexOf(color)) % NUM_ROWS;
         return (square[row][column] != null);
     }
+
+    public boolean hasColor(String color, int row) {
+        for (int i = 0; i < NUM_ROWS; i++) {
+            if(square[row][i]!= null && square[row][i].getColor().equals(color)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public boolean columnHasSameColor(char code,int col){
         for (int i = 0; i < 5; i++) {
