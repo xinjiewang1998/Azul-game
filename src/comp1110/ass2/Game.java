@@ -156,8 +156,6 @@ public class Game {
 
 //                System.out.println("Build Player: " + player.toString());
                 playerState = playerState.substring(matcher.end());
-            } else {
-//                System.out.println("Not Found Player: " + playerState);
             }
         }
     }
@@ -176,8 +174,8 @@ public class Game {
     public String[] refillFactories(String[] gameState) {
         //task 6
         this.reconstructCommonFrom(gameState[0]);
-        Factory[] factories = this.getCommon().getFactories();
-        ArrayList<Tile> centreTiles = this.getCommon().getCentre().getTiles();
+        Factory[] factories = common.getFactories();
+        ArrayList<Tile> centreTiles =common.getCentre().getTiles();
         if (centreTiles.size() > 0 && !(centreTiles.size() == 1 && centreTiles.get(0).getColorCode() == 'f')) {
             return gameState;
         }
