@@ -65,6 +65,16 @@ public class Factory {
         return returnTiles;
     }
 
+    public int countTile(char code){
+        int count = 0;
+        for(Tile T:this.getTiles()){
+            if(T.getColorCode()==code){
+                count++;
+            }
+        }
+        return count;
+    }
+
     public boolean hasTile(char code){
         for (int i=0;i<this.getTiles().size();i++){
             if(this.getTiles().get(i).getColorCode()==code){

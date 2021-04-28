@@ -59,6 +59,15 @@ public class Floor {
     }
 
 
+    public int countTile(char code){
+        int count = 0;
+        for(Tile T:this.getTiles()){
+            if(T.getColorCode()==code){
+                count++;
+            }
+        }
+        return count;
+    }
     /**
      * Add all other tiles to our tiles.
      *

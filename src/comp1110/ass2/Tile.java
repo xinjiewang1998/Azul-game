@@ -48,9 +48,9 @@ public enum Tile {
 
     public static int tileNum(String string,char a,int i){
         int num = 0;
-        for (int j =0 ;j<string.length();j++){
+        for (int j =1 ;j<string.length();j+=2){
             if (string.charAt(j)==a){
-                num= num + Integer.parseInt(string.substring(i+1,i+2));
+                num= num + Integer.parseInt(string.substring(j+1,j+2));
             }
         }
         return num;

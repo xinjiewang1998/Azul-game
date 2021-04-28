@@ -63,6 +63,15 @@ public class Centre {
         this.tiles = newList;
     }
 
+    public int countTile(char code){
+        int count = 0;
+        for(Tile T:this.getTiles()){
+            if(T.getColorCode()==code){
+                count++;
+            }
+        }
+        return count;
+    }
     /**
      * Pick all tiles of the same colour from the centre.
      *

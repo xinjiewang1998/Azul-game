@@ -86,6 +86,15 @@ public class Bag {
         tiles.addAll(otherTiles);
     }
 
+    public int countTile(char code){
+        int count = 0;
+        for(Tile T:this.getTiles()){
+            if(T.getColorCode()==code){
+                count++;
+            }
+        }
+        return count;
+    }
 
     /**
      * The bag substring starts with a 'B' and is followed by 5 2-character substrings 1st substring

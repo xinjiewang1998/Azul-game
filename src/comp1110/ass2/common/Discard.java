@@ -58,6 +58,16 @@ public class Discard {
         tiles.clear();
     }
 
+
+    public int countTile(char code){
+        int count = 0;
+        for(Tile T:this.getTiles()){
+            if(T.getColorCode()==code){
+                count++;
+            }
+        }
+        return count;
+    }
     /**
      * The discard substring starts with a 'D' and is followed by 5 2-character substrings defined
      * the same as the bag substring. For example: "D0005201020" The bag contains zero 'a' tiles,

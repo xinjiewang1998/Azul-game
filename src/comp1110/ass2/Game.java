@@ -85,7 +85,7 @@ public class Game {
 
             String factoryStates = matcher.group(2);
             String centreState = matcher.group(4);
-            String bagState = matcher.group(5);
+            String bagState = matcher.group(5);//2020202020
             String discardState = matcher.group(7);
 
             for (int i = 0; i < factoryStates.length(); i += 5) {
@@ -119,7 +119,7 @@ public class Game {
                 String storageToken = matcher.group(5);
                 String floorToken = matcher.group(7);
 
-                System.out.println(matchToken);
+                //System.out.println(matchToken);
                 if (!Mosaic.isWellFormedMosaicString(mosaicToken) ||
                         !Storage.isWellFormedStorageString(storageToken) ||
                         !Floor.isWellFormedFloorString(floorToken)) {
@@ -390,57 +390,48 @@ public class Game {
     }
 
     public boolean isStateValid(String[] gameState) {
-        boolean isStateValid = true;
+        //boolean isStateValid = true;
         if (!isSharedStateWellFormed(gameState[0]) || !isPlayerStateWellFormed(gameState[1])) {
-            isStateValid = false;
+            return false;
         }
-        Pattern patternCommon = Pattern.compile(COMMON_REGEX);
-        Matcher matcher = patternCommon.matcher(gameState[0]);
-        Pattern patternPlayer = Pattern.compile(COMMON_REGEX);
-        Matcher matcherPlayer = patternPlayer.matcher(gameState[1]);
-
-        boolean matchFoundCommon = matcher.find();
-        boolean matchFoundPlayer = matcherPlayer.find();
-        if (matchFoundCommon && matchFoundPlayer) {
-            String factoriesToken = matcher.group(2);
-            String centreToken = matcher.group(4);
-            String bagToken = matcher.group(5);
-            String discardToken = matcher.group(7);
-
-            String playerToken = matcherPlayer.group(1);
-            String scoreToken = matcherPlayer.group(2);
-            String mosaicToken = matcherPlayer.group(3);
-            String storageToken = matcherPlayer.group(5);
-            String floorToken = matcherPlayer.group(7);
-
-            int aNum= 0; int bNum = 0; int cNum = 0; int dNum =0; int eNum =0; int fNum =0;
-            aNum = Tile.tileNum(factoriesToken+centreToken,'a')+Tile.tileNum(bagToken,0)+Tile.tileNum(discardToken,0)
-                    +Tile.tileNum(mosaicToken,'a')+Tile.tileNum(storageToken,'a',0)+Tile.tileNum(floorToken,'a');
-            bNum = Tile.tileNum(factoriesToken+centreToken,'b')+Tile.tileNum(bagToken,2)+Tile.tileNum(discardToken,2)
-                    +Tile.tileNum(mosaicToken,'b')+Tile.tileNum(storageToken,'b',0)+Tile.tileNum(floorToken,'b');
-            cNum = Tile.tileNum(factoriesToken+centreToken,'c')+Tile.tileNum(bagToken,4)+Tile.tileNum(discardToken,4)
-                    +Tile.tileNum(mosaicToken,'c')+Tile.tileNum(storageToken,'c',0)+Tile.tileNum(floorToken,'c');
-            dNum = Tile.tileNum(factoriesToken+centreToken,'d')+Tile.tileNum(bagToken,6)+Tile.tileNum(discardToken,6)
-                    +Tile.tileNum(mosaicToken,'d')+Tile.tileNum(storageToken,'d',0)+Tile.tileNum(floorToken,'d');
-            eNum = Tile.tileNum(factoriesToken+centreToken,'e')+Tile.tileNum(bagToken,8)+Tile.tileNum(discardToken,8)
-                    +Tile.tileNum(mosaicToken,'e')+Tile.tileNum(storageToken,'e',0)+Tile.tileNum(floorToken,'e');
-            fNum = Tile.tileNum(centreToken+floorToken,'f');
-
-            if (aNum >20 || bNum >20 || cNum>20 || dNum >20 || eNum>20|| fNum>1){
-                isStateValid = false;
-            }else if (!Mosaic.isMosaicValid(mosaicToken, storageToken)) {
-                isStateValid = false;
-            } else if (!Storage.isStorageValid(storageToken)) {
-                isStateValid = false;
-            } else if (Floor.isFloorValid(floorToken)) {
-                isStateValid = false;
-            } else if (!Centre.isCentreValid(centreToken, factoriesToken)) {
-                isStateValid = false;
-            }else if (!Factory.factoryValid(factoriesToken)) {
-                isStateValid = false;
+        this.reconstructCommonFrom(gameState[0]);
+        this.reconstructBoardsFrom(gameState[1]);
+        for(int i=0;i<5;i++){
+            int count = 0;
+            for (int j=0;j<5;j++){
+                count+=this.common.getFactories()[j].countTile((char)('a'+i));
+            }
+            count += this.common.getBag().countTile((char)('a'+i))+this.common.getCentre().countTile((char)('a'+i))+this.common.getDiscard().countTile((char)('a'+i));
+            for(int k = 0;k<2;k++){
+                count+=this.getPlayers()[k].getBoard().getFloor().countTile((char)('a'+i))+this.getPlayers()[k].getBoard().getMosaic().countTile((char)('a'+i))
+                        +this.getPlayers()[k].getBoard().getStorage().countTile((char)('a'+i));
+            }
+            if(count!=20){
+                return false;
             }
         }
-        return isStateValid;
+        for(int i = 0;i<5;i++){
+            for(int j =0;j<5;j++){
+                for (int k=0;k<2;k++){
+                    if(this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()!=0&&this.getPlayers()[k].getBoard().getMosaic().getSquare()[i][j]!=null)
+                    if(this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).getFirst().getColorCode()==this.getPlayers()[k].getBoard().getMosaic().getSquare()[i][j].getColorCode()){
+                        return false;
+                    }
+                }
+            }
+        }
+        for(int i = 0;i<5;i++){
+            for (int k=0;k<2;k++){
+            if(this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()>i+1){
+                return false;
+            }}
+        }
+
+
+
+
+
+        return true;
     }
 
     // A1M e04    S 1b2 2c1 3a3 4a1 Fbeeee B0MS0c11b12e13d4Ff

@@ -308,6 +308,19 @@ public class Mosaic {
         return mosaicValid;
     }
 
+    public int countTile(char code){
+        int count = 0;
+        for (int i=0;i<5;i++){
+            for(int j=0;j<5;j++){
+                if(square[i][j]!=null){
+                if(square[i][j].getColorCode()==code){
+                    count++;
+                }}
+            }
+        }
+        return count;
+    }
+
     /**
      * reconstruct internal state from string
      *

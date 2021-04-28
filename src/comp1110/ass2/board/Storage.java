@@ -32,6 +32,16 @@ public class Storage {
         }
     }
 
+    public int countTile(char code){
+        int count = 0;
+        for (int i=0;i<5;i++){
+            if(getTriangle().get(i).size()!=0){
+            if(getTriangle().get(i).getFirst().getColorCode()==code){
+                count = count+getTriangle().get(i).size();
+            }}
+        }
+        return count;
+    }
     /**
      * Check if has complete row.
      *
