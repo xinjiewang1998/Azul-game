@@ -156,6 +156,8 @@ public class Game {
 
 //                System.out.println("Build Player: " + player.toString());
                 playerState = playerState.substring(matcher.end());
+            } else {
+//                System.out.println("Not Found Player: " + playerState);
             }
         }
     }
@@ -174,9 +176,10 @@ public class Game {
     public String[] refillFactories(String[] gameState) {
         //task 6
         this.reconstructCommonFrom(gameState[0]);
-        Factory[] factories = common.getFactories();
-        ArrayList<Tile> centreTiles =common.getCentre().getTiles();
-        if (centreTiles.size() > 0 && !(centreTiles.size() == 1 && centreTiles.get(0).getColorCode() == 'f')) {
+        Factory[] factories = this.getCommon().getFactories();
+        ArrayList<Tile> centreTiles = this.getCommon().getCentre().getTiles();
+        if (centreTiles.size() > 0 && !(centreTiles.size() == 1
+                && centreTiles.get(0).getColorCode() == 'f')) {
             return gameState;
         }
 
@@ -328,11 +331,13 @@ public class Game {
                         return false;
                     }
                     //2. The specified column does not already contain a tile of the same colour.
-                    if(game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic().columnHasSameColor(code,col)){
+                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                            .columnHasSameColor(code, col)) {
                         return false;
                     }
                     //3. The specified location in the mosaic is empty.
-                    return !game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic().hasTile(row, col);
+                    return !game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                            .hasTile(row, col);
 
 
                 } else {
@@ -359,7 +364,7 @@ public class Game {
                     }
                     // If the position has no tile determine whether column of it has tile with the same color.
                     if (!game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
-                            .hasTile(row,i)) {
+                            .hasTile(row, i)) {
                         int time = 0;
                         int num = 0;
                         for (int j = 0; j < 5; j++) {
@@ -385,42 +390,62 @@ public class Game {
     }
 
     public boolean isStateValid(String[] gameState) {
-        if (isSharedStateWellFormed(gameState[0]) || isPlayerStateWellFormed(gameState[1])) {
-            Pattern patternCommon = Pattern.compile(COMMON_REGEX);
-            Matcher matcher = patternCommon.matcher(gameState[0]);
-            Pattern patternPlayer = Pattern.compile(COMMON_REGEX);
-            Matcher matcherPlayer = patternPlayer.matcher(gameState[1]);
-
-            boolean matchFoundCommon = matcher.find();
-            boolean matchFoundPlayer = matcherPlayer.find();
-            if (matchFoundCommon && matchFoundPlayer) {
-                String factoriesToken = matcher.group(2);
-                String centreToken = matcher.group(4);
-                String bagToken = matcher.group(5);
-                String discardToken = matcher.group(7);
-
-                String playerToken = matcherPlayer.group(1);
-                String scoreToken = matcherPlayer.group(2);
-                String mosaicToken = matcherPlayer.group(3);
-                String storageToken = matcherPlayer.group(5);
-                String floorToken = matcherPlayer.group(7);
-
-                if (Mosaic.isMosaicValid(mosaicToken)) {
-                    return true;
-                }
-                if (Floor.isFloorValid(floorToken)) {
-                    return true;
-                }
-                if (Centre.isCentreValid(centreToken, factoriesToken)) {
-                    return true;
-                }
-            }
-            ;
-
-            return true;
+        boolean isStateValid = true;
+        if (!isSharedStateWellFormed(gameState[0]) || !isPlayerStateWellFormed(gameState[1])) {
+            isStateValid = false;
         }
-        return false;
+        Pattern patternCommon = Pattern.compile(COMMON_REGEX);
+        Matcher matcher = patternCommon.matcher(gameState[0]);
+        Pattern patternPlayer = Pattern.compile(COMMON_REGEX);
+        Matcher matcherPlayer = patternPlayer.matcher(gameState[1]);
+
+        boolean matchFoundCommon = matcher.find();
+        boolean matchFoundPlayer = matcherPlayer.find();
+        if (matchFoundCommon && matchFoundPlayer) {
+            String factoriesToken = matcher.group(2);
+            String centreToken = matcher.group(4);
+            String bagToken = matcher.group(5);
+            String discardToken = matcher.group(7);
+
+            String playerToken = matcherPlayer.group(1);
+            String scoreToken = matcherPlayer.group(2);
+            String mosaicToken = matcherPlayer.group(3);
+            String storageToken = matcherPlayer.group(5);
+            String floorToken = matcherPlayer.group(7);
+
+            int aNum= 0; int bNum = 0; int cNum = 0; int dNum =0; int eNum =0; int fNum =0;
+            aNum = Tile.tileNum(factoriesToken+centreToken,'a')+Tile.tileNum(bagToken,0)+Tile.tileNum(discardToken,0)
+                    +Tile.tileNum(mosaicToken,'a')+Tile.tileNum(storageToken,'a',0)+Tile.tileNum(floorToken,'a');
+            bNum = Tile.tileNum(factoriesToken+centreToken,'b')+Tile.tileNum(bagToken,2)+Tile.tileNum(discardToken,2)
+                    +Tile.tileNum(mosaicToken,'b')+Tile.tileNum(storageToken,'b',0)+Tile.tileNum(floorToken,'b');
+            cNum = Tile.tileNum(factoriesToken+centreToken,'c')+Tile.tileNum(bagToken,4)+Tile.tileNum(discardToken,4)
+                    +Tile.tileNum(mosaicToken,'c')+Tile.tileNum(storageToken,'c',0)+Tile.tileNum(floorToken,'c');
+            dNum = Tile.tileNum(factoriesToken+centreToken,'d')+Tile.tileNum(bagToken,6)+Tile.tileNum(discardToken,6)
+                    +Tile.tileNum(mosaicToken,'d')+Tile.tileNum(storageToken,'d',0)+Tile.tileNum(floorToken,'d');
+            eNum = Tile.tileNum(factoriesToken+centreToken,'e')+Tile.tileNum(bagToken,8)+Tile.tileNum(discardToken,8)
+                    +Tile.tileNum(mosaicToken,'e')+Tile.tileNum(storageToken,'e',0)+Tile.tileNum(floorToken,'e');
+            fNum = Tile.tileNum(centreToken+floorToken,'f');
+
+            if (aNum >20 || bNum >20 || cNum>20 || dNum >20 || eNum>20|| fNum>1){
+                isStateValid = false;
+            }else if (!Mosaic.isMosaicValid(mosaicToken, storageToken)) {
+                isStateValid = false;
+            } else if (!Storage.isStorageValid(storageToken)) {
+                isStateValid = false;
+            } else if (Floor.isFloorValid(floorToken)) {
+                isStateValid = false;
+            } else if (!Centre.isCentreValid(centreToken, factoriesToken)) {
+                isStateValid = false;
+            }else if (!Factory.factoryValid(factoriesToken)) {
+                isStateValid = false;
+            }
+        }
+        return isStateValid;
     }
+
+    // A1M e04    S 1b2 2c1 3a3 4a1 Fbeeee B0MS0c11b12e13d4Ff
+    // A2M e04b11 S     2c1 3a3 4a1 Fbeeee B0MS0c11b12e13d4Ff
+
 
     public String[] applyMove(String[] gameState, String move) {
 
@@ -438,6 +463,9 @@ public class Game {
                             board.getMosaic(),
                             common.getDiscard());
             board.getScore().addScore(score);
+            if(!board.getStorage().hasCompleteRow()) {
+                turn = (turn.equals("A")) ? "B" : "A";
+            }
         } else if (move.length() == 4) {
             Player player = this.players[move.charAt(0) - 'A'];
             Board board = player.getBoard();
@@ -447,45 +475,38 @@ public class Game {
             if (move.charAt(1) == 'C') {
                 // draw tiles from centre
                 ArrayDeque<Tile> tiles = player.drawTiles(color, false, 0, common);
-                if (move.charAt(3) == 'F') {
-                    // place tiles on floor
-                    board.getStorage().placeTiles(tiles, color, 0, row
-                            , board.getMosaic(), board.getFloor()
-                            , common.getDiscard());
-
+                Tile firstPlayerTile = common.getCentre().getFirstPlayerTile();
+                if (firstPlayerTile != null) {
                     // transfer first player tile
-                    board.getFloor().placeFirstPlayerTile(common.getCentre().getFirstPlayerTile(),
-                            common.getDiscard());
+                    board.getFloor().placeFirstPlayerTile(firstPlayerTile, common.getDiscard());
                     common.getCentre().setFirstPlayerTile(null);
-                } else {
-                    // place tiles on storage
-                    board.getStorage().placeTiles(tiles, color, tiles.size(), row
-                            , board.getMosaic(), board.getFloor()
-                            , common.getDiscard());
                 }
+                int tilesNum = (move.charAt(3) == 'F') ? 0 : tiles.size();
+                board.getStorage().placeTiles(tiles, color, tilesNum, row
+                        , board.getMosaic(), board.getFloor()
+                        , common.getDiscard());
+
             } else {
                 // draw tiles from factory
                 int factoryNum = move.charAt(1) - '0';
                 ArrayDeque<Tile> tiles = player.drawTiles(color, true, factoryNum, common);
-                if (move.charAt(3) == 'F') {
-                    // place tiles on floor
-                    board.getStorage().placeTiles(tiles, color, 0, row
-                            , board.getMosaic(), board.getFloor()
-                            , common.getDiscard());
+                int tilesNum = (move.charAt(3) == 'F') ? 0 : tiles.size();
+                board.getStorage().placeTiles(tiles, color, tilesNum, row
+                        , board.getMosaic(), board.getFloor()
+                        , common.getDiscard());
+            }
 
-                    // transfer first player tile
-                    board.getFloor().placeFirstPlayerTile(common.getCentre().getFirstPlayerTile(),
-                            common.getDiscard());
-                    common.getCentre().setFirstPlayerTile(null);
-                } else {
-                    // place tiles on storage
-                    board.getStorage().placeTiles(tiles, color, tiles.size(), row
-                            , board.getMosaic(), board.getFloor()
-                            , common.getDiscard());
-                }
+            // check if goes to next phase
+            int remaining = 0;
+            for (Factory factory: common.getFactories()) {
+                remaining += factory.getTiles().size();
+            }
+            remaining += common.getCentre().getTiles().size();
+            if (remaining != 0) {
+                turn = (turn.equals("A")) ? "B" : "A";
             }
         }
-        turn = (turn.equals("A")) ? "B" : "A";
+
         // rebuild state
         gameState = new String[2];
         gameState[0] = turn + common.toString();

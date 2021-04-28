@@ -3,24 +3,25 @@ package comp1110.ass2.board;
 import comp1110.ass2.Tile;
 import comp1110.ass2.common.Centre;
 import comp1110.ass2.common.Discard;
+import java.sql.SQLOutput;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class Floor {
 
-    private ArrayDeque<Tile> tiles;
+    private ArrayList<Tile> tiles;
     private Tile firstPlayerTile;
 
     public Floor() {
-        this.tiles = new ArrayDeque<>();
+        this.tiles = new ArrayList<>();
     }
 
 
-    public ArrayDeque<Tile> getTiles() {
+    public ArrayList<Tile> getTiles() {
         return tiles;
     }
 
-    public void setTiles(ArrayDeque<Tile> tiles) {
+    public void setTiles(ArrayList<Tile> tiles) {
         this.tiles = tiles;
     }
 
@@ -53,7 +54,7 @@ public class Floor {
     public void placeFirstPlayerTile(Tile firstPlayerTile, Discard discard) {
         this.firstPlayerTile = firstPlayerTile;
         if (tiles.size() == 7) {
-            discard.placeTile(tiles.pop());
+            discard.placeTile(tiles.remove(6));
         }
     }
 
@@ -64,12 +65,36 @@ public class Floor {
      * @param otherTiles the other tiles
      */
     public void placeTiles(ArrayDeque<Tile> otherTiles, Discard discard) {
-        while (otherTiles.size() != 0 && getSize() <= 7) {
+        while (otherTiles.size() != 0) {
             tiles.add(otherTiles.pop());
         }
-        if (otherTiles.size() > 0) {
-            discard.placeTiles(otherTiles);
+        sort();
+        ArrayList<Tile> newList = new ArrayList<>();
+        if (getSize() > 7) {
+            int limit = (hasFirstPlayerTile())? 6 : 7;
+            while(newList.size() < limit) {
+                newList.add(tiles.remove(0));
+            }
+        } else {
+            newList.addAll(tiles);
+            tiles.clear();
         }
+        discard.placeTiles(tiles);
+        tiles.clear();
+        tiles = newList;
+    }
+
+    private void sort() {
+        ArrayList<Tile> newList = new ArrayList<>();
+        for(int i = 0; i < 5; i++) {
+            for(Tile tile : tiles) {
+                if (tile.getColorCode() == 'a' +i) {
+                    newList.add(tile);
+                }
+            }
+        }
+        tiles.clear();
+        tiles = newList;
     }
 
     /**
@@ -138,6 +163,9 @@ public class Floor {
         return countF <= 1;
     }
 
+//  * [Floor]
+//  * 1. There are no more than 7 tiles on a single player's floor.
+
     public static boolean isFloorValid(String floor) {
         if (floor.length() > 7) {
             return false;
@@ -157,7 +185,7 @@ public class Floor {
         }
 
         firstPlayerTile = null;
-        tiles = new ArrayDeque<>();
+        tiles = new ArrayList<>();
 
         for (int i = 0; i < token.length(); i++) {
             if (token.charAt(i) == 'f') {

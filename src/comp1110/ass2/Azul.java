@@ -265,7 +265,7 @@ public class Azul {
      * any tiles that cannot fit on the floor are placed in the discard with
      * the following exception:
      * If the first player tile would be placed into the discard, it is instead
-     * swapped with the last tile in the floor, when the floor is sorted
+     * If the first player tile would be placed into the discard, it is instead
      * alphabetically.
      *
      * @param gameState the game state.

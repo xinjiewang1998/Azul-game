@@ -1,6 +1,8 @@
 package comp1110.ass2.board;
 
 import comp1110.ass2.Tile;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -57,10 +59,20 @@ public class Mosaic {
      * @param row   the target row
      * @return true if the color exists in mosaic
      */
-    public boolean hasColor(String color, int row) {
+    public boolean hasIndexedColor(String color, int row) {
         int column = (row + DEFAULT_COLORS.indexOf(color)) % NUM_ROWS;
         return (square[row][column] != null);
     }
+
+    public boolean hasColor(String color, int row) {
+        for (int i = 0; i < NUM_ROWS; i++) {
+            if(square[row][i]!= null && square[row][i].getColor().equals(color)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public boolean columnHasSameColor(char code,int col){
         for (int i = 0; i < 5; i++) {
@@ -260,18 +272,40 @@ public class Mosaic {
         return true;
     }
 
-    public static boolean isMosaicValid(String mosaic) {
-        ArrayList<String> Mosaic = new ArrayList<String>();
-        for (int i = 0; i < mosaic.length(); i = i + 3) {
-            Mosaic.add(mosaic.substring(i + 1, i + 3));
+//     * [Mosaic]
+//     * 1. No two tiles occupy the same location on a single player's mosaic.
+//     * 2. Each row contains only 1 of each colour of tile.
+//     * 3. Each column contains only 1 of each colour of tile.
+//     * 2. The colour of tile stored in a row must not be the same as a colour
+//     * already found in the corresponding row of the mosaic.
+
+    public static boolean isMosaicValid(String mosaic,String storage) {
+        // Example "A0Ma00S0a11c22a33c44b5FB0MS0e11a22b33d44e5Ff",mosaic = a00, storage = 0a11c22a33c44b5
+        boolean mosaicValid = true;
+        for (int i = 0;i<mosaic.length();i=i+3){
+            //Record the color, rows, column of the mosaic
+            char mosaicColor = mosaic.charAt(i);
+            int mosaicRow = Integer.parseInt(mosaic.substring(i+1,i+2));
+            int mosaicColumn = Integer.parseInt(mosaic.substring(i+2,i+3));
+            //Compare with other mosaic
+            for (int k = 3 ; k<mosaic.length(); k = k+3){
+                char mosaicColor2 = mosaic.charAt(k);
+                int mosaicRow2 = Integer.parseInt(mosaic.substring(k+1,k+2));
+                int mosaicColumn2 = Integer.parseInt(mosaic.substring(k+2,k+3));
+                if(mosaicColor == mosaicColor2 && (mosaicRow == mosaicRow2 || mosaicColumn == mosaicColumn2)){
+                    mosaicValid = false;
+                }
+            }
+            //Record the color and rows of the storage, mosaic compares with storage color and rows.
+            for (int j = 0 ;j<storage.length();j=j+3){
+                int storageRow = Integer.parseInt(storage.substring(j,j+1));
+                char storageColor = storage.charAt(j+1);
+                if (mosaicColor == storageColor && mosaicRow == storageRow){
+                    mosaicValid = false;
+                }
+            }
         }
-        Set<String> s = new HashSet<String>();
-        s.addAll(Mosaic);
-        if (Mosaic.size() - s.size() >= 1) {
-            return false;
-        } else {
-            return true;
-        }
+        return mosaicValid;
     }
 
     /**
