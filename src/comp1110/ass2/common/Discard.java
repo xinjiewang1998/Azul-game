@@ -30,7 +30,13 @@ public class Discard {
      * @param leftTiles tiles left in storage.
      */
     public void placeTiles(ArrayDeque<Tile> leftTiles) {
-        this.tiles.addAll(leftTiles);
+        while (leftTiles.size() != 0) {
+            tiles.add(leftTiles.pop());
+        }
+    }
+
+    public void placeTiles(ArrayList<Tile> leftTiles) {
+        tiles.addAll(leftTiles);
     }
 
     /**

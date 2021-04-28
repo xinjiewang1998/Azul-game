@@ -37,6 +37,7 @@ public class Centre {
      */
     public void placeTile(Tile tile) {
         this.tiles.add(tile);
+        sort();
     }
 
     /**
@@ -46,8 +47,21 @@ public class Centre {
      */
     public void placeTiles(ArrayList<Tile> otherTiles) {
         tiles.addAll(otherTiles);
+        sort();
     }
 
+    private void sort() {
+        ArrayList<Tile> newList = new ArrayList<>();
+        for(int i = 0; i < 5; i++) {
+            for(Tile tile : tiles) {
+                if (tile.getColorCode() == 'a' +i) {
+                    newList.add(tile);
+                }
+            }
+        }
+        tiles.clear();
+        this.tiles = newList;
+    }
 
     /**
      * Pick all tiles of the same colour from the centre.

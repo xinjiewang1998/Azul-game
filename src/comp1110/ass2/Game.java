@@ -178,7 +178,8 @@ public class Game {
         this.reconstructCommonFrom(gameState[0]);
         Factory[] factories = this.getCommon().getFactories();
         ArrayList<Tile> centreTiles = this.getCommon().getCentre().getTiles();
-        if (centreTiles.size() > 0 && !(centreTiles.size() == 1 && centreTiles.get(0).getColorCode() == 'f')) {
+        if (centreTiles.size() > 0 && !(centreTiles.size() == 1
+                && centreTiles.get(0).getColorCode() == 'f')) {
             return gameState;
         }
 
@@ -330,11 +331,13 @@ public class Game {
                         return false;
                     }
                     //2. The specified column does not already contain a tile of the same colour.
-                    if(game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic().columnHasSameColor(code,col)){
+                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                            .columnHasSameColor(code, col)) {
                         return false;
                     }
                     //3. The specified location in the mosaic is empty.
-                    return !game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic().hasTile(row, col);
+                    return !game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                            .hasTile(row, col);
 
 
                 } else {
@@ -361,7 +364,7 @@ public class Game {
                     }
                     // If the position has no tile determine whether column of it has tile with the same color.
                     if (!game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
-                            .hasTile(row,i)) {
+                            .hasTile(row, i)) {
                         int time = 0;
                         int num = 0;
                         for (int j = 0; j < 5; j++) {
@@ -424,6 +427,10 @@ public class Game {
         return false;
     }
 
+    // A1M e04    S 1b2 2c1 3a3 4a1 Fbeeee B0MS0c11b12e13d4Ff
+    // A2M e04b11 S     2c1 3a3 4a1 Fbeeee B0MS0c11b12e13d4Ff
+
+
     public String[] applyMove(String[] gameState, String move) {
 
         this.reconstructCommonFrom(gameState[0]);
@@ -440,6 +447,9 @@ public class Game {
                             board.getMosaic(),
                             common.getDiscard());
             board.getScore().addScore(score);
+            if(!board.getStorage().hasCompleteRow()) {
+                turn = (turn.equals("A")) ? "B" : "A";
+            }
         } else if (move.length() == 4) {
             Player player = this.players[move.charAt(0) - 'A'];
             Board board = player.getBoard();
@@ -449,45 +459,38 @@ public class Game {
             if (move.charAt(1) == 'C') {
                 // draw tiles from centre
                 ArrayDeque<Tile> tiles = player.drawTiles(color, false, 0, common);
-                if (move.charAt(3) == 'F') {
-                    // place tiles on floor
-                    board.getStorage().placeTiles(tiles, color, 0, row
-                            , board.getMosaic(), board.getFloor()
-                            , common.getDiscard());
-
+                Tile firstPlayerTile = common.getCentre().getFirstPlayerTile();
+                if (firstPlayerTile != null) {
                     // transfer first player tile
-                    board.getFloor().placeFirstPlayerTile(common.getCentre().getFirstPlayerTile(),
-                            common.getDiscard());
+                    board.getFloor().placeFirstPlayerTile(firstPlayerTile, common.getDiscard());
                     common.getCentre().setFirstPlayerTile(null);
-                } else {
-                    // place tiles on storage
-                    board.getStorage().placeTiles(tiles, color, tiles.size(), row
-                            , board.getMosaic(), board.getFloor()
-                            , common.getDiscard());
                 }
+                int tilesNum = (move.charAt(3) == 'F') ? 0 : tiles.size();
+                board.getStorage().placeTiles(tiles, color, tilesNum, row
+                        , board.getMosaic(), board.getFloor()
+                        , common.getDiscard());
+
             } else {
                 // draw tiles from factory
                 int factoryNum = move.charAt(1) - '0';
                 ArrayDeque<Tile> tiles = player.drawTiles(color, true, factoryNum, common);
-                if (move.charAt(3) == 'F') {
-                    // place tiles on floor
-                    board.getStorage().placeTiles(tiles, color, 0, row
-                            , board.getMosaic(), board.getFloor()
-                            , common.getDiscard());
+                int tilesNum = (move.charAt(3) == 'F') ? 0 : tiles.size();
+                board.getStorage().placeTiles(tiles, color, tilesNum, row
+                        , board.getMosaic(), board.getFloor()
+                        , common.getDiscard());
+            }
 
-                    // transfer first player tile
-                    board.getFloor().placeFirstPlayerTile(common.getCentre().getFirstPlayerTile(),
-                            common.getDiscard());
-                    common.getCentre().setFirstPlayerTile(null);
-                } else {
-                    // place tiles on storage
-                    board.getStorage().placeTiles(tiles, color, tiles.size(), row
-                            , board.getMosaic(), board.getFloor()
-                            , common.getDiscard());
-                }
+            // check if goes to next phase
+            int remaining = 0;
+            for (Factory factory: common.getFactories()) {
+                remaining += factory.getTiles().size();
+            }
+            remaining += common.getCentre().getTiles().size();
+            if (remaining != 0) {
+                turn = (turn.equals("A")) ? "B" : "A";
             }
         }
-        turn = (turn.equals("A")) ? "B" : "A";
+
         // rebuild state
         gameState = new String[2];
         gameState[0] = turn + common.toString();

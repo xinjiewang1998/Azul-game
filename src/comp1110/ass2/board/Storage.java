@@ -116,7 +116,6 @@ public class Storage {
                 // tiling
                 Score score = mosaic.placeTile(row.pop(), i);
                 discard.placeTiles(row);
-                row.clear();
 
                 // scoring
                 total.addScore(score);
