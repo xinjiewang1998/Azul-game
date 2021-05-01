@@ -287,6 +287,29 @@ public class Azul {
      */
     public static String generateAction(String[] gameState) {
         // FIXME Task 13
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        game.reconstructBoardsFrom(gameState[1]);
+        if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().hasCompleteRow()){
+            for (int i=0;i<5;i++){
+                if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(i).size()==i+1){
+                    int col = 0;
+                    for(int j=0;j<5;j++){
+                        char code = game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(i).getFirst().getColorCode();
+                        if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic().getSquare()[i][j]==null){
+                        if(!game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic().columnHasSameColor(code,j)){
+                            col = j;
+                            break;
+                        }}
+                    }
+                    return game.turn+i+col;
+                }
+            }
+        }
+        else{
+
+        }
+
         return null;
         // FIXME Task 15 Implement a "smart" generateAction()
     }

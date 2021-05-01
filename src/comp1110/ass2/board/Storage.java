@@ -56,6 +56,17 @@ public class Storage {
         return false;
     }
 
+    /**
+     *
+     * @param tiles the tiles draw from factory
+     * @return the list of row can place this tile
+     */
+
+    public ArrayList<Integer> canBePlaced(ArrayDeque<Tile> tiles){
+        //FIXME
+        return new ArrayList<Integer>();
+    }
+
 
     /**
      * Rules to place the tiles. 1. If a row already contains tiles, you may only add tiles of the
