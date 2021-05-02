@@ -1,10 +1,10 @@
 ## Code Review
 
-Reviewed by: <Xinjie Wang>, <u7201825>
+Reviewed by: Xinjie Wang, u7201825
 
-Reviewing code written by: <Jiaan Guo> <u7323668>
+Reviewing code written by: Jiaan Guo u7323668
 
-Component: <Task 10 Line 475 to Line 544>
+Component: Task 10 Line 475 to Line 544
 
 ### Comments 
 The codes are well-formed and have a good structure, comments are also accurate.
