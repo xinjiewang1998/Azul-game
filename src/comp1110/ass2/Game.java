@@ -196,6 +196,7 @@ public class Game {
     public char drawTileFromBag(String[] gameState) {
         //task 5
         this.reconstructCommonFrom(gameState[0]);
+        // draw tile
         Tile tile = common.getBag().drawTile(common.getDiscard());
         if (tile == null) {
             return 'Z';
