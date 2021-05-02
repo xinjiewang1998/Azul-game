@@ -299,47 +299,52 @@ public class Game {
 
     public boolean isStateValid(String[] gameState) {
         // task 9
+
+        //1.The game state is well-formed.
         if (!isSharedStateWellFormed(gameState[0]) || !isPlayerStateWellFormed(gameState[1])) {
             return false;
         }
         this.reconstructCommonFrom(gameState[0]);
         this.reconstructBoardsFrom(gameState[1]);
+
+        //There are no more than 20 of each colour of tile across all player areas, factories, bag and discard
         for (int i = 0; i < 5; i++) {
             int count = 0;
-            for (int j = 0; j < 5; j++) {
-                count += this.common.getFactories()[j].countTile((char) ('a' + i));
+            char colorCode = (char) ('a' + i);
+            for (Factory factory : common.getFactories()) {
+                count += factory.countTile(colorCode);
             }
-            count += this.common.getBag().countTile((char) ('a' + i)) + this.common.getCentre()
-                    .countTile((char) ('a' + i)) + this.common.getDiscard()
-                    .countTile((char) ('a' + i));
-            for (int k = 0; k < 2; k++) {
-                count += this.getPlayers()[k].getBoard().getFloor().countTile((char) ('a' + i))
-                        + this.getPlayers()[k].getBoard().getMosaic().countTile((char) ('a' + i))
-                        + this.getPlayers()[k].getBoard().getStorage().countTile((char) ('a' + i));
+            count += this.common.getBag().countTile(colorCode) + this.common.getCentre().countTile(colorCode) +
+                    this.common.getDiscard().countTile(colorCode);
+            for (Player player : players) {
+                Board board = player.getBoard();
+                count += board.getFloor().countTile(colorCode)
+                        + board.getMosaic().countTile(colorCode)
+                        + board.getStorage().countTile(colorCode);
             }
             if (count != 20) {
                 return false;
             }
         }
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                for (int k = 0; k < 2; k++) {
-                    if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()
-                            != 0 && this.getPlayers()[k].getBoard().getMosaic().getSquare()[i][j]
-                            != null) {
-                        if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i)
-                                .getFirst().getColorCode() == this.getPlayers()[k].getBoard()
-                                .getMosaic().getSquare()[i][j].getColorCode()) {
+        //check the Mosaic and Storage whether has a same colour
+        for (int row = 0; row < 5; row++) {
+            for (int column = 0; column < 5; column++) {
+                for (Player player : players) {
+                    Board board = player.getBoard();
+                    if (board.getStorage().getTriangle().get(row).size() != 0 &&
+                            board.getMosaic().getSquare()[row][column] != null) {
+                        if (board.getStorage().getTriangle().get(row).getFirst().getColorCode()
+                                == board.getMosaic().getSquare()[row][column].getColorCode()) {
                             return false;
                         }
                     }
                 }
             }
         }
-        for (int i = 0; i < 5; i++) {
-            for (int k = 0; k < 2; k++) {
-                if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()
-                        > i + 1) {
+        //The maximum number of tiles stored in a row must not exceed (row_number + 1).
+        for (int row = 0; row < 5; row++) {
+            for (Player player : players) {
+                if (player.getBoard().getStorage().getTriangle().get(row).size() > row + 1) {
                     return false;
                 }
             }

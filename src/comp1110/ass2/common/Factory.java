@@ -76,8 +76,8 @@ public class Factory {
      */
     public int countTile(char code) {
         int count = 0;
-        for (Tile T : this.getTiles()) {
-            if (T.getColorCode() == code) {
+        for (Tile tile : this.getTiles()) {
+            if (tile.getColorCode() == code) {
                 count++;
             }
         }
