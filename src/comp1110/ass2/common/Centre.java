@@ -4,8 +4,10 @@ import comp1110.ass2.Tile;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Centre {
-
 
     private ArrayList<Tile> tiles;
     private Tile firstPlayerTile;
@@ -31,7 +33,7 @@ public class Centre {
     }
 
     /**
-     * place one tile to the centre.
+     * Place one tile to the centre.
      *
      * @param tile the tile to be placed
      */
@@ -41,7 +43,7 @@ public class Centre {
     }
 
     /**
-     * move the remaining tiles on this factory to the centre.
+     * Move the remaining tiles on this factory to the centre.
      *
      * @param otherTiles a array contains remaining tiles on this factory
      */
@@ -50,11 +52,14 @@ public class Centre {
         sort();
     }
 
+    /**
+     * Sort the tiles by color code
+     */
     private void sort() {
         ArrayList<Tile> newList = new ArrayList<>();
-        for(int i = 0; i < 5; i++) {
-            for(Tile tile : tiles) {
-                if (tile.getColorCode() == 'a' +i) {
+        for (int i = 0; i < 5; i++) {
+            for (Tile tile : tiles) {
+                if (tile.getColorCode() == 'a' + i) {
                     newList.add(tile);
                 }
             }
@@ -63,15 +68,22 @@ public class Centre {
         this.tiles = newList;
     }
 
-    public int countTile(char code){
+    /**
+     * Count the number of tiles with specific color
+     *
+     * @param code the color code
+     * @return the number
+     */
+    public int countTile(char code) {
         int count = 0;
-        for(Tile T:this.getTiles()){
-            if(T.getColorCode()==code){
+        for (Tile T : this.getTiles()) {
+            if (T.getColorCode() == code) {
                 count++;
             }
         }
         return count;
     }
+
     /**
      * Pick all tiles of the same colour from the centre.
      *
@@ -97,14 +109,21 @@ public class Centre {
         return returnTiles;
     }
 
-    public boolean hasTile(char code){
-        for (int i=0;i<this.getTiles().size();i++){
-            if(this.getTiles().get(i).getColorCode()==code){
+    /**
+     * Check tiles contains a specific color tile
+     *
+     * @param code the color code
+     * @return true if tiles contains a specific color tile
+     */
+    public boolean hasTile(char code) {
+        for (int i = 0; i < this.getTiles().size(); i++) {
+            if (this.getTiles().get(i).getColorCode() == code) {
                 return true;
             }
         }
         return false;
     }
+
     /**
      * The centre substring starts with a 'C' This is followed by *up to* 15 characters. Each
      * character is 'a' to 'e', alphabetically - representing a tile in the centre. The centre
@@ -138,35 +157,8 @@ public class Centre {
         return true;
     }
 
-
-//  * [Centre]
-//  * 1. The number of tiles in the centre is no greater than 3 * the number of empty factories.
-
-    public static boolean isCentreValid(String centre, String factories) {
-        int tilesNum = 0;
-        int empty = 0;
-        for (int i = 0; i < centre.length(); i++) {
-            if (centre.charAt(i) == 'a' || centre.charAt(i) == 'b' || centre.charAt(i) == 'c' ||
-                    centre.charAt(i) == 'd' || centre.charAt(i) == 'e'|| centre.charAt(i) == 'f') {
-                tilesNum++;
-            }
-        }
-        for (int i = 0; i < factories.length(); i++) {
-            if (factories.charAt(i) == '0' || factories.charAt(i) == '1'
-                    || factories.charAt(i) == '2' ||
-                    factories.charAt(i) == '3' || factories.charAt(i) == '4') {
-                empty++;
-            }
-        }
-        if (tilesNum > (3 * (5-empty))) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     /**
-     * reconstruct internal state from string
+     * Reconstruct internal state from string
      *
      * @param token the string representation of floor state
      */

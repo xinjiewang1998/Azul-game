@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Bag {
 
     private final int COLOR_LIMIT = 20;
@@ -24,7 +27,7 @@ public class Bag {
     }
 
     /**
-     * fill bag with 20 colored tiles each
+     * Fill bag with 20 colored tiles each
      */
     public void init() {
         tiles = new ArrayList<>();
@@ -60,7 +63,7 @@ public class Bag {
 
 
     /**
-     * draw 1 tile
+     * Draw 1 tile
      *
      * @param discard the discard may used for refill
      * @return the tile
@@ -78,7 +81,7 @@ public class Bag {
     }
 
     /**
-     * place other tiles into the bag
+     * Place other tiles into the bag
      *
      * @param otherTiles the tiles to be added
      */
@@ -86,10 +89,16 @@ public class Bag {
         tiles.addAll(otherTiles);
     }
 
-    public int countTile(char code){
+    /**
+     * Count the number of tiles with specific color
+     *
+     * @param code the color code
+     * @return the number
+     */
+    public int countTile(char code) {
         int count = 0;
-        for(Tile T:this.getTiles()){
-            if(T.getColorCode()==code){
+        for (Tile T : this.getTiles()) {
+            if (T.getColorCode() == code) {
                 count++;
             }
         }
@@ -128,7 +137,7 @@ public class Bag {
     }
 
     /**
-     * reconstruct internal state from string
+     * Reconstruct internal state from string
      *
      * @param token the string representation of bag state
      */

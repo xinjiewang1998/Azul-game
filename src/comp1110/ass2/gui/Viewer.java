@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Viewer extends Application {
 
     private static final int VIEWER_WIDTH = 1200;
@@ -114,8 +117,13 @@ public class Viewer extends Application {
         }
     }
 
-    //This step is to make the decoded mosaic position opaque.
-    //Opacity means there are ceramic tiles in this place, and transparency means there are no ceramic tiles.
+    /**
+     * This step is to make the decoded mosaic position opaque, opacity means there are ceramic
+     * tiles in this place, and transparency means there are no ceramic tiles.
+     *
+     * @param positions the position at mosaic
+     * @param mosaic    the mosaic
+     */
     private void decodeMosaic(String positions, Rectangle[][] mosaic) {
         for (int i = 1; i < positions.length(); i++) {
             i = i + 1;
@@ -126,7 +134,13 @@ public class Viewer extends Application {
         }
     }
 
-    //In this step, we hope to cover the colored tiles with the background color (gray) in the storage position
+    /**
+     * In this step, we hope to cover the colored tiles with the background color (gray) in the
+     * storage position
+     *
+     * @param positions the position at storage
+     * @param storage   the storage
+     */
     private void decodeStorage(String positions, Rectangle[][] storage) {
         for (int i = 1; i < positions.length(); i = i + 3) {
             int row = positions.charAt(i) - 48;
@@ -139,6 +153,12 @@ public class Viewer extends Application {
         }
     }
 
+    /**
+     * Decode floor info
+     *
+     * @param positions the position at floor
+     * @param floor     the floor
+     */
     private void decodeFloor(String positions, Rectangle[] floor) {
         for (int i = 1; i < positions.length(); i++) {
             char code = positions.charAt(i);
@@ -146,6 +166,12 @@ public class Viewer extends Application {
         }
     }
 
+    /**
+     * Decode factories' info
+     *
+     * @param substringF the substring of factory
+     * @param factories  the factories
+     */
     private void decodeFactories(String substringF, Rectangle[][] factories) {
         for (int n = 1; n < substringF.length(); n = n + 5) {
             int x = (substringF.charAt(n) - 48) % 5 - 1;
@@ -158,6 +184,12 @@ public class Viewer extends Application {
         }
     }
 
+    /**
+     * Decode discard info
+     *
+     * @param substringC the substring of centre
+     * @param centre     the centre
+     */
     private void decodeCentre(String substringC, Rectangle[][] centre) {
         for (int i = 1; i < substringC.length(); i++) {
             char code = substringC.charAt(i);
@@ -165,53 +197,84 @@ public class Viewer extends Application {
         }
     }
 
-    //The example diagram only shows squares and words，do we need to display different color tiles decoded?
+    /**
+     * Decode discard info
+     *
+     * @param substringD the substring of discard
+     * @param discard    the discard
+     */
     void decodeDiscard(String substringD, Rectangle[][] discard) {
         //Record the number of tiles of various colors in the discard
-        fillBagAndDis(substringD, discard);
+        fillBagAndDiscard(substringD, discard);
     }
 
+    /**
+     * Decode bag info
+     *
+     * @param substringB the substring of bag
+     * @param bag        the bag
+     */
     private void decodeBag(String substringB, Rectangle[][] bag) {
         //This is used to record the number of tiles of various colors in bag。
-        fillBagAndDis(substringB, bag);
+        fillBagAndDiscard(substringB, bag);
     }
 
-    private void fillBagAndDis(String substring, Rectangle[][] test) {
+    /**
+     * Fill bag and discard with color
+     *
+     * @param substring the substring of bag or discard
+     * @param rectangle the rectangle
+     */
+    private void fillBagAndDiscard(String substring, Rectangle[][] rectangle) {
         int a = Integer.parseInt(substring.substring(1, 3));
         int b = Integer.parseInt(substring.substring(3, 5));
         int c = Integer.parseInt(substring.substring(5, 7));
         int d = Integer.parseInt(substring.substring(7, 9));
         int e = Integer.parseInt(substring.substring(9));
 
-        fillColor(a, 0, test, Color.BLUE);
-        fillColor(b, 2, test, Color.GREEN);
-        fillColor(c, 4, test, Color.ORANGE);
-        fillColor(d, 6, test, Color.PURPLE);
-        fillColor(e, 8, test, Color.RED);
+        fillColor(a, 0, rectangle, Color.BLUE);
+        fillColor(b, 2, rectangle, Color.GREEN);
+        fillColor(c, 4, rectangle, Color.ORANGE);
+        fillColor(d, 6, rectangle, Color.PURPLE);
+        fillColor(e, 8, rectangle, Color.RED);
     }
 
-    private void fillColor(int a, int p, Rectangle[][] test, Color color) {
+    /**
+     * Fill the rectangle
+     *
+     * @param a         the limit
+     * @param p         the start
+     * @param rectangle the rectangle
+     * @param color     the color
+     */
+    private void fillColor(int a, int p, Rectangle[][] rectangle, Color color) {
         if (a <= 10) {
             for (int i = p; i < p + 1; i++) {
                 for (int j = 0; j < a; j++) {
-                    test[j][i].setFill(color);
+                    rectangle[j][i].setFill(color);
                 }
             }
         } else {
             for (int i = p; i < p + 2; i++) {
                 if (i == p) {
                     for (int j = 0; j < 10; j++) {
-                        test[j][i].setFill(color);
+                        rectangle[j][i].setFill(color);
                     }
                 } else {
                     for (int j = 0; j < (a - 10); j++) {
-                        test[j][i].setFill(color);
+                        rectangle[j][i].setFill(color);
                     }
                 }
             }
         }
     }
 
+    /**
+     * Map code to color
+     *
+     * @param code the code
+     * @return the color
+     */
     private Color fillColor(char code) {
         return switch (code) {
             case 'a' -> Color.BLUE;
@@ -252,8 +315,7 @@ public class Viewer extends Application {
         controls.getChildren().add(hb);
     }
 
-    private void changeState(){
-
+    private void changeState() {
         //create five factories，each factory has four tiles.
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 2; j++) {
@@ -329,7 +391,6 @@ public class Viewer extends Application {
         Text DiscardText = new Text(590, 340, "Discard");
         DiscardText.setFill(Color.BLACK);
         root.getChildren().add(DiscardText);
-
 
         //Title： "Player 1 player board"，and "Player 2 player board"
         Text PlayerAText = new Text(100, 155, "Player 1 player board");

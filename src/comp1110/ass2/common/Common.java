@@ -1,5 +1,8 @@
 package comp1110.ass2.common;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Common {
 
     private Bag bag;
@@ -54,13 +57,6 @@ public class Common {
         for (int i = 0; i < 5; i++) {
             factories[i] = new Factory(i);
         }
-    }
-
-    /**
-     * Cleanup the common area after the game.
-     */
-    public void cleanUp() {
-        // FIXME
     }
 
     @Override

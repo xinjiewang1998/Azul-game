@@ -6,6 +6,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Discard {
 
     ArrayList<Tile> tiles;
@@ -58,16 +61,22 @@ public class Discard {
         tiles.clear();
     }
 
-
-    public int countTile(char code){
+    /**
+     * Count the number of tiles with specific color
+     *
+     * @param code the color code
+     * @return the number
+     */
+    public int countTile(char code) {
         int count = 0;
-        for(Tile T:this.getTiles()){
-            if(T.getColorCode()==code){
+        for (Tile T : this.getTiles()) {
+            if (T.getColorCode() == code) {
                 count++;
             }
         }
         return count;
     }
+
     /**
      * The discard substring starts with a 'D' and is followed by 5 2-character substrings defined
      * the same as the bag substring. For example: "D0005201020" The bag contains zero 'a' tiles,
@@ -97,7 +106,7 @@ public class Discard {
     }
 
     /**
-     * reconstruct internal state from string
+     * Reconstruct internal state from string
      *
      * @param token the string representation of score state
      */

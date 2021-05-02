@@ -6,11 +6,18 @@ import comp1110.ass2.common.Discard;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Storage {
-
 
     private final int NUM_ROWS = 5;
     private final int[] MAX_LENGTH = new int[]{1, 2, 3, 4, 5};
+
+    // ArrayList is better for access each elements,
+    // and ArrayDeque has convenient pop methods.
+    // better use ArrayDeque when all elements has same color.
+    private ArrayList<ArrayDeque<Tile>> triangle;
 
     public ArrayList<ArrayDeque<Tile>> getTriangle() {
         return triangle;
@@ -20,11 +27,6 @@ public class Storage {
         this.triangle = triangle;
     }
 
-    // ArrayList is better for access each elements,
-    // and ArrayDeque has convenient pop methods.
-    // better use ArrayDeque when all elements has same color.
-    private ArrayList<ArrayDeque<Tile>> triangle;
-
     public Storage() {
         triangle = new ArrayList<>();
         for (int i = 0; i < NUM_ROWS; i++) {
@@ -32,16 +34,24 @@ public class Storage {
         }
     }
 
-    public int countTile(char code){
+    /**
+     * Count the number of tiles with specific color
+     *
+     * @param code the color code
+     * @return the number
+     */
+    public int countTile(char code) {
         int count = 0;
-        for (int i=0;i<5;i++){
-            if(getTriangle().get(i).size()!=0){
-            if(getTriangle().get(i).getFirst().getColorCode()==code){
-                count = count+getTriangle().get(i).size();
-            }}
+        for (int i = 0; i < 5; i++) {
+            if (getTriangle().get(i).size() != 0) {
+                if (getTriangle().get(i).getFirst().getColorCode() == code) {
+                    count = count + getTriangle().get(i).size();
+                }
+            }
         }
         return count;
     }
+
     /**
      * Check if has complete row.
      *
@@ -55,18 +65,6 @@ public class Storage {
         }
         return false;
     }
-
-    /**
-     *
-     * @param tiles the tiles draw from factory
-     * @return the list of row can place this tile
-     */
-
-    public ArrayList<Integer> canBePlaced(ArrayDeque<Tile> tiles){
-        //FIXME
-        return new ArrayList<Integer>();
-    }
-
 
     /**
      * Rules to place the tiles. 1. If a row already contains tiles, you may only add tiles of the
@@ -115,17 +113,31 @@ public class Storage {
         return true;
     }
 
-    public boolean hasTileSameColor(int row, char code) {
+    /**
+     * Check if the mosaic contains a tile with same color on specific row
+     *
+     * @param row  the row number
+     * @param code the color code
+     * @return true if the mosaic contains a tile with same color on specific row
+     */
+    public boolean rowHasSameColor(int row, char code) {
         return this.getTriangle().get(row).getFirst().getColorCode() == code;
     }
 
-    public ArrayList<Integer> canBePlacedOn(Mosaic mosaic,char code){
+    /**
+     * Find the rows can contain the tile with specific color code
+     *
+     * @param mosaic the mosaic to check
+     * @param code   the color code
+     * @return the rows
+     */
+    public ArrayList<Integer> rowsCanBePlacedOn(Mosaic mosaic, char code) {
         ArrayList<Integer> numRow = new ArrayList<>();
-        for (int i =0;i<5;i++){
-            if(this.getTriangle().get(i).size()==0&&!mosaic.rowHasSameColor(i,code)){
+        for (int i = 0; i < 5; i++) {
+            if (this.getTriangle().get(i).size() == 0 && !mosaic.rowHasSameColor(i, code)) {
                 numRow.add(i);
-            }
-            else if(!(this.getTriangle().get(i).size() ==0) &&hasTileSameColor(i,code)&&!mosaic.rowHasSameColor(i,code)&&this.triangle.get(i).size()<i+1){
+            } else if (!(this.getTriangle().get(i).size() == 0) && rowHasSameColor(i, code)
+                    && !mosaic.rowHasSameColor(i, code) && this.triangle.get(i).size() < i + 1) {
                 numRow.add(i);
             }
         }
@@ -216,26 +228,8 @@ public class Storage {
         return true;
     }
 
-//  * [Storage]
-//  * 1. The maximum number of tiles stored in a row must not exceed (row_number + 1).
-//  * (This part finish in mosaic)2. The colour of tile stored in a row must not be the same as a colour
-//  * already found in the corresponding row of the mosaic.
-//    Example "A1Mb41S0a21c32a33c24d1FaaaccfB1Mc13S0b11b12a33e44d2Fb", "0a2 1c3 2a3 3c2 4d1"
-
-    public static boolean isStorageValid (String storage){
-        boolean mosaicValid = true;
-        for (int i = 0;i<storage.length();i=i+3){
-            int storageRow = Integer.parseInt(storage.substring(i,i+1));
-            int storageNumber = Integer.parseInt(storage.substring(i+2,i+3));
-            if (storageNumber > (storageRow + 1)){
-                mosaicValid = false;
-            }
-        }
-        return mosaicValid;
-    }
-
     /**
-     * reconstruct internal state from string
+     * Reconstruct internal state from string
      *
      * @param token the string representation of storage state
      */

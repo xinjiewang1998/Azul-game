@@ -1,5 +1,8 @@
 package comp1110.ass2.board;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Score {
 
     private int score;
@@ -21,7 +24,7 @@ public class Score {
     }
 
     /**
-     * add other score
+     * Add other score
      *
      * @param otherScore the other score with type int
      * @return the score
@@ -32,7 +35,7 @@ public class Score {
     }
 
     /**
-     * add other score
+     * Add other score
      *
      * @param otherScore the other score with type Score
      * @return the score
@@ -43,7 +46,7 @@ public class Score {
     }
 
     /**
-     * reconstruct internal state from string
+     * Reconstruct internal state from string
      *
      * @param token the string representation of score state
      */

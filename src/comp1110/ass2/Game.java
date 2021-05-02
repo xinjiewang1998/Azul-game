@@ -5,9 +5,13 @@ import comp1110.ass2.common.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Game {
 
     private final String COMMON_REGEX = "^([A-D])F((\\d\\w{4}){0,5})C([a-e]{0,15}f?)B((\\d{2}){5})D((\\d{2}){5})$";
@@ -46,34 +50,11 @@ public class Game {
         this.players = players;
     }
 
-    public boolean isSharedStateWellFormed(String sharedState) {
-        //task 2
-        Pattern pattern = Pattern.compile(COMMON_REGEX);
-        Matcher matcher = pattern.matcher(sharedState);
-        boolean matchFound = matcher.find();
-        if (matchFound) {
-            String factoriesToken = matcher.group(2);
-            String centreToken = matcher.group(4);
-            String bagToken = matcher.group(5);
-            String discardToken = matcher.group(7);
-
-            if (factoriesToken.length() % 5 != 0) {
-                return false;
-            }
-            for (int i = 0; i < factoriesToken.length(); i += 5) {
-                String factoryToken = factoriesToken.substring(i, i + 5);
-                if (!Factory.isWellFormedFactoryString(factoryToken)) {
-                    return false;
-                }
-            }
-            return Centre.isWellFormedCentreString(centreToken) &&
-                    Bag.isWellFormedBagString(bagToken) &&
-                    Discard.isWellFormedDiscardString(discardToken);
-        } else {
-            return false;
-        }
-    }
-
+    /**
+     * Turn state string to common objects
+     *
+     * @param sharedState the state string
+     */
     public void reconstructCommonFrom(String sharedState) {
         Pattern pattern = Pattern.compile(COMMON_REGEX);
         Matcher matcher = pattern.matcher(sharedState);
@@ -101,6 +82,85 @@ public class Game {
 
         } else {
 //            System.out.println("Not Found Common: " + sharedState);
+        }
+    }
+
+    /**
+     * Turn player string to boards objects
+     *
+     * @param playerState
+     */
+    public void reconstructBoardsFrom(String playerState) {
+        Pattern pattern = Pattern.compile(PLAYER_REGEX);
+        boolean matchFound = true;
+        while (matchFound && !playerState.equals("")) {
+            Matcher matcher = pattern.matcher(playerState);
+            matchFound = matcher.find();
+            if (matchFound) {
+//                System.out.println("Found Player: " + matcher.group(0));
+
+                String playerToken = matcher.group(1);
+                String scoreToken = matcher.group(2);
+                String mosaicToken = matcher.group(3);
+                String storageToken = matcher.group(5);
+                String floorToken = matcher.group(7);
+
+                Player player = players[playerToken.charAt(0) - 'A'];
+
+                player.getBoard().getScore().reconstructFromString(scoreToken);
+                player.getBoard().getMosaic().reconstructFromString(mosaicToken);
+                player.getBoard().getStorage().reconstructFromString(storageToken);
+                player.getBoard().getFloor().reconstructFromString(floorToken);
+
+//                System.out.println("Build Player: " + player.toString());
+                playerState = playerState.substring(matcher.end());
+            } else {
+//                System.out.println("Not Found Player: " + playerState);
+            }
+        }
+    }
+
+    /**
+     * Turn objects back to string
+     *
+     * @return
+     */
+    public String[] rebuildStateString() {
+        String[] gameState = new String[2];
+        gameState[0] = turn + common.toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Player player : players) {
+            stringBuilder.append(player.toString());
+        }
+        gameState[1] = stringBuilder.toString();
+        return gameState;
+    }
+
+    public boolean isSharedStateWellFormed(String sharedState) {
+        //task 2
+        Pattern pattern = Pattern.compile(COMMON_REGEX);
+        Matcher matcher = pattern.matcher(sharedState);
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            String factoriesToken = matcher.group(2);
+            String centreToken = matcher.group(4);
+            String bagToken = matcher.group(5);
+            String discardToken = matcher.group(7);
+
+            if (factoriesToken.length() % 5 != 0) {
+                return false;
+            }
+            for (int i = 0; i < factoriesToken.length(); i += 5) {
+                String factoryToken = factoriesToken.substring(i, i + 5);
+                if (!Factory.isWellFormedFactoryString(factoryToken)) {
+                    return false;
+                }
+            }
+            return Centre.isWellFormedCentreString(centreToken) &&
+                    Bag.isWellFormedBagString(bagToken) &&
+                    Discard.isWellFormedDiscardString(discardToken);
+        } else {
+            return false;
         }
     }
 
@@ -132,35 +192,6 @@ public class Game {
         return length == fullLength;
     }
 
-    public void reconstructBoardsFrom(String playerState) {
-        Pattern pattern = Pattern.compile(PLAYER_REGEX);
-        boolean matchFound = true;
-        while (matchFound && !playerState.equals("")) {
-            Matcher matcher = pattern.matcher(playerState);
-            matchFound = matcher.find();
-            if (matchFound) {
-//                System.out.println("Found Player: " + matcher.group(0));
-
-                String playerToken = matcher.group(1);
-                String scoreToken = matcher.group(2);
-                String mosaicToken = matcher.group(3);
-                String storageToken = matcher.group(5);
-                String floorToken = matcher.group(7);
-
-                Player player = players[playerToken.charAt(0) - 'A'];
-
-                player.getBoard().getScore().reconstructFromString(scoreToken);
-                player.getBoard().getMosaic().reconstructFromString(mosaicToken);
-                player.getBoard().getStorage().reconstructFromString(storageToken);
-                player.getBoard().getFloor().reconstructFromString(floorToken);
-
-//                System.out.println("Build Player: " + player.toString());
-                playerState = playerState.substring(matcher.end());
-            } else {
-//                System.out.println("Not Found Player: " + playerState);
-            }
-        }
-    }
 
     public char drawTileFromBag(String[] gameState) {
         //task 5
@@ -266,7 +297,59 @@ public class Game {
         return gameState;
     }
 
+    public boolean isStateValid(String[] gameState) {
+        // task 9
+        if (!isSharedStateWellFormed(gameState[0]) || !isPlayerStateWellFormed(gameState[1])) {
+            return false;
+        }
+        this.reconstructCommonFrom(gameState[0]);
+        this.reconstructBoardsFrom(gameState[1]);
+        for (int i = 0; i < 5; i++) {
+            int count = 0;
+            for (int j = 0; j < 5; j++) {
+                count += this.common.getFactories()[j].countTile((char) ('a' + i));
+            }
+            count += this.common.getBag().countTile((char) ('a' + i)) + this.common.getCentre()
+                    .countTile((char) ('a' + i)) + this.common.getDiscard()
+                    .countTile((char) ('a' + i));
+            for (int k = 0; k < 2; k++) {
+                count += this.getPlayers()[k].getBoard().getFloor().countTile((char) ('a' + i))
+                        + this.getPlayers()[k].getBoard().getMosaic().countTile((char) ('a' + i))
+                        + this.getPlayers()[k].getBoard().getStorage().countTile((char) ('a' + i));
+            }
+            if (count != 20) {
+                return false;
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < 2; k++) {
+                    if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()
+                            != 0 && this.getPlayers()[k].getBoard().getMosaic().getSquare()[i][j]
+                            != null) {
+                        if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i)
+                                .getFirst().getColorCode() == this.getPlayers()[k].getBoard()
+                                .getMosaic().getSquare()[i][j].getColorCode()) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            for (int k = 0; k < 2; k++) {
+                if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()
+                        > i + 1) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public boolean isMoveValid(String[] gameState, String move) {
+        //task 10
         Game game = new Game();
         game.reconstructCommonFrom(gameState[0]);
         game.reconstructBoardsFrom(gameState[1]);
@@ -294,7 +377,7 @@ public class Game {
                 if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
                         .getTriangle().get(row).size() != 0) {
                     if (!game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
-                            .hasTileSameColor(row, move.charAt(2))) {
+                            .rowHasSameColor(row, move.charAt(2))) {
                         return false;
                     }
                 }
@@ -389,59 +472,8 @@ public class Game {
         return true;
     }
 
-    public boolean isStateValid(String[] gameState) {
-        //boolean isStateValid = true;
-        if (!isSharedStateWellFormed(gameState[0]) || !isPlayerStateWellFormed(gameState[1])) {
-            return false;
-        }
-        this.reconstructCommonFrom(gameState[0]);
-        this.reconstructBoardsFrom(gameState[1]);
-        for (int i = 0; i < 5; i++) {
-            int count = 0;
-            for (int j = 0; j < 5; j++) {
-                count += this.common.getFactories()[j].countTile((char) ('a' + i));
-            }
-            count += this.common.getBag().countTile((char) ('a' + i)) + this.common.getCentre()
-                    .countTile((char) ('a' + i)) + this.common.getDiscard()
-                    .countTile((char) ('a' + i));
-            for (int k = 0; k < 2; k++) {
-                count += this.getPlayers()[k].getBoard().getFloor().countTile((char) ('a' + i))
-                        + this.getPlayers()[k].getBoard().getMosaic().countTile((char) ('a' + i))
-                        + this.getPlayers()[k].getBoard().getStorage().countTile((char) ('a' + i));
-            }
-            if (count != 20) {
-                return false;
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                for (int k = 0; k < 2; k++) {
-                    if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()
-                            != 0 && this.getPlayers()[k].getBoard().getMosaic().getSquare()[i][j]
-                            != null) {
-                        if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i)
-                                .getFirst().getColorCode() == this.getPlayers()[k].getBoard()
-                                .getMosaic().getSquare()[i][j].getColorCode()) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            for (int k = 0; k < 2; k++) {
-                if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()
-                        > i + 1) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     public String[] applyMove(String[] gameState, String move) {
-
+        // task 11
         this.reconstructCommonFrom(gameState[0]);
         this.reconstructBoardsFrom(gameState[1]);
 
@@ -511,10 +543,124 @@ public class Game {
         return gameState;
     }
 
-    public static void main(String[] args) {
+    public String generateAction(String[] gameState) {
+        // task 13
         Game game = new Game();
-        game.reconstructCommonFrom("AF0CB1207080506D0107030805");
-        game.reconstructBoardsFrom(
-                "A21Md00c01b02a03e04d11a12c13a21c22a30d34a44S2b2FeeeefB24Md00c02a03e04a10c11d12e13b14c20e22b23b32c34e40S4d2Fcc");
+        game.reconstructCommonFrom(gameState[0]);
+        game.reconstructBoardsFrom(gameState[1]);
+        int count = 0;
+        for (int i = 0; i < 5; i++) {
+            if (game.getCommon().getFactories()[i].getTiles().size() == 0) {
+                count++;
+            }
+        }
+
+        if (count != 5 || !(game.getCommon().getCentre().getTiles().size() == 0 || (
+                game.getCommon().getCentre().getTiles().size() == 1
+                        && game.getCommon().getCentre().getTiles().get(0).getColorCode() == 'f'))) {
+            Random r = new Random();
+
+            if (count == 5) {
+                int num = r.nextInt(game.getCommon().getCentre().getTiles().size());
+                Tile tile = game.getCommon().getCentre().getTiles().get(num);
+                ArrayList<Integer> numRow = new ArrayList<Integer>();
+                numRow = game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard().getStorage()
+                        .rowsCanBePlacedOn(game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard()
+                                .getMosaic(), tile.getColorCode());
+                if (numRow.size() != 0) {
+                    int row = r.nextInt(numRow.size());
+                    return game.turn + "C" + tile.getColorCode() + numRow.get(row);
+                } else {
+                    return game.turn + "C" + tile.getColorCode() + "F";
+                }
+            } else if (game.getCommon().getCentre().getTiles().size() == 0 || (
+                    game.getCommon().getCentre().getTiles().size() == 1
+                            && game.getCommon().getCentre().getTiles().get(0).getColorCode()
+                            == 'f')) {
+                int num = 0;
+                int i = 0;
+                while (i < 1000) {
+                    num = r.nextInt(game.getCommon().getFactories().length);
+                    if ((game.getCommon().getFactories()[num].getTiles().size() != 0)) {
+                        break;
+                    }
+                    i++;
+                }
+                int num1 = r.nextInt(game.getCommon().getFactories()[num].getTiles().size());
+                Tile tile = game.getCommon().getFactories()[num].getTiles().get(num1);
+                ArrayList<Integer> numRow = new ArrayList<Integer>();
+                numRow = game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard().getStorage()
+                        .rowsCanBePlacedOn(game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard()
+                                .getMosaic(), tile.getColorCode());
+                if (numRow.size() != 0) {
+                    int row = r.nextInt(numRow.size());
+                    return game.turn + num + tile.getColorCode() + numRow.get(row);
+                } else {
+                    return game.turn + num + tile.getColorCode() + "F";
+                }
+            } else {
+                int choose = r.nextInt(2);
+                if (choose == 0) {
+                    int num = 0;
+                    int i = 0;
+                    while (i < 1000) {
+                        num = r.nextInt(game.getCommon().getFactories().length);
+                        if ((game.getCommon().getFactories()[num].getTiles().size() != 0)) {
+                            break;
+                        }
+                        i++;
+                    }
+                    int num1 = r.nextInt(game.getCommon().getFactories()[num].getTiles().size());
+                    Tile tile = game.getCommon().getFactories()[num].getTiles().get(num1);
+                    ArrayList<Integer> numRow = new ArrayList<Integer>();
+                    numRow = game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard().getStorage()
+                            .rowsCanBePlacedOn(
+                                    game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard()
+                                            .getMosaic(), tile.getColorCode());
+                    if (numRow.size() != 0) {
+                        int row = r.nextInt(numRow.size());
+                        return game.turn + num + tile.getColorCode() + numRow.get(row);
+                    } else {
+                        return game.turn + num + tile.getColorCode() + "F";
+                    }
+                } else {
+                    int num = r.nextInt(game.getCommon().getCentre().getTiles().size());
+                    Tile tile = game.getCommon().getCentre().getTiles().get(num);
+                    ArrayList<Integer> numRow = new ArrayList<Integer>();
+                    numRow = game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard().getStorage()
+                            .rowsCanBePlacedOn(
+                                    game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard()
+                                            .getMosaic(), tile.getColorCode());
+                    if (numRow.size() != 0) {
+                        int row = r.nextInt(numRow.size());
+                        return game.turn + "C" + tile.getColorCode() + numRow.get(row);
+                    } else {
+                        return game.turn + "C" + tile.getColorCode() + "F";
+                    }
+                }
+            }
+        } else if (game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard().getStorage()
+                .hasCompleteRow()) {
+            for (int i = 0; i < 5; i++) {
+                if (game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard().getStorage()
+                        .getTriangle().get(i).size() == i + 1) {
+                    int col = 0;
+                    for (int j = 0; j < 5; j++) {
+                        char code = game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard()
+                                .getStorage().getTriangle().get(i).getFirst().getColorCode();
+                        if (game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard().getMosaic()
+                                .getSquare()[i][j] == null) {
+                            if (!game.getPlayers()[(game.turn.charAt(0) - 'A')].getBoard()
+                                    .getMosaic().columnHasSameColor(code, j)) {
+                                col = j;
+                                break;
+                            }
+                        }
+                    }
+                    return game.turn + i + col;
+                }
+            }
+        }
+        return null;
     }
 }

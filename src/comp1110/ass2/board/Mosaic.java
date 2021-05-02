@@ -1,13 +1,13 @@
 package comp1110.ass2.board;
 
 import comp1110.ass2.Tile;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Mosaic {
 
     private final int NUM_ROWS = 5;
@@ -41,7 +41,7 @@ public class Mosaic {
     }
 
     /**
-     * calculate the column number according to the color and row number.
+     * Calculate the column number according to the color and row number.
      *
      * @param color the target color
      * @param row   the target row number
@@ -52,7 +52,7 @@ public class Mosaic {
     }
 
     /**
-     * tells whether a colored tile has occupied that row. if it is true, cannot put tile with same
+     * Tells whether a colored tile has occupied that row. if it is true, cannot put tile with same
      * color on that row again.
      *
      * @param color the target color
@@ -64,28 +64,43 @@ public class Mosaic {
         return (square[row][column] != null);
     }
 
+    /**
+     * Tells whether a colored tile has occupied that row. if it is true, cannot put tile with same
+     * color on that row again.
+     *
+     * @param color the target color
+     * @param row   the target row
+     * @return true if the color exists in mosaic
+     */
     public boolean hasColor(String color, int row) {
         for (int i = 0; i < NUM_ROWS; i++) {
-            if(square[row][i]!= null && square[row][i].getColor().equals(color)) {
+            if (square[row][i] != null && square[row][i].getColor().equals(color)) {
                 return true;
             }
         }
         return false;
     }
 
-
-    public boolean columnHasSameColor(char code,int col){
+    /**
+     * Check if the mosaic contains a tile with same color on specific column
+     *
+     * @param code   the color code
+     * @param column the column number
+     * @return true if the mosaic contains a tile with same color on specific column
+     */
+    public boolean columnHasSameColor(char code, int column) {
         for (int i = 0; i < 5; i++) {
-            if (this.getSquare()[i][col] != null) {
-                if (this.getSquare()[i][col].getColorCode() == code) {
+            if (this.getSquare()[i][column] != null) {
+                if (this.getSquare()[i][column].getColorCode() == code) {
                     return true;
                 }
             }
         }
         return false;
     }
+
     /**
-     * check if has tile at specific position
+     * Check if has tile at specific position
      *
      * @param rowNum    row number
      * @param columnNum column number
@@ -94,10 +109,18 @@ public class Mosaic {
     public boolean hasTile(int rowNum, int columnNum) {
         return square[rowNum][columnNum] != null;
     }
-    public boolean rowHasSameColor(int row,char code){
-        for (int i =0;i<5;i++){
-            if(this.square[row][i]!=null){
-                if(this.square[row][i].getColorCode()==code){
+
+    /**
+     * Check if the mosaic contains a tile with same color on specific row
+     *
+     * @param row  the row number
+     * @param code the color code
+     * @return true if the mosaic contains a tile with same color on specific row
+     */
+    public boolean rowHasSameColor(int row, char code) {
+        for (int i = 0; i < 5; i++) {
+            if (this.square[row][i] != null) {
+                if (this.square[row][i].getColorCode() == code) {
                     return true;
                 }
             }
@@ -106,7 +129,7 @@ public class Mosaic {
     }
 
     /**
-     * find the correct position and place the tile
+     * Find the correct position and place the tile
      *
      * @param tile the tile to be placed
      * @param row  the target row
@@ -117,7 +140,14 @@ public class Mosaic {
         return placeTile(tile, row, (row + index) % NUM_ROWS);
     }
 
-
+    /**
+     * Place the tile on specific row and column
+     *
+     * @param tile   the tile to be placed
+     * @param row    the target row
+     * @param column the target column
+     * @return the score earned for this move
+     */
     public Score placeTile(Tile tile, int row, int column) {
 
         square[row][column] = tile;
@@ -167,7 +197,7 @@ public class Mosaic {
     }
 
     /**
-     * check if there is a complete row in our mosaic if it has, then end the game.
+     * Check if there is a complete row in our mosaic if it has, then end the game.
      *
      * @return true if exists a complete row
      */
@@ -282,57 +312,28 @@ public class Mosaic {
         return true;
     }
 
-//     * [Mosaic]
-//     * 1. No two tiles occupy the same location on a single player's mosaic.
-//     * 2. Each row contains only 1 of each colour of tile.
-//     * 3. Each column contains only 1 of each colour of tile.
-//     * 2. The colour of tile stored in a row must not be the same as a colour
-//     * already found in the corresponding row of the mosaic.
-
-    public static boolean isMosaicValid(String mosaic,String storage) {
-        // Example "A0Ma00S0a11c22a33c44b5FB0MS0e11a22b33d44e5Ff",mosaic = a00, storage = 0a11c22a33c44b5
-        boolean mosaicValid = true;
-        for (int i = 0;i<mosaic.length();i=i+3){
-            //Record the color, rows, column of the mosaic
-            char mosaicColor = mosaic.charAt(i);
-            int mosaicRow = Integer.parseInt(mosaic.substring(i+1,i+2));
-            int mosaicColumn = Integer.parseInt(mosaic.substring(i+2,i+3));
-            //Compare with other mosaic
-            for (int k = 3 ; k<mosaic.length(); k = k+3){
-                char mosaicColor2 = mosaic.charAt(k);
-                int mosaicRow2 = Integer.parseInt(mosaic.substring(k+1,k+2));
-                int mosaicColumn2 = Integer.parseInt(mosaic.substring(k+2,k+3));
-                if(mosaicColor == mosaicColor2 && (mosaicRow == mosaicRow2 || mosaicColumn == mosaicColumn2)){
-                    mosaicValid = false;
-                }
-            }
-            //Record the color and rows of the storage, mosaic compares with storage color and rows.
-            for (int j = 0 ;j<storage.length();j=j+3){
-                int storageRow = Integer.parseInt(storage.substring(j,j+1));
-                char storageColor = storage.charAt(j+1);
-                if (mosaicColor == storageColor && mosaicRow == storageRow){
-                    mosaicValid = false;
-                }
-            }
-        }
-        return mosaicValid;
-    }
-
-    public int countTile(char code){
+    /**
+     * Count the number of tiles with specific color
+     *
+     * @param code the color code
+     * @return the number
+     */
+    public int countTile(char code) {
         int count = 0;
-        for (int i=0;i<5;i++){
-            for(int j=0;j<5;j++){
-                if(square[i][j]!=null){
-                if(square[i][j].getColorCode()==code){
-                    count++;
-                }}
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (square[i][j] != null) {
+                    if (square[i][j].getColorCode() == code) {
+                        count++;
+                    }
+                }
             }
         }
         return count;
     }
 
     /**
-     * reconstruct internal state from string
+     * Reconstruct internal state from string
      *
      * @param token the string representation of mosaic state
      */

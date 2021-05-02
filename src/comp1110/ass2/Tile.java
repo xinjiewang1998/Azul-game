@@ -1,5 +1,8 @@
 package comp1110.ass2;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public enum Tile {
     Blue('a', "blue"),
     Green('b', "green"),
@@ -29,31 +32,6 @@ public enum Tile {
             }
         }
         return FirstPlayer;
-    }
-
-    public static int tileNum(String string,char a){
-        int num = 0;
-        for (int i =0 ;i<string.length();i++){
-            if (string.charAt(i)==a){
-                num++;
-            }
-        }
-        return num;
-    }
-
-    public static int tileNum(String string,int i){
-        int num = Integer.parseInt(string.substring(i,i+2));
-        return num;
-    }
-
-    public static int tileNum(String string,char a,int i){
-        int num = 0;
-        for (int j =1 ;j<string.length();j+=2){
-            if (string.charAt(j)==a){
-                num= num + Integer.parseInt(string.substring(j+1,j+2));
-            }
-        }
-        return num;
     }
 
     /**

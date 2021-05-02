@@ -5,6 +5,9 @@ import comp1110.ass2.common.Common;
 import comp1110.ass2.common.Factory;
 import java.util.ArrayDeque;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Player {
 
     private boolean isFirstPlayer;
@@ -69,28 +72,6 @@ public class Player {
             return common.getCentre().drawTiles(color);
         }
     }
-
-    /**
-     * according to the instruction string given, pass it to board.performInstruction method.
-     *
-     * @param instruction the move instruction
-     */
-    public void play(String instruction) {
-//        // drafting
-//
-//        Deque tiles = drawTiles("blue", true, 0);
-//
-//        // placing
-//        this.board.getStorage().putTiles(tiles, "blue", tiles.size(), 4);
-//
-//        // tiling & scoring
-//        this.board.getScore().addScore(this.board.getStorage().tileAndScore());
-//        this.board.getScore().addScore(this.board.getFloor().score());
-//
-//        // check completes a row
-//        return this.board.getMosaic().hasCompleteRow();
-    }
-
 
     @Override
     public String toString() {

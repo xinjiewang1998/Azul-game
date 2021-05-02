@@ -3,10 +3,12 @@ package comp1110.ass2.board;
 import comp1110.ass2.Tile;
 import comp1110.ass2.common.Centre;
 import comp1110.ass2.common.Discard;
-import java.sql.SQLOutput;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
+/**
+ * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ */
 public class Floor {
 
     private ArrayList<Tile> tiles;
@@ -15,7 +17,6 @@ public class Floor {
     public Floor() {
         this.tiles = new ArrayList<>();
     }
-
 
     public ArrayList<Tile> getTiles() {
         return tiles;
@@ -33,12 +34,17 @@ public class Floor {
         this.firstPlayerTile = firstPlayerTile;
     }
 
+    /**
+     * Get the number of tiles (firstPlayerTile + tiles.size())
+     *
+     * @return the number of tiles
+     */
     private int getSize() {
         return (firstPlayerTile != null) ? tiles.size() + 1 : tiles.size();
     }
 
     /**
-     * check if floor contains first player tile
+     * Check if floor contains first player tile
      *
      * @return true if has first player tile
      */
@@ -47,7 +53,7 @@ public class Floor {
     }
 
     /**
-     * place first player tile
+     * Place first player tile Author: Jiaan
      *
      * @param firstPlayerTile the firstPlayerTile
      */
@@ -58,16 +64,22 @@ public class Floor {
         }
     }
 
-
-    public int countTile(char code){
+    /**
+     * Count the number of tiles with specific color
+     *
+     * @param code the color code
+     * @return the number
+     */
+    public int countTile(char code) {
         int count = 0;
-        for(Tile T:this.getTiles()){
-            if(T.getColorCode()==code){
+        for (Tile T : this.getTiles()) {
+            if (T.getColorCode() == code) {
                 count++;
             }
         }
         return count;
     }
+
     /**
      * Add all other tiles to our tiles.
      *
@@ -80,8 +92,8 @@ public class Floor {
         sort();
         ArrayList<Tile> newList = new ArrayList<>();
         if (getSize() > 7) {
-            int limit = (hasFirstPlayerTile())? 6 : 7;
-            while(newList.size() < limit) {
+            int limit = (hasFirstPlayerTile()) ? 6 : 7;
+            while (newList.size() < limit) {
                 newList.add(tiles.remove(0));
             }
         } else {
@@ -93,11 +105,14 @@ public class Floor {
         tiles = newList;
     }
 
+    /**
+     * Sort the tiles by color code
+     */
     private void sort() {
         ArrayList<Tile> newList = new ArrayList<>();
-        for(int i = 0; i < 5; i++) {
-            for(Tile tile : tiles) {
-                if (tile.getColorCode() == 'a' +i) {
+        for (int i = 0; i < 5; i++) {
+            for (Tile tile : tiles) {
+                if (tile.getColorCode() == 'a' + i) {
                     newList.add(tile);
                 }
             }
@@ -122,7 +137,7 @@ public class Floor {
     }
 
     /**
-     * calculate the total penalty of the floor.
+     * Calculate the total penalty of the floor.
      *
      * @return the penalty score
      */
@@ -170,17 +185,6 @@ public class Floor {
         }
         // only one f
         return countF <= 1;
-    }
-
-//  * [Floor]
-//  * 1. There are no more than 7 tiles on a single player's floor.
-
-    public static boolean isFloorValid(String floor) {
-        if (floor.length() > 7) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     /**
