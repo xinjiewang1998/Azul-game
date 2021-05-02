@@ -293,30 +293,16 @@ public class Azul {
         Game game = new Game();
         game.reconstructCommonFrom(gameState[0]);
         game.reconstructBoardsFrom(gameState[1]);
-        if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().hasCompleteRow()){
-            for (int i=0;i<5;i++){
-                if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(i).size()==i+1){
-                    int col = 0;
-                    for(int j=0;j<5;j++){
-                        char code = game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(i).getFirst().getColorCode();
-                        if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic().getSquare()[i][j]==null){
-                        if(!game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic().columnHasSameColor(code,j)){
-                            col = j;
-                            break;
-                        }}
-                    }
-                    return game.turn+i+col;
-                }
+        int count = 0;
+        for (int i=0;i<5;i++){
+            if(game.getCommon().getFactories()[i].getTiles().size()==0){
+                count++;
             }
         }
-        else{
+
+        if(count!=5||!(game.getCommon().getCentre().getTiles().size()==0||(game.getCommon().getCentre().getTiles().size()==1&&game.getCommon().getCentre().getTiles().get(0).getColorCode()=='f'))){
             Random r  = new Random();
-            int count = 0;
-            for (int i=0;i<5;i++){
-                if(game.getCommon().getFactories()[i].getTiles().size()==0){
-                    count++;
-                }
-            }
+
             if(count==5){
                 int num = r.nextInt(game.getCommon().getCentre().getTiles().size());
                 Tile tile = game.getCommon().getCentre().getTiles().get(num);
@@ -382,6 +368,22 @@ public class Azul {
                     else{
                         return game.turn+"C"+tile.getColorCode()+"F";
                     }
+                }
+            }
+        }
+        else if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().hasCompleteRow()){
+            for (int i=0;i<5;i++){
+                if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(i).size()==i+1){
+                    int col = 0;
+                    for(int j=0;j<5;j++){
+                        char code = game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(i).getFirst().getColorCode();
+                        if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic().getSquare()[i][j]==null){
+                            if(!game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic().columnHasSameColor(code,j)){
+                                col = j;
+                                break;
+                            }}
+                    }
+                    return game.turn+i+col;
                 }
             }
         }
