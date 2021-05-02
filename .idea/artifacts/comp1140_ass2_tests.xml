@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$</output-path>
     <root id="archive" name="comp1140-ass2-tests.jar">
       <element id="module-test-output" name="comp1110-ass2" />
+      <element id="module-output" name="comp1110-ass2" />
     </root>
   </artifact>
 </component>
