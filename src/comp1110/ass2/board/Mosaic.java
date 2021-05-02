@@ -94,6 +94,16 @@ public class Mosaic {
     public boolean hasTile(int rowNum, int columnNum) {
         return square[rowNum][columnNum] != null;
     }
+    public boolean rowHasSameColor(int row,char code){
+        for (int i =0;i<5;i++){
+            if(this.square[row][i]!=null){
+                if(this.square[row][i].getColorCode()==code){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * find the correct position and place the tile

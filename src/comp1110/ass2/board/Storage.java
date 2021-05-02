@@ -119,6 +119,19 @@ public class Storage {
         return this.getTriangle().get(row).getFirst().getColorCode() == code;
     }
 
+    public ArrayList<Integer> canBePlacedOn(Mosaic mosaic,char code){
+        ArrayList<Integer> numRow = new ArrayList<>();
+        for (int i =0;i<5;i++){
+            if(this.getTriangle().get(i).size()==0&&!mosaic.rowHasSameColor(i,code)){
+                numRow.add(i);
+            }
+            else if(!(this.getTriangle().get(i).size() ==0) &&hasTileSameColor(i,code)&&!mosaic.rowHasSameColor(i,code)&&this.triangle.get(i).size()<i+1){
+                numRow.add(i);
+            }
+        }
+        return numRow;
+    }
+
     /**
      * Tile and Score Tile rules 1. Go through your storage rows from row 0 to row 4 and move the
      * rightmost tile of each complete row to the space of the same colour in the corresponding row
