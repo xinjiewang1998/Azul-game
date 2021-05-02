@@ -1,5 +1,8 @@
 package comp1110.ass2;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Azul {
     /**
      * Given a shared state string, determine if it is well-formed.
@@ -287,6 +290,104 @@ public class Azul {
      */
     public static String generateAction(String[] gameState) {
         // FIXME Task 13
+        Game game = new Game();
+        game.reconstructCommonFrom(gameState[0]);
+        game.reconstructBoardsFrom(gameState[1]);
+        int count = 0;
+        for (int i=0;i<5;i++){
+            if(game.getCommon().getFactories()[i].getTiles().size()==0){
+                count++;
+            }
+        }
+
+        if(count!=5||!(game.getCommon().getCentre().getTiles().size()==0||(game.getCommon().getCentre().getTiles().size()==1&&game.getCommon().getCentre().getTiles().get(0).getColorCode()=='f'))){
+            Random r  = new Random();
+
+            if(count==5){
+                int num = r.nextInt(game.getCommon().getCentre().getTiles().size());
+                Tile tile = game.getCommon().getCentre().getTiles().get(num);
+                ArrayList<Integer> numRow = new ArrayList<Integer>();
+                numRow = game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().canBePlacedOn(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic(),tile.getColorCode());
+                if(numRow.size()!=0){
+                int row = r.nextInt(numRow.size());
+                return game.turn+"C"+tile.getColorCode()+numRow.get(row);}
+                else{
+                    return game.turn+"C"+tile.getColorCode()+"F";
+                }
+            }
+            else if(game.getCommon().getCentre().getTiles().size()==0||(game.getCommon().getCentre().getTiles().size()==1&&game.getCommon().getCentre().getTiles().get(0).getColorCode()=='f')){
+                int num = 0;
+                int i = 0;
+                while(i<1000){
+                    num = r.nextInt(game.getCommon().getFactories().length);
+                    if((game.getCommon().getFactories()[num].getTiles().size()!=0)){
+                        break;}
+                    i++;
+                }
+                int num1 = r.nextInt(game.getCommon().getFactories()[num].getTiles().size());
+                Tile tile = game.getCommon().getFactories()[num].getTiles().get(num1);
+                ArrayList<Integer> numRow = new ArrayList<Integer>();
+                numRow = game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().canBePlacedOn(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic(),tile.getColorCode());
+                if(numRow.size()!=0){
+                    int row = r.nextInt(numRow.size());
+                    return game.turn+num+tile.getColorCode()+numRow.get(row);}
+                else{
+                    return game.turn+num+tile.getColorCode()+"F";
+                }
+            }
+            else{
+                int choose = r.nextInt(2);
+                if(choose==0){
+                    int num = 0;
+                    int i = 0;
+                    while(i<1000){
+                        num = r.nextInt(game.getCommon().getFactories().length);
+                        if((game.getCommon().getFactories()[num].getTiles().size()!=0)){
+                            break;}
+                        i++;
+                    }
+                    int num1 = r.nextInt(game.getCommon().getFactories()[num].getTiles().size());
+                    Tile tile = game.getCommon().getFactories()[num].getTiles().get(num1);
+                    ArrayList<Integer> numRow = new ArrayList<Integer>();
+                    numRow = game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().canBePlacedOn(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic(),tile.getColorCode());
+                    if(numRow.size()!=0){
+                        int row = r.nextInt(numRow.size());
+                        return game.turn+num+tile.getColorCode()+numRow.get(row);}
+                    else{
+                        return game.turn+num+tile.getColorCode()+"F";
+                    }
+                }
+                else{
+                    int num = r.nextInt(game.getCommon().getCentre().getTiles().size());
+                    Tile tile = game.getCommon().getCentre().getTiles().get(num);
+                    ArrayList<Integer> numRow = new ArrayList<Integer>();
+                    numRow = game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().canBePlacedOn(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic(),tile.getColorCode());
+                    if(numRow.size()!=0){
+                        int row = r.nextInt(numRow.size());
+                        return game.turn+"C"+tile.getColorCode()+numRow.get(row);}
+                    else{
+                        return game.turn+"C"+tile.getColorCode()+"F";
+                    }
+                }
+            }
+        }
+        else if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().hasCompleteRow()){
+            for (int i=0;i<5;i++){
+                if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(i).size()==i+1){
+                    int col = 0;
+                    for(int j=0;j<5;j++){
+                        char code = game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getStorage().getTriangle().get(i).getFirst().getColorCode();
+                        if(game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic().getSquare()[i][j]==null){
+                            if(!game.getPlayers()[(game.turn.charAt(0)-'A')].getBoard().getMosaic().columnHasSameColor(code,j)){
+                                col = j;
+                                break;
+                            }}
+                    }
+                    return game.turn+i+col;
+                }
+            }
+        }
+
         return null;
         // FIXME Task 15 Implement a "smart" generateAction()
     }

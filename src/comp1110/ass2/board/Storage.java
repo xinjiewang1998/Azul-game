@@ -56,6 +56,17 @@ public class Storage {
         return false;
     }
 
+    /**
+     *
+     * @param tiles the tiles draw from factory
+     * @return the list of row can place this tile
+     */
+
+    public ArrayList<Integer> canBePlaced(ArrayDeque<Tile> tiles){
+        //FIXME
+        return new ArrayList<Integer>();
+    }
+
 
     /**
      * Rules to place the tiles. 1. If a row already contains tiles, you may only add tiles of the
@@ -106,6 +117,19 @@ public class Storage {
 
     public boolean hasTileSameColor(int row, char code) {
         return this.getTriangle().get(row).getFirst().getColorCode() == code;
+    }
+
+    public ArrayList<Integer> canBePlacedOn(Mosaic mosaic,char code){
+        ArrayList<Integer> numRow = new ArrayList<>();
+        for (int i =0;i<5;i++){
+            if(this.getTriangle().get(i).size()==0&&!mosaic.rowHasSameColor(i,code)){
+                numRow.add(i);
+            }
+            else if(!(this.getTriangle().get(i).size() ==0) &&hasTileSameColor(i,code)&&!mosaic.rowHasSameColor(i,code)&&this.triangle.get(i).size()<i+1){
+                numRow.add(i);
+            }
+        }
+        return numRow;
     }
 
     /**

@@ -66,14 +66,16 @@ public class IsMoveValidTest {
     @Test
     public void testStorageNotFull() {
         String[] gameState = {"FCB1516181516D0000000000", "A0MS1c12d13e24b4FaaafB0MS1c12a23e24d4F"};
+        String[] updated = new String[2];
+        updated[1] = gameState[1];
         for (int p = 0; p < 2; p++) {
             char player = (char) (p + 'A');
-            gameState[0] = "" + player + gameState[0];
+            updated[0] = "" + player + gameState[0];
             for (int row = 0; row < 5; row++) {
                 for (int col = 0; col < 5; col++) {
                     String move = "" + player + row + col;
-                    String errorMessagePrefix = errorPrefix(gameState, move);
-                    boolean out = Azul.isMoveValid(gameState, move);
+                    String errorMessagePrefix = errorPrefix(updated, move);
+                    boolean out = Azul.isMoveValid(updated, move);
                     assertFalse(out, errorMessagePrefix + "Storage row is not full");
                 }
             }
@@ -86,7 +88,7 @@ public class IsMoveValidTest {
 
     @Test
     public void testMosaicColumnColour() {
-        String[] gameState = {"AFCB1314131511D0001000002", "A8Ma00c02b11c13e22b23d31a34c40S3c44e5FfB1Mb01e10c24d31e43S1a22b33a44d5F"};
+        String[] gameState = {"AFCB1213121310D0001000002", "A8Ma00c02b11c13e22b23d31a34c40S3c44e5FfB1Mb01e10c24d31e43S1a22b33a44d5F"};
         String[] moves = {"A30", "A32", "A33"};
         for (String move : moves) {
             String errorMessagePrefix = errorPrefix(gameState, move);
@@ -101,7 +103,7 @@ public class IsMoveValidTest {
 
     @Test
     public void testLocationOccupied() {
-        String[] gameState = {"AFCB0812081010D0000040201", "A32Ma00b01c02e04a11b12c13d14e21a22b23d31a34c40e42S1e23c34d5FbB16Mb01e10a11d14a22b23c24d31a33d42e43S0a11c22e33b34a5Ff"};
+        String[] gameState = {"AFCB0711070809D0000040201", "A32Ma00b01c02e04a11b12c13d14e21a22b23d31a34c40e42S1e23c34d5FbB16Mb01e10a11d14a22b23c24d31a33d42e43S0a11c22e33b34a5Ff"};
         String[] moves = {"A11", "A12", "A13", "A14"};
         for (String move : moves) {
             String errorMessagePrefix = errorPrefix(gameState, move);
@@ -116,7 +118,7 @@ public class IsMoveValidTest {
 
     @Test
     public void testStorageToFloor() {
-        String[] gameState = {"FCB1314131511D0000000000", "A4Mc02c13b23d31a34c40S0a11b22e33c44e5FfB1Mb01e10c24d31e43S1a22b33a44d5F"};
+        String[] gameState = {"FCB1213121310D0000000000", "A4Mc02c13b23d31a34c40S0a11b22e33c44e5FfB1Mb01e10c24d31e43S1a22b33a44d5F"};
         String[] updated = new String[2];
         updated[1] = gameState[1];
         for (int p = 0; p < 2; p++) {
