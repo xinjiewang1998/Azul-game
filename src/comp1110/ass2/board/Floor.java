@@ -59,6 +59,15 @@ public class Floor {
     }
 
 
+    public int countTile(char code){
+        int count = 0;
+        for(Tile T:this.getTiles()){
+            if(T.getColorCode()==code){
+                count++;
+            }
+        }
+        return count;
+    }
     /**
      * Add all other tiles to our tiles.
      *
@@ -162,6 +171,9 @@ public class Floor {
         // only one f
         return countF <= 1;
     }
+
+//  * [Floor]
+//  * 1. There are no more than 7 tiles on a single player's floor.
 
     public static boolean isFloorValid(String floor) {
         if (floor.length() > 7) {

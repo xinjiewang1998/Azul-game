@@ -63,6 +63,15 @@ public class Centre {
         this.tiles = newList;
     }
 
+    public int countTile(char code){
+        int count = 0;
+        for(Tile T:this.getTiles()){
+            if(T.getColorCode()==code){
+                count++;
+            }
+        }
+        return count;
+    }
     /**
      * Pick all tiles of the same colour from the centre.
      *
@@ -129,12 +138,16 @@ public class Centre {
         return true;
     }
 
+
+//  * [Centre]
+//  * 1. The number of tiles in the centre is no greater than 3 * the number of empty factories.
+
     public static boolean isCentreValid(String centre, String factories) {
         int tilesNum = 0;
         int empty = 0;
         for (int i = 0; i < centre.length(); i++) {
             if (centre.charAt(i) == 'a' || centre.charAt(i) == 'b' || centre.charAt(i) == 'c' ||
-                    centre.charAt(i) == 'd' || centre.charAt(i) == 'e') {
+                    centre.charAt(i) == 'd' || centre.charAt(i) == 'e'|| centre.charAt(i) == 'f') {
                 tilesNum++;
             }
         }
@@ -145,7 +158,7 @@ public class Centre {
                 empty++;
             }
         }
-        if (tilesNum > (3 * empty)) {
+        if (tilesNum > (3 * (5-empty))) {
             return false;
         } else {
             return true;

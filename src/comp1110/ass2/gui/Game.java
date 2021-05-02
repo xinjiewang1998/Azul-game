@@ -1,14 +1,18 @@
 package comp1110.ass2.gui;
 
+import comp1110.ass2.Azul;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.swing.text.Element;
+import javax.swing.text.html.ImageView;
 
 public class Game extends Application {
+
     /* comp1110.ass2.board layout */
-    private static final int BOARD_WIDTH = 1200;
-    private static final int BOARD_HEIGHT = 700;
+    private static final int BOARD_WIDTH = 1280;
+    private static final int BOARD_HEIGHT = 768;
 
     @Override
     public void start(Stage stage) throws Exception {

@@ -85,7 +85,7 @@ public class Game {
 
             String factoryStates = matcher.group(2);
             String centreState = matcher.group(4);
-            String bagState = matcher.group(5);
+            String bagState = matcher.group(5);//2020202020
             String discardState = matcher.group(7);
 
             for (int i = 0; i < factoryStates.length(); i += 5) {
@@ -119,7 +119,7 @@ public class Game {
                 String storageToken = matcher.group(5);
                 String floorToken = matcher.group(7);
 
-                System.out.println(matchToken);
+                //System.out.println(matchToken);
                 if (!Mosaic.isWellFormedMosaicString(mosaicToken) ||
                         !Storage.isWellFormedStorageString(storageToken) ||
                         !Floor.isWellFormedFloorString(floorToken)) {
@@ -390,41 +390,54 @@ public class Game {
     }
 
     public boolean isStateValid(String[] gameState) {
-        if (isSharedStateWellFormed(gameState[0]) || isPlayerStateWellFormed(gameState[1])) {
-            Pattern patternCommon = Pattern.compile(COMMON_REGEX);
-            Matcher matcher = patternCommon.matcher(gameState[0]);
-            Pattern patternPlayer = Pattern.compile(COMMON_REGEX);
-            Matcher matcherPlayer = patternPlayer.matcher(gameState[1]);
-
-            boolean matchFoundCommon = matcher.find();
-            boolean matchFoundPlayer = matcherPlayer.find();
-            if (matchFoundCommon && matchFoundPlayer) {
-                String factoriesToken = matcher.group(2);
-                String centreToken = matcher.group(4);
-                String bagToken = matcher.group(5);
-                String discardToken = matcher.group(7);
-
-                String playerToken = matcherPlayer.group(1);
-                String scoreToken = matcherPlayer.group(2);
-                String mosaicToken = matcherPlayer.group(3);
-                String storageToken = matcherPlayer.group(5);
-                String floorToken = matcherPlayer.group(7);
-
-                if (Mosaic.isMosaicValid(mosaicToken)) {
-                    return true;
-                }
-                if (Floor.isFloorValid(floorToken)) {
-                    return true;
-                }
-                if (Centre.isCentreValid(centreToken, factoriesToken)) {
-                    return true;
+        //boolean isStateValid = true;
+        if (!isSharedStateWellFormed(gameState[0]) || !isPlayerStateWellFormed(gameState[1])) {
+            return false;
+        }
+        this.reconstructCommonFrom(gameState[0]);
+        this.reconstructBoardsFrom(gameState[1]);
+        for (int i = 0; i < 5; i++) {
+            int count = 0;
+            for (int j = 0; j < 5; j++) {
+                count += this.common.getFactories()[j].countTile((char) ('a' + i));
+            }
+            count += this.common.getBag().countTile((char) ('a' + i)) + this.common.getCentre()
+                    .countTile((char) ('a' + i)) + this.common.getDiscard()
+                    .countTile((char) ('a' + i));
+            for (int k = 0; k < 2; k++) {
+                count += this.getPlayers()[k].getBoard().getFloor().countTile((char) ('a' + i))
+                        + this.getPlayers()[k].getBoard().getMosaic().countTile((char) ('a' + i))
+                        + this.getPlayers()[k].getBoard().getStorage().countTile((char) ('a' + i));
+            }
+            if (count != 20) {
+                return false;
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < 2; k++) {
+                    if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()
+                            != 0 && this.getPlayers()[k].getBoard().getMosaic().getSquare()[i][j]
+                            != null) {
+                        if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i)
+                                .getFirst().getColorCode() == this.getPlayers()[k].getBoard()
+                                .getMosaic().getSquare()[i][j].getColorCode()) {
+                            return false;
+                        }
+                    }
                 }
             }
-            ;
-
-            return true;
         }
-        return false;
+        for (int i = 0; i < 5; i++) {
+            for (int k = 0; k < 2; k++) {
+                if (this.getPlayers()[k].getBoard().getStorage().getTriangle().get(i).size()
+                        > i + 1) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public String[] applyMove(String[] gameState, String move) {
@@ -443,7 +456,7 @@ public class Game {
                             board.getMosaic(),
                             common.getDiscard());
             board.getScore().addScore(score);
-            if(!board.getStorage().hasCompleteRow()) {
+            if (!board.getStorage().hasCompleteRow()) {
                 turn = (turn.equals("A")) ? "B" : "A";
             }
         } else if (move.length() == 4) {
@@ -478,7 +491,7 @@ public class Game {
 
             // check if goes to next phase
             int remaining = 0;
-            for (Factory factory: common.getFactories()) {
+            for (Factory factory : common.getFactories()) {
                 remaining += factory.getTiles().size();
             }
             remaining += common.getCentre().getTiles().size();

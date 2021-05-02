@@ -65,6 +65,16 @@ public class Factory {
         return returnTiles;
     }
 
+    public int countTile(char code){
+        int count = 0;
+        for(Tile T:this.getTiles()){
+            if(T.getColorCode()==code){
+                count++;
+            }
+        }
+        return count;
+    }
+
     public boolean hasTile(char code){
         for (int i=0;i<this.getTiles().size();i++){
             if(this.getTiles().get(i).getColorCode()==code){
@@ -116,6 +126,36 @@ public class Factory {
             }
         }
         return true;
+    }
+
+
+//    [Factories]
+//     * 1. At most one factory has less than 4, but greater than 0 tiles.
+//     * Any factories with factory number greater than this factory must contain 0 tiles
+//     correct example"1aabc2abbb4ddee" error example "1aa2abb4ddee"
+
+    public static boolean factoryValid(String factories){
+        int tileNumber = 0;
+        int notFull = 0;
+        for(int i = 1 ; i<factories.length();i=i+tileNumber){
+            int a =0;
+            for(int j = 0; j<4;j++){
+                if(factories.charAt(i+j) == 'a' || factories.charAt(i+j) == 'b' ||factories.charAt(i+j) == 'c' ||
+                    factories.charAt(i+j) == 'd'|| factories.charAt(i+j) == 'e'){
+                    a++; } else {break;}
+                tileNumber =a;
+            }
+            if(tileNumber<4) {
+                notFull++;
+            }
+        }
+        if(notFull>1){
+            return false;
+        }else if (notFull==1){
+            return true;
+        }else{
+            return true;
+        }
     }
 
     /**

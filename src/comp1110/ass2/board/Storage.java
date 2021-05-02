@@ -32,6 +32,16 @@ public class Storage {
         }
     }
 
+    public int countTile(char code){
+        int count = 0;
+        for (int i=0;i<5;i++){
+            if(getTriangle().get(i).size()!=0){
+            if(getTriangle().get(i).getFirst().getColorCode()==code){
+                count = count+getTriangle().get(i).size();
+            }}
+        }
+        return count;
+    }
     /**
      * Check if has complete row.
      *
@@ -180,6 +190,24 @@ public class Storage {
             }
         }
         return true;
+    }
+
+//  * [Storage]
+//  * 1. The maximum number of tiles stored in a row must not exceed (row_number + 1).
+//  * (This part finish in mosaic)2. The colour of tile stored in a row must not be the same as a colour
+//  * already found in the corresponding row of the mosaic.
+//    Example "A1Mb41S0a21c32a33c24d1FaaaccfB1Mc13S0b11b12a33e44d2Fb", "0a2 1c3 2a3 3c2 4d1"
+
+    public static boolean isStorageValid (String storage){
+        boolean mosaicValid = true;
+        for (int i = 0;i<storage.length();i=i+3){
+            int storageRow = Integer.parseInt(storage.substring(i,i+1));
+            int storageNumber = Integer.parseInt(storage.substring(i+2,i+3));
+            if (storageNumber > (storageRow + 1)){
+                mosaicValid = false;
+            }
+        }
+        return mosaicValid;
     }
 
     /**
