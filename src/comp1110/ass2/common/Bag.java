@@ -1,6 +1,7 @@
 package comp1110.ass2.common;
 
 import comp1110.ass2.Tile;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,10 +64,10 @@ public class Bag {
 
 
     /**
-     * Draw 1 tile
-     *
      * @param discard the discard may used for refill
      * @return the tile
+     * @Author: Xinjie Wang
+     * Draw 1 tile
      */
     public Tile drawTile(Discard discard) {
         if (tiles.size() == 0) {

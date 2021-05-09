@@ -1,7 +1,7 @@
 package comp1110.ass2.board;
 
 /**
- * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+ * @Author: Xinjie Wang, Jiaan Guo, Xiang Lu
  */
 public class Board {
 

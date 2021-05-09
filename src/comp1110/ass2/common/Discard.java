@@ -52,9 +52,9 @@ public class Discard {
     }
 
     /**
-     * Send all tiles from discard to bag
-     *
      * @param bag the bag get refilled
+     * @Author: Xinjie Wang
+     * Send all tiles from discard to bag
      */
     public void refillTiles(Bag bag) {
         bag.placeTiles(tiles);

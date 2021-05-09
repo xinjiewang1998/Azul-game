@@ -1,6 +1,7 @@
 package comp1110.ass2.common;
 
 import comp1110.ass2.Tile;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
@@ -114,6 +115,7 @@ public class Centre {
      *
      * @param code the color code
      * @return true if tiles contains a specific color tile
+     * @Author: Xinjie Wang
      */
     public boolean hasTile(char code) {
         for (int i = 0; i < this.getTiles().size(); i++) {

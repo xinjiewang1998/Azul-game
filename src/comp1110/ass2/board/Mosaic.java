@@ -82,11 +82,11 @@ public class Mosaic {
     }
 
     /**
-     * Check if the mosaic contains a tile with same color on specific column
-     *
      * @param code   the color code
      * @param column the column number
      * @return true if the mosaic contains a tile with same color on specific column
+     * @Author: Xinjie Wang
+     * Check if the mosaic contains a tile with same color on specific column
      */
     public boolean columnHasSameColor(char code, int column) {
         for (int i = 0; i < 5; i++) {
@@ -100,6 +100,7 @@ public class Mosaic {
     }
 
     /**
+     * @Author: Xinjie Wang
      * Check if has tile at specific position
      *
      * @param rowNum    row number
@@ -111,6 +112,7 @@ public class Mosaic {
     }
 
     /**
+     * @Author: Xinjie Wang
      * Check if the mosaic contains a tile with same color on specific row
      *
      * @param row  the row number
@@ -197,6 +199,7 @@ public class Mosaic {
     }
 
     /**
+     * @Author: Xinjie Wang
      * Check if there is a complete row in our mosaic if it has, then end the game.
      *
      * @return true if exists a complete row
@@ -218,6 +221,7 @@ public class Mosaic {
     }
 
     /**
+     * @Author: Xinjie Wang
      * Each player gains additional bonus points if they satisfy the following conditions:
      * <p>
      * Gain 2 points for each complete row of your mosaic (5 consecutive horizontal tiles). Gain 7
