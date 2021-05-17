@@ -118,7 +118,7 @@ public class IsMoveValidTest {
 
     @Test
     public void testStorageToFloor() {
-        String[] gameState = {"FCB1213121310D0000000000", "A4Mc02c13b23d31a34c40S0a11b22e33c44e5FfB1Mb01e10c24d31e43S1a22b33a44d5F"};
+        String[] gameState = {"FCB1213121310D0102000003", "A4Mc02c13b23d31a34c40S3c44e5FfB1Mb01e10c24d31e43S1a22b33a44d5F"};
         String[] updated = new String[2];
         updated[1] = gameState[1];
         for (int p = 0; p < 2; p++) {
