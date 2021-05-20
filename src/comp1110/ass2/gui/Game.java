@@ -620,7 +620,7 @@ public class Game extends Application {
 //        baseboard.setLayoutY(BOARD_Y);
 
         // box
-        Text title = new Text(x + 50, 155, "Player " + player + " board with Score ");
+        Text title = new Text(x + 50, 155, "Player " + player + " with Score ");
         title.setFont(Font.font(32));
         title.setFill(Color.BLACK);
         board.getChildren().add(title);
