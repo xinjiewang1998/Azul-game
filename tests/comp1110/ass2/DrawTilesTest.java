@@ -9,7 +9,9 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
+/**
+ * Author: Xinjie Wang
+ */
 public class DrawTilesTest {
 
     @Test

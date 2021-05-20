@@ -49,11 +49,12 @@ public class Viewer extends Application {
     private final Rectangle[][] discard = new Rectangle[10][10];
 
     /**
+     * @Author: Xiang Lu
      * Draw a placement in the window, removing any previously drawn placements
      *
      * @param state an array of two strings, representing the current game state TASK 4
      */
-    void displayState(String[] state) {
+    public void displayState(String[] state) {
 
         // Example Board: AF1bbbe2abde3cdee4bcceCfadB1915161614D1103100920
         // Example Player:
@@ -118,13 +119,14 @@ public class Viewer extends Application {
     }
 
     /**
+     * @Author: Xiang Lu
      * This step is to make the decoded mosaic position opaque, opacity means there are ceramic
      * tiles in this place, and transparency means there are no ceramic tiles.
      *
      * @param positions the position at mosaic
      * @param mosaic    the mosaic
      */
-    private void decodeMosaic(String positions, Rectangle[][] mosaic) {
+    public void decodeMosaic(String positions, Rectangle[][] mosaic) {
         for (int i = 1; i < positions.length(); i++) {
             i = i + 1;
             int row = positions.charAt(i) - 48;
@@ -135,13 +137,14 @@ public class Viewer extends Application {
     }
 
     /**
+     * @Author: Xiang Lu
      * In this step, we hope to cover the colored tiles with the background color (gray) in the
      * storage position
      *
      * @param positions the position at storage
      * @param storage   the storage
      */
-    private void decodeStorage(String positions, Rectangle[][] storage) {
+    public void decodeStorage(String positions, Rectangle[][] storage) {
         for (int i = 1; i < positions.length(); i = i + 3) {
             int row = positions.charAt(i) - 48;
             char code = positions.charAt(i + 1);
@@ -154,12 +157,13 @@ public class Viewer extends Application {
     }
 
     /**
+     * @Author: Xiang Lu
      * Decode floor info
      *
      * @param positions the position at floor
      * @param floor     the floor
      */
-    private void decodeFloor(String positions, Rectangle[] floor) {
+    public void decodeFloor(String positions, Rectangle[] floor) {
         for (int i = 1; i < positions.length(); i++) {
             char code = positions.charAt(i);
             floor[i - 1].setFill(fillColor(code));
@@ -167,12 +171,13 @@ public class Viewer extends Application {
     }
 
     /**
+     * @Author: Xiang Lu
      * Decode factories' info
      *
      * @param substringF the substring of factory
      * @param factories  the factories
      */
-    private void decodeFactories(String substringF, Rectangle[][] factories) {
+    public void decodeFactories(String substringF, Rectangle[][] factories) {
         for (int n = 1; n < substringF.length(); n = n + 5) {
             int x = (substringF.charAt(n) - 48) % 5 - 1;
             for (int m = 0; m < 4; m++) {
@@ -185,12 +190,13 @@ public class Viewer extends Application {
     }
 
     /**
+     * @Author: Xiang Lu
      * Decode discard info
      *
      * @param substringC the substring of centre
      * @param centre     the centre
      */
-    private void decodeCentre(String substringC, Rectangle[][] centre) {
+    public void decodeCentre(String substringC, Rectangle[][] centre) {
         for (int i = 1; i < substringC.length(); i++) {
             char code = substringC.charAt(i);
             centre[(i - 1) % 4][(i - 1) / 4].setFill(fillColor(code));
@@ -198,34 +204,37 @@ public class Viewer extends Application {
     }
 
     /**
+     * @Author: Xiang Lu
      * Decode discard info
      *
      * @param substringD the substring of discard
      * @param discard    the discard
      */
-    void decodeDiscard(String substringD, Rectangle[][] discard) {
+    public void decodeDiscard(String substringD, Rectangle[][] discard) {
         //Record the number of tiles of various colors in the discard
         fillBagAndDiscard(substringD, discard);
     }
 
     /**
+     * @Author: Xiang Lu
      * Decode bag info
      *
      * @param substringB the substring of bag
      * @param bag        the bag
      */
-    private void decodeBag(String substringB, Rectangle[][] bag) {
+    public void decodeBag(String substringB, Rectangle[][] bag) {
         //This is used to record the number of tiles of various colors in bag。
         fillBagAndDiscard(substringB, bag);
     }
 
     /**
+     * @Author: Xiang Lu
      * Fill bag and discard with color
      *
      * @param substring the substring of bag or discard
      * @param rectangle the rectangle
      */
-    private void fillBagAndDiscard(String substring, Rectangle[][] rectangle) {
+    public void fillBagAndDiscard(String substring, Rectangle[][] rectangle) {
         int a = Integer.parseInt(substring.substring(1, 3));
         int b = Integer.parseInt(substring.substring(3, 5));
         int c = Integer.parseInt(substring.substring(5, 7));
@@ -240,6 +249,7 @@ public class Viewer extends Application {
     }
 
     /**
+     * @Author: Xiang Lu
      * Fill the rectangle
      *
      * @param a         the limit
@@ -270,6 +280,7 @@ public class Viewer extends Application {
     }
 
     /**
+     * @Author: Xiang Lu
      * Map code to color
      *
      * @param code the code
@@ -288,6 +299,7 @@ public class Viewer extends Application {
     }
 
     /**
+     * @Author: Xiang Lu
      * Create a basic text field for input and a refresh button.
      */
     private void makeControls() {
@@ -314,6 +326,11 @@ public class Viewer extends Application {
         hb.setLayoutY(VIEWER_HEIGHT - 50);
         controls.getChildren().add(hb);
     }
+
+    /**
+     * @Author: Xiang Lu
+     * Create an initial interface for gamers
+     */
 
     private void changeState() {
         //create five factories，each factory has four tiles.

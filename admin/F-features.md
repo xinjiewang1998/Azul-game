@@ -10,3 +10,4 @@ of our project implements the following features:
  - Implements interesting game variant/s (Task 16)
 
 additional features...
+Retract a false move in a chess game.

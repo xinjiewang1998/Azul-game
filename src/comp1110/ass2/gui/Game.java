@@ -204,8 +204,11 @@ public class Game extends Application {
                 }
                 System.out.println(move);
                 String[] gameState = azulGame.rebuildStateString();
-                if (move.length() == 3 && azulGame.isMoveValid(gameState, move) && azulGame
-                        .areFactoriesAndCentreEmpty()) {
+
+                if (azulGame.generateAction(gameState)==null){
+                    azulGame.setTurn("B");
+                }
+                if (move.length() == 3 && azulGame.isMoveValid(gameState, move)) {
                     String currentTurn = azulGame.getTurn();
                     gameState = azulGame.applyMove(gameState, move);
                     System.out.println("A apply move " + gameState[0]);
@@ -216,9 +219,9 @@ public class Game extends Application {
 
                     gameState = azulGame.nextRound(gameState);
                     boolean hasComplete = checkCompletion();
-                    if (hasComplete && azulGame.generateAction(gameState) == null) {
-                        Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic()
-                                .calculateBonusScore();
+
+                    if(hasComplete && azulGame.generateAction(gameState)==null){
+                        Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic().calculateBonusScore();
                         azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
 
                         int maxScore = 0;
@@ -245,11 +248,12 @@ public class Game extends Application {
                     makeScore();
 
                     // AI
-                    int index = (azulGame.getTurn().equals("A")) ? 0 : 1;
-                    if (checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn)) {
+                    int index  = (azulGame.getTurn().equals("A")) ? 0 : 1;
+                    if(checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn)) {
                         // until change turn
                         currentTurn = azulGame.getTurn();
-                        while (azulGame.getTurn().equals(currentTurn)) {
+
+                        while(azulGame.getTurn().equals(currentTurn)) {
                             System.out.println("kale");
                             System.out.println(currentTurn);
                             String action = azulGame.generateAction(gameState);
@@ -908,13 +912,13 @@ public class Game extends Application {
         boardTextField.setPrefWidth(100);
 
         Button button = new Button("Refresh");
-        button.setOnAction(event -> displayState(new String[]{playerTextField.getText(),
-                boardTextField.getText()}));
+//        button.setOnAction(event -> displayState(new String[]{playerTextField.getText(),
+//                boardTextField.getText()}));
         Label moveLabel = new Label("Move:");
         moveTextField = new TextField();
         moveTextField.setPrefWidth(100);
         Button moveButton = new Button("Apply Move");
-        moveButton.setOnAction(actionEvent -> moveState(moveTextField.getText()));
+//        moveButton.setOnAction(actionEvent -> moveState(moveTextField.getText()));
 
         HBox hb = new HBox();
         hb.getChildren().addAll(playerLabel, playerTextField, boardLabel,
