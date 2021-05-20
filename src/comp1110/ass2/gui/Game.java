@@ -163,7 +163,6 @@ public class Game extends Application {
                 event.consume();
             });
             setOnMouseReleased(event -> {     // drag is complete
-                System.out.println("1");
                 try {
                     snapToGrid(event.getSceneX(), event.getSceneY());
                 } catch (InterruptedException e) {
@@ -178,16 +177,11 @@ public class Game extends Application {
          * Snap the tile to the nearest grid position (if it is over the grid)
          */
         private void snapToGrid(double x, double y) throws InterruptedException {
-            System.out.println(x + " " + y);
 
             String move = azulGame.getTurn();
             if (homeFrom < 0) {
-                // given x and y
-                // generate move
-                // PLAYER + row + column
                 int row = (homeY - 180) / 45;
                 move += row;
-                // x + 240 + 10 + 45 * j, 180 + 45 * i
                 if (y - homeY >= 0 && y - homeY <= 40) {
                     for (int col = 0; col < 5; col++) {
                         if (azulGame.getTurn().equals("A") &&
@@ -202,7 +196,6 @@ public class Game extends Application {
                         }
                     }
                 }
-                System.out.println(move);
                 String[] gameState = azulGame.rebuildStateString();
 
                 if (azulGame.generateAction(gameState)==null){
@@ -211,8 +204,6 @@ public class Game extends Application {
                 if (move.length() == 3 && azulGame.isMoveValid(gameState, move)) {
                     String currentTurn = azulGame.getTurn();
                     gameState = azulGame.applyMove(gameState, move);
-                    System.out.println("A apply move " + gameState[0]);
-                    System.out.println("A apply move " + gameState[1]);
                     if (!azulGame.isStateValid(gameState)) {
                         alert.showAndWait();
                     }
@@ -237,8 +228,6 @@ public class Game extends Application {
                         showCompletion(mul * 700 + 30, 200);
                     }
 
-                    System.out.println("A next round " + gameState[0]);
-                    System.out.println("A next round " + gameState[1]);
                     if (!azulGame.isStateValid(gameState)) {
                         alert.showAndWait();
                     }
@@ -254,14 +243,10 @@ public class Game extends Application {
                         currentTurn = azulGame.getTurn();
 
                         while(azulGame.getTurn().equals(currentTurn)) {
-                            System.out.println("kale");
-                            System.out.println(currentTurn);
                             String action = azulGame.generateAction(gameState);
                             if (action != null) {
-                                System.out.println(action);
                                 gameState = azulGame.applyMove(gameState, action);
-                                System.out.println("B apply move " + gameState[0]);
-                                System.out.println("B apply move " + gameState[1]);
+
                                 if (!azulGame.isStateValid(gameState)) {
                                     alert.showAndWait();
                                 }
@@ -288,8 +273,6 @@ public class Game extends Application {
                                 break;
                             }
 
-                            System.out.println("B next round " + gameState[0]);
-                            System.out.println("B next round " + gameState[1]);
                             if (!azulGame.isStateValid(gameState)) {
                                 alert.showAndWait();
                             }
@@ -338,13 +321,10 @@ public class Game extends Application {
                         }
                     }
                 }
-                System.out.println(move);
                 String[] gameState = azulGame.rebuildStateString();
                 if (move.length() == 4 && azulGame.isMoveValid(gameState, move)) {
                     String currentTurn = azulGame.getTurn();
                     gameState = azulGame.applyMove(gameState, move);
-                    System.out.println("A apply move " + gameState[0]);
-                    System.out.println("A apply move " + gameState[1]);
                     if (!azulGame.isStateValid(gameState)) {
                         alert.showAndWait();
                     }
@@ -370,9 +350,6 @@ public class Game extends Application {
                         showCompletion(mul * 700 + 30, 200);
 
                     }
-
-                    System.out.println("A next round " + gameState[0]);
-                    System.out.println("A next round " + gameState[1]);
                     if (!azulGame.isStateValid(gameState)) {
                         alert.showAndWait();
                     }
@@ -387,14 +364,11 @@ public class Game extends Application {
                         // until change turn
                         currentTurn = azulGame.getTurn();
                         while (azulGame.getTurn().equals(currentTurn)) {
-                            System.out.println("kale");
-                            System.out.println(currentTurn);
                             String action = azulGame.generateAction(gameState);
                             if (action != null) {
-                                System.out.println(action);
+
                                 gameState = azulGame.applyMove(gameState, action);
-                                System.out.println("B apply move " + gameState[0]);
-                                System.out.println("B apply move " + gameState[1]);
+
                                 if (!azulGame.isStateValid(gameState)) {
                                     alert.showAndWait();
                                 }
@@ -420,8 +394,7 @@ public class Game extends Application {
                                 showCompletion(mul * 700 + 30, 200);
                                 break;
                             }
-                            System.out.println("B next round " + gameState[0]);
-                            System.out.println("B next round " + gameState[1]);
+
                             if (!azulGame.isStateValid(gameState)) {
                                 alert.showAndWait();
                             }
@@ -982,8 +955,6 @@ public class Game extends Application {
             hideCompletion();
             azulGame = new comp1110.ass2.Game();
             azulGame.refillFactories(azulGame.rebuildStateString());
-            System.out.println(azulGame.rebuildStateString()[0]);
-            System.out.println(azulGame.rebuildStateString()[1]);
             makeFCTiles();
             makeOtherTiles();
             makeScore();
