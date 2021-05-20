@@ -57,6 +57,7 @@ public class Game {
     public void setTurn(String turn) {
         this.turn = turn;
     }
+
     /**
      * Turn state string to common objects
      *
@@ -316,7 +317,8 @@ public class Game {
             for (Factory factory : common.getFactories()) {
                 count += factory.countTile(colorCode);
             }
-            count += this.common.getBag().countTile(colorCode) + this.common.getCentre().countTile(colorCode) +
+            count += this.common.getBag().countTile(colorCode) + this.common.getCentre()
+                    .countTile(colorCode) +
                     this.common.getDiscard().countTile(colorCode);
             for (Player player : players) {
                 Board board = player.getBoard();
@@ -357,23 +359,22 @@ public class Game {
 
     public boolean isMoveValid(String[] gameState, String move) {
         //task 10
-        Game game = new Game();
-        game.reconstructCommonFrom(gameState[0]);
-        game.reconstructBoardsFrom(gameState[1]);
+        reconstructCommonFrom(gameState[0]);
+        reconstructBoardsFrom(gameState[1]);
         //it is not your turn.
-        if (!String.valueOf(move.charAt(0)).equals(game.turn)) {
+        if (!String.valueOf(move.charAt(0)).equals(turn)) {
             return false;
         }
         //Drafting move
         if (move.length() == 4) {
             //1. The specified factory/centre contains at least one tile of the specified colour.
             if (move.charAt(1) == 'C') {
-                if (!game.getCommon().getCentre().hasTile(move.charAt(2))) {
+                if (!common.getCentre().hasTile(move.charAt(2))) {
                     return false;
                 }
             } else {
                 //1. The specified factory/centre contains at least one tile of the specified colour.
-                if (!game.getCommon().getFactories()[move.charAt(1) - 48].hasTile(move.charAt(2))) {
+                if (!common.getFactories()[move.charAt(1) - 48].hasTile(move.charAt(2))) {
                     return false;
                 }
 
@@ -381,18 +382,18 @@ public class Game {
             if (move.charAt(3) != 'F') {
                 //2. The storage row the tile is being placed in does not already contain a different colour.
                 int row = Integer.parseInt(String.valueOf(move.charAt(3)));
-                if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
+                if (players[move.charAt(0) - 'A'].getBoard().getStorage()
                         .getTriangle().get(row).size() != 0) {
-                    if (!game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
+                    if (!players[move.charAt(0) - 'A'].getBoard().getStorage()
                             .rowHasSameColor(row, move.charAt(2))) {
                         return false;
                     }
                 }
                 //3. The corresponding mosaic row does not already contain a tile of that colour.
                 for (int i = 0; i < 5; i++) {
-                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                    if (players[move.charAt(0) - 'A'].getBoard().getMosaic()
                             .getSquare()[row][i] != null) {
-                        if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                        if (players[move.charAt(0) - 'A'].getBoard().getMosaic()
                                 .getSquare()[row][i].getColorCode() == move.charAt(2)) {
                             return false;
                         }
@@ -411,22 +412,22 @@ public class Game {
             if (move.charAt(2) != 'F') {
                 int col = Integer.parseInt(String.valueOf(move.charAt(2)));
 
-                if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
+                if (players[move.charAt(0) - 'A'].getBoard().getStorage()
                         .getTriangle().get(row).size() != 0) {
-                    char code = game.getPlayers()[move.charAt(0) - 'A'].getBoard()
+                    char code = getPlayers()[move.charAt(0) - 'A'].getBoard()
                             .getStorage().getTriangle().get(row).getFirst().getColorCode();
                     // The row of the Storage is full.
-                    if (!game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
+                    if (!players[move.charAt(0) - 'A'].getBoard().getStorage()
                             .hasCompleteRow()) {
                         return false;
                     }
                     //2. The specified column does not already contain a tile of the same colour.
-                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                    if (players[move.charAt(0) - 'A'].getBoard().getMosaic()
                             .columnHasSameColor(code, col)) {
                         return false;
                     }
                     //3. The specified location in the mosaic is empty.
-                    return !game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                    return !players[move.charAt(0) - 'A'].getBoard().getMosaic()
                             .hasTile(row, col);
 
 
@@ -438,31 +439,31 @@ public class Game {
             else {
                 for (int i = 0; i < 5; i++) {
                     // The row of Storage has Tiles.
-                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getStorage()
+                    if (players[move.charAt(0) - 'A'].getBoard().getStorage()
                             .getTriangle().get(row).size() == 0) {
                         return false;
                     }
-                    char code = game.getPlayers()[move.charAt(0) - 'A'].getBoard()
+                    char code = players[move.charAt(0) - 'A'].getBoard()
                             .getStorage().getTriangle().get(row).getFirst().getColorCode();
                     // The Mosaic has the same color.
-                    if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                    if (players[move.charAt(0) - 'A'].getBoard().getMosaic()
                             .getSquare()[row][i] != null) {
-                        if (game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                        if (players[move.charAt(0) - 'A'].getBoard().getMosaic()
                                 .getSquare()[row][i].getColorCode() == code) {
                             return true;
                         }
                     }
                     // If the position has no tile determine whether column of it has tile with the same color.
-                    if (!game.getPlayers()[move.charAt(0) - 'A'].getBoard().getMosaic()
+                    if (!players[move.charAt(0) - 'A'].getBoard().getMosaic()
                             .hasTile(row, i)) {
                         int time = 0;
                         int num = 0;
                         for (int j = 0; j < 5; j++) {
 
-                            if (game.getPlayers()[move.charAt(0) - 'A'].getBoard()
+                            if (players[move.charAt(0) - 'A'].getBoard()
                                     .getMosaic().getSquare()[j][i] != null) {
                                 num++;
-                                if (game.getPlayers()[move.charAt(0) - 'A'].getBoard()
+                                if (players[move.charAt(0) - 'A'].getBoard()
                                         .getMosaic().getSquare()[j][i].getColorCode() != code) {
                                     time++;
                                 }
@@ -669,5 +670,13 @@ public class Game {
             }
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+         Game game = new Game();
+         game.reconstructCommonFrom("BF0bcbe1cedb2dddc3abab4bedaCfB0504050501D0706070612");
+         game.reconstructBoardsFrom("A22Md00c01c10d11e12e20b21e31b40S3c24a2FB0Mc00a01b02d10a12a20d21e40S3b1F");
+         System.out.println(game.generateAction(game.rebuildStateString()));
+
     }
 }
