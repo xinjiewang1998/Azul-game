@@ -39,8 +39,8 @@ import javafx.stage.Stage;
 public class Game extends Application {
 
     /* comp1110.ass2.board layout */
-    private static final int BOARD_WIDTH = 1200;
-    private static final int BOARD_HEIGHT = 700;
+    private static final int BOARD_WIDTH = 1280;
+    private static final int BOARD_HEIGHT = 768;
 
     private static final int SQUARE_SIZE = 40;
 
@@ -69,7 +69,7 @@ public class Game extends Application {
     private final Rectangle[][] bag = new Rectangle[10][10];
     private final Rectangle[][] discard = new Rectangle[10][10];
 
-    private final CheckBox[] checkboxes = new CheckBox[2];
+    private CheckBox checkbox;
 
     /* message on completion */
     private final Text completionText = new Text("WIN!");
@@ -198,7 +198,7 @@ public class Game extends Application {
                 }
                 String[] gameState = azulGame.rebuildStateString();
 
-                if (azulGame.generateAction(gameState)==null){
+                if (azulGame.generateAction(gameState) == null) {
                     azulGame.setTurn("B");
                 }
                 if (move.length() == 3 && azulGame.isMoveValid(gameState, move)) {
@@ -211,8 +211,9 @@ public class Game extends Application {
                     gameState = azulGame.nextRound(gameState);
                     boolean hasComplete = checkCompletion();
 
-                    if(hasComplete && azulGame.generateAction(gameState)==null){
-                        Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic().calculateBonusScore();
+                    if (hasComplete && azulGame.generateAction(gameState) == null) {
+                        Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic()
+                                .calculateBonusScore();
                         azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
 
                         int maxScore = 0;
@@ -237,12 +238,12 @@ public class Game extends Application {
                     makeScore();
 
                     // AI
-                    int index  = (azulGame.getTurn().equals("A")) ? 0 : 1;
-                    if(checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn)) {
+
+                    if (checkbox.isSelected() && !azulGame.getTurn().equals(currentTurn)) {
                         // until change turn
                         currentTurn = azulGame.getTurn();
 
-                        while(azulGame.getTurn().equals(currentTurn)) {
+                        while (azulGame.getTurn().equals(currentTurn)) {
                             String action = azulGame.generateAction(gameState);
                             if (action != null) {
                                 gameState = azulGame.applyMove(gameState, action);
@@ -360,7 +361,7 @@ public class Game extends Application {
 
                     // AI
                     int index = (azulGame.getTurn().equals("A")) ? 0 : 1;
-                    if (checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn)) {
+                    if (checkbox.isSelected() && !azulGame.getTurn().equals(currentTurn)) {
                         // until change turn
                         currentTurn = azulGame.getTurn();
                         while (azulGame.getTurn().equals(currentTurn)) {
@@ -688,18 +689,12 @@ public class Game extends Application {
      */
     private void makeCommon() {
         //////////////////////////// AI CHECKBOX ///////////////////////////////////
-        CheckBox playerACheckBox = new CheckBox();
         CheckBox playerBCheckBox = new CheckBox();
-        playerACheckBox.setLayoutX(1100);
-        playerACheckBox.setLayoutY(30);
-        playerACheckBox.setText("AI for A");
         playerBCheckBox.setLayoutX(1100);
         playerBCheckBox.setLayoutY(60);
         playerBCheckBox.setText("AI for B");
-        checkboxes[0] = playerACheckBox;
-        checkboxes[1] = playerBCheckBox;
+        checkbox = playerBCheckBox;
 
-        common.getChildren().add(playerACheckBox);
         common.getChildren().add(playerBCheckBox);
 
         //////////////////////////// FACTORIES /////////////////////////////////////
@@ -863,7 +858,7 @@ public class Game extends Application {
         playerBScoreText.setFont(Font.font(32));
         playerBScoreText.setFill(Color.BLACK);
 
-        Text turnText = new Text(500, 30, turn);
+        Text turnText = new Text(585, 70, turn);
         turnText.setFont(Font.font(32));
         turnText.setFill(Color.BLACK);
 
@@ -871,37 +866,6 @@ public class Game extends Application {
         score.getChildren().add(playerBScoreText);
         score.getChildren().add(turnText);
     }
-
-    /**
-     * Create a basic text field for input and a refresh button.
-     */
-    private void makeControls() {
-        Label playerLabel = new Label("Player State:");
-        playerTextField = new TextField();
-        playerTextField.setPrefWidth(100);
-
-        Label boardLabel = new Label("Board State:");
-        boardTextField = new TextField();
-        boardTextField.setPrefWidth(100);
-
-        Button button = new Button("Refresh");
-//        button.setOnAction(event -> displayState(new String[]{playerTextField.getText(),
-//                boardTextField.getText()}));
-        Label moveLabel = new Label("Move:");
-        moveTextField = new TextField();
-        moveTextField.setPrefWidth(100);
-        Button moveButton = new Button("Apply Move");
-//        moveButton.setOnAction(actionEvent -> moveState(moveTextField.getText()));
-
-        HBox hb = new HBox();
-        hb.getChildren().addAll(playerLabel, playerTextField, boardLabel,
-                boardTextField, button, moveTextField, moveButton);
-        hb.setSpacing(10);
-        hb.setLayoutX(50);
-        hb.setLayoutY(BOARD_HEIGHT - 50);
-        controls.getChildren().add(hb);
-    }
-
 
     /**
      * Create the message to be displayed when the player completes the puzzle.
@@ -983,7 +947,6 @@ public class Game extends Application {
         makeBoard(leftBoard, 0, 'A');
         makeBoard(rightBoard, 700, 'B');
         makeCommon();
-        makeControls();
         makeCompletion();
 
         newGame();
