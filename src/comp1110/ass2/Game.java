@@ -214,7 +214,16 @@ public class Game {
         return length == fullLength;
     }
 
-
+    /**
+     * Given the gameState, draw a *random* tile from the bag.
+     * If the bag is empty, refill the the bag with the discard pile and then draw a tile.
+     * If the discard pile is also empty, return 'Z'.
+     *
+     * @param gameState the current game state
+     * @return the tile drawn from the bag, or 'Z' if the bag and discard pile are empty.
+     * @Author: Xinjie Wang
+     * TASK 5
+     */
     public char drawTileFromBag(String[] gameState) {
         //task 5
         this.reconstructCommonFrom(gameState[0]);
@@ -226,7 +235,16 @@ public class Game {
             return tile.getColorCode();
         }
     }
-
+    /**
+     * Given a state, refill the factories with tiles.
+     * If the factories are not all empty, return the given state.
+     *
+     * @param gameState the state of the game.
+     * @return the updated state after the factories have been filled or
+     * the given state if not all factories are empty.
+     * @Author: Xinjie Wang
+     * TASK 6
+     */
     public String[] refillFactories(String[] gameState) {
         //task 6
         this.reconstructCommonFrom(gameState[0]);
@@ -249,7 +267,17 @@ public class Game {
 
         return gameState;
     }
-
+    /**
+     * Given a gameState for a completed game,
+     * return bonus points for rows, columns, and sets.
+     *
+     * @param gameState a completed game state
+     * @param player    the player for whom the score is to be returned
+     * @return the number of bonus points awarded to this player for rows,
+     * columns, and sets
+     * @Author: Xinjie Wang
+     * TASK 7
+     */
     public int getBonusPoints(String[] gameState, char player) {
         //task 7
         this.reconstructCommonFrom(gameState[0]);
@@ -370,7 +398,32 @@ public class Game {
 
         return true;
     }
-
+    /**
+     * Given a valid gameState and a move, determine whether the move is valid.
+     * A Drafting move is a 4-character String.
+     * A Drafting move is valid if it satisfies the following conditions:
+     * <p>
+     * 1. The specified factory/centre contains at least one tile of the specified colour.
+     * 2. The storage row the tile is being placed in does not already contain a different colour.
+     * 3. The corresponding mosaic row does not already contain a tile of that colour.
+     * Note that the tile may be placed on the floor.
+     * </p>
+     * <p>
+     * A Tiling move is a 3-character String.
+     * A Tiling move is valid if it satisfies the following conditions:
+     * 1. The specified row in the Storage area is full.
+     * 2. The specified column does not already contain a tile of the same colour.
+     * 3. The specified location in the mosaic is empty.
+     * 4. If the specified column is 'F', no valid move exists from the
+     * specified row into the mosaic.
+     * </p>
+     *
+     * @param gameState the game state.
+     * @param move      A string representing a move.
+     * @return true if the move is valid, false if it is invalid.
+     * @Author: Xinjie Wang
+     * TASK 10
+     */
     public boolean isMoveValid(String[] gameState, String move) {
         //task 10
         reconstructCommonFrom(gameState[0]);
@@ -421,6 +474,14 @@ public class Game {
         }
         //Tiling move 3 chars
         if (move.length() == 3) {
+            for (Factory factory : common.getFactories()) {
+                if (!factory.getTiles().isEmpty()) {
+                    return false;
+                }
+            }
+            if (!common.getCentre().getTiles().isEmpty()) {
+                return false;
+            }
             //1. The specified row in the Storage area is full.
             int row = Integer.parseInt(String.valueOf(move.charAt(1)));
             if (move.charAt(2) != 'F') {
@@ -564,7 +625,13 @@ public class Game {
         gameState[1] = stringBuilder.toString();
         return gameState;
     }
-
+    /**
+     * Given a valid game state, return a valid move.
+     *
+     * @param gameState the game state
+     * @return a move for the current game state.
+     * TASK 13 @Author: Xinjie Wang
+     */
     public String generateAction(String[] gameState) {
         // task 13
         Game game = new Game();

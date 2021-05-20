@@ -250,6 +250,9 @@ public class Game extends Application {
                 }
                 System.out.println(move);
                 String[] gameState = azulGame.rebuildStateString();
+                if (azulGame.generateAction(gameState)==null){
+                    azulGame.setTurn("B");
+                }
                 if (move.length() == 3 && azulGame.isMoveValid(gameState, move) && azulGame.areFactoriesAndCentreEmpty()) {
                     String currentTurn = azulGame.getTurn();
                     gameState = azulGame.applyMove(gameState, move);
@@ -261,6 +264,7 @@ public class Game extends Application {
 
                     gameState = azulGame.nextRound(gameState);
                     boolean hasComplete = checkCompletion();
+
                     if(hasComplete && azulGame.generateAction(gameState)==null){
                         Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic().calculateBonusScore();
                         azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
@@ -289,10 +293,12 @@ public class Game extends Application {
                     makeScore();
 
                     // AI
+
                     int index  = (azulGame.getTurn().equals("A")) ? 0 : 1;
                     if(checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn)) {
                         // until change turn
                         currentTurn = azulGame.getTurn();
+
                         while(azulGame.getTurn().equals(currentTurn)) {
                             System.out.println("kale");
                             System.out.println(currentTurn);
