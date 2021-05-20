@@ -128,6 +128,7 @@ public class Azul {
      *
      * @param gameState the current game state
      * @return the tile drawn from the bag, or 'Z' if the bag and discard pile are empty.
+     * @Author: Xinjie Wang
      * TASK 5
      */
     public static char drawTileFromBag(String[] gameState) {
@@ -143,6 +144,7 @@ public class Azul {
      * @param gameState the state of the game.
      * @return the updated state after the factories have been filled or
      * the given state if not all factories are empty.
+     * @Author: Xinjie Wang
      * TASK 6
      */
     public static String[] refillFactories(String[] gameState) {
@@ -158,6 +160,7 @@ public class Azul {
      * @param player    the player for whom the score is to be returned
      * @return the number of bonus points awarded to this player for rows,
      * columns, and sets
+     * @Author: Xinjie Wang
      * TASK 7
      */
     public static int getBonusPoints(String[] gameState, char player) {
@@ -247,6 +250,7 @@ public class Azul {
      * @param gameState the game state.
      * @param move      A string representing a move.
      * @return true if the move is valid, false if it is invalid.
+     * @Author: Xinjie Wang
      * TASK 10
      */
     public static boolean isMoveValid(String[] gameState, String move) {
@@ -283,7 +287,7 @@ public class Azul {
      *
      * @param gameState the game state
      * @return a move for the current game state.
-     * TASK 13
+     * TASK 13 @Author: Xinjie Wang
      */
     public static String generateAction(String[] gameState) {
         Game game = new Game();

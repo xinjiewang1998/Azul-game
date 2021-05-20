@@ -1,6 +1,7 @@
 package comp1110.ass2.common;
 
 import comp1110.ass2.Tile;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
@@ -43,6 +44,7 @@ public class Factory {
      *
      * @param bag     the bag to draw
      * @param discard the discard if bag is empty
+     * @Author: Xinjie Wang
      */
     public void refillTiles(Bag bag, Discard discard) {
         tiles.addAll(bag.drawTiles(discard));
@@ -89,6 +91,7 @@ public class Factory {
      *
      * @param code the color code
      * @return true if tiles contains a specific color tile
+     * @Author: Xinjie Wang
      */
     public boolean hasTile(char code) {
         for (int i = 0; i < this.getTiles().size(); i++) {

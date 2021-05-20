@@ -53,9 +53,9 @@ public class Storage {
     }
 
     /**
-     * Check if has complete row.
-     *
      * @return if has complete row
+     * @Author: Xinjie Wang
+     * Check if has complete row.
      */
     public boolean hasCompleteRow() {
         for (int i = 0; i < triangle.size(); i++) {
@@ -114,6 +114,7 @@ public class Storage {
     }
 
     /**
+     * @Author: Xinjie Wang
      * Check if the mosaic contains a tile with same color on specific row
      *
      * @param row  the row number
@@ -125,6 +126,7 @@ public class Storage {
     }
 
     /**
+     * @Author: Xinjie Wang
      * Find the rows can contain the tile with specific color code
      *
      * @param mosaic the mosaic to check
