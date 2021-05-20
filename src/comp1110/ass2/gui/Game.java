@@ -237,38 +237,28 @@ public class Game extends Application {
                     }
                 }
                 System.out.println(move);
-                String[] gameState = azulGame.rebuildStateString();
-                if (move.length() == 3 && azulGame.isMoveValid(gameState, move)) {
-                    String currentTurn = azulGame.getTurn();
-                    gameState = azulGame.applyMove(gameState, move);
-                    System.out.println("A apply move " + gameState[0]);
-                    System.out.println("A apply move " + gameState[1]);
-
-                    gameState = azulGame.nextRound(gameState);
-                    System.out.println("A next round " + gameState[0]);
-                    System.out.println("A next round " + gameState[1]);
+                if (move.length() == 3) {
+                    azulGame.applyMove(azulGame.rebuildStateString(), move);
+                    System.out.println(azulGame.rebuildStateString()[0]);
+                    System.out.println(azulGame.rebuildStateString()[1]);
+                    azulGame.nextRound(azulGame.rebuildStateString());
                     makeFCTiles();
                     makeOtherTiles();
                     makeScore();
 
-                    // AI
                     int index  = (azulGame.getTurn().equals("A")) ? 0 : 1;
-                    if(checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn) ) {
-                        // until change turn
-                        currentTurn = azulGame.getTurn();
+                    if(checkboxes[index].isSelected()) {
+                        String currentTurn = azulGame.getTurn();
                         while(azulGame.getTurn().equals(currentTurn)) {
-                            System.out.println("kale");
-                            System.out.println(currentTurn);
-                            String action = azulGame.generateAction(gameState);
-                            if(action != null) {
-                                System.out.println(action);
-                                gameState = azulGame.applyMove(gameState, action);
-                                System.out.println("B apply move " + gameState[0]);
-                                System.out.println("B apply move " + gameState[1]);
+                            String action = azulGame.generateAction(azulGame.rebuildStateString());
+                            if(action == null) {
+                                break;
                             }
-                            gameState = azulGame.nextRound(gameState);
-                            System.out.println("B next round " + gameState[0]);
-                            System.out.println("B next round " + gameState[1]);
+//                        Thread.sleep(2000);
+
+                            azulGame.applyMove(azulGame.rebuildStateString(), action);
+
+                            azulGame.nextRound(azulGame.rebuildStateString());
                             makeFCTiles();
                             makeOtherTiles();
                             makeScore();
@@ -314,38 +304,28 @@ public class Game extends Application {
                     }
                 }
                 System.out.println(move);
-                String[] gameState = azulGame.rebuildStateString();
-                if (move.length() == 4 && azulGame.isMoveValid(gameState, move)) {
-                    String currentTurn = azulGame.getTurn();
-                    gameState = azulGame.applyMove(gameState, move);
-                    System.out.println("A apply move " + gameState[0]);
-                    System.out.println("A apply move " + gameState[1]);
-
-                    gameState = azulGame.nextRound(gameState);
-                    System.out.println("A next round " + gameState[0]);
-                    System.out.println("A next round " + gameState[1]);
+                if (move.length() == 4) {
+                    azulGame.applyMove(azulGame.rebuildStateString(), move);
+                    System.out.println(azulGame.rebuildStateString()[0]);
+                    System.out.println(azulGame.rebuildStateString()[1]);
+                    azulGame.nextRound(azulGame.rebuildStateString());
                     makeFCTiles();
                     makeOtherTiles();
                     makeScore();
 
-                    // AI
                     int index  = (azulGame.getTurn().equals("A")) ? 0 : 1;
-                    if(checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn) ) {
-                        // until change turn
-                        currentTurn = azulGame.getTurn();
+                    if(checkboxes[index].isSelected()) {
+                        String currentTurn = azulGame.getTurn();
                         while(azulGame.getTurn().equals(currentTurn)) {
-                            System.out.println("kale");
-                            System.out.println(currentTurn);
-                            String action = azulGame.generateAction(gameState);
-                            if(action != null) {
-                                System.out.println(action);
-                                gameState = azulGame.applyMove(gameState, action);
-                                System.out.println("B apply move " + gameState[0]);
-                                System.out.println("B apply move " + gameState[1]);
+                            String action = azulGame.generateAction(azulGame.rebuildStateString());
+                            if(action == null) {
+                                break;
                             }
-                            gameState = azulGame.nextRound(gameState);
-                            System.out.println("B next round " + gameState[0]);
-                            System.out.println("B next round " + gameState[1]);
+//                        Thread.sleep(2000);
+
+                            azulGame.applyMove(azulGame.rebuildStateString(), action);
+
+                            azulGame.nextRound(azulGame.rebuildStateString());
                             makeFCTiles();
                             makeOtherTiles();
                             makeScore();
@@ -356,11 +336,6 @@ public class Game extends Application {
                     snapToHome();
                 }
             }
-
-
-
-            // BF0bcbe1cedb2dddc3abab4bedaCfB0504050501D0706070612
-            // A22Md00c01c10d11e12e20b21e31b40S3c24a2FB0Mc00a01b02d10a12a20d21e40S3b1F
 
 //            if (onBoard() && (!alreadyOccupied())) {
 //                if ((getLayoutX() >= (PLAY_AREA_X - (SQUARE_SIZE / 2))) && (getLayoutX() < (PLAY_AREA_X + (SQUARE_SIZE / 2)))) {

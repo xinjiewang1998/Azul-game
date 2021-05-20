@@ -674,9 +674,12 @@ public class Game {
 
     public static void main(String[] args) {
          Game game = new Game();
-         game.reconstructCommonFrom("BF0bcbe1cedb2dddc3abab4bedaCfB0504050501D0706070612");
-         game.reconstructBoardsFrom("A22Md00c01c10d11e12e20b21e31b40S3c24a2FB0Mc00a01b02d10a12a20d21e40S3b1F");
-         System.out.println(game.generateAction(game.rebuildStateString()));
+         String[] gameState = new String[2];
+         gameState[0] = "BF0bcbe1cedb2dddc3abab4bedaCfB0504050501D0706070612";
+         gameState[1]  ="A22Md00c01c10d11e12e20b21e31b40S3c24a2FB0Mc00a01b02d10a12a20d21e40S3b1F";
+//         game.reconstructCommonFrom(BF0bcbe1cedb2dddc3abab4bedaCfB0504050501D0706070612);
+//         game.reconstructBoardsFrom("A22Md00c01c10d11e12e20b21e31b40S3c24a2FB0Mc00a01b02d10a12a20d21e40S3b1F");
+         System.out.println(game.generateAction(gameState));
 
     }
 }
