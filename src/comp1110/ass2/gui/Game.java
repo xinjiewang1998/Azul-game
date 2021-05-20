@@ -99,6 +99,11 @@ public class Game extends Application {
     private final Rectangle[][] discard = new Rectangle[10][10];
 
     private final CheckBox[] checkboxes = new CheckBox[2];
+
+    /* message on completion */
+    private final Text completionText = new Text("WIN!");
+
+
     /* Define a drop shadow effect that we will appy to tiles */
     private static DropShadow dropShadow;
 
@@ -245,6 +250,7 @@ public class Game extends Application {
                     System.out.println("A apply move " + gameState[1]);
 
                     gameState = azulGame.nextRound(gameState);
+                    boolean hasComplete = checkCompletion();
                     System.out.println("A next round " + gameState[0]);
                     System.out.println("A next round " + gameState[1]);
                     makeFCTiles();
@@ -253,10 +259,11 @@ public class Game extends Application {
 
                     // AI
                     int index  = (azulGame.getTurn().equals("A")) ? 0 : 1;
-                    if(checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn) ) {
+                    if(checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn)
+                            && !hasComplete) {
                         // until change turn
                         currentTurn = azulGame.getTurn();
-                        while(azulGame.getTurn().equals(currentTurn)) {
+                        while(azulGame.getTurn().equals(currentTurn) && !hasComplete) {
                             System.out.println("kale");
                             System.out.println(currentTurn);
                             String action = azulGame.generateAction(gameState);
@@ -267,6 +274,7 @@ public class Game extends Application {
                                 System.out.println("B apply move " + gameState[1]);
                             }
                             gameState = azulGame.nextRound(gameState);
+                            hasComplete = checkCompletion();
                             System.out.println("B next round " + gameState[0]);
                             System.out.println("B next round " + gameState[1]);
                             makeFCTiles();
@@ -322,6 +330,7 @@ public class Game extends Application {
                     System.out.println("A apply move " + gameState[1]);
 
                     gameState = azulGame.nextRound(gameState);
+                    boolean hasComplete = checkCompletion();
                     System.out.println("A next round " + gameState[0]);
                     System.out.println("A next round " + gameState[1]);
                     makeFCTiles();
@@ -330,10 +339,10 @@ public class Game extends Application {
 
                     // AI
                     int index  = (azulGame.getTurn().equals("A")) ? 0 : 1;
-                    if(checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn) ) {
+                    if(checkboxes[index].isSelected() && !azulGame.getTurn().equals(currentTurn) && !hasComplete) {
                         // until change turn
                         currentTurn = azulGame.getTurn();
-                        while(azulGame.getTurn().equals(currentTurn)) {
+                        while(azulGame.getTurn().equals(currentTurn) && !hasComplete) {
                             System.out.println("kale");
                             System.out.println(currentTurn);
                             String action = azulGame.generateAction(gameState);
@@ -344,6 +353,7 @@ public class Game extends Application {
                                 System.out.println("B apply move " + gameState[1]);
                             }
                             gameState = azulGame.nextRound(gameState);
+                            hasComplete = checkCompletion();
                             System.out.println("B next round " + gameState[0]);
                             System.out.println("B next round " + gameState[1]);
                             makeFCTiles();
@@ -361,7 +371,8 @@ public class Game extends Application {
 
             // BF0bcbe1cedb2dddc3abab4bedaCfB0504050501D0706070612
             // A22Md00c01c10d11e12e20b21e31b40S3c24a2FB0Mc00a01b02d10a12a20d21e40S3b1F
-
+            // B next round BFCfB0000000000D1112141413
+            // B next round A164159Mc00d01b02e03a04a10c11d12b13e14d20c23b30e31c32a42S3a24b2FB369270Md00e01a02b03a10c11d12e13b14e20b21c22d31a41S2a14e1F
 //            if (onBoard() && (!alreadyOccupied())) {
 //                if ((getLayoutX() >= (PLAY_AREA_X - (SQUARE_SIZE / 2))) && (getLayoutX() < (PLAY_AREA_X + (SQUARE_SIZE / 2)))) {
 //                    setLayoutX(PLAY_AREA_X);
@@ -1120,11 +1131,57 @@ public class Game extends Application {
     }
 
     /**
+     * Create the message to be displayed when the player completes the puzzle.
+     */
+    private void makeCompletion() {
+        completionText.setFill(Color.BLACK);
+        completionText.setEffect(dropShadow);
+        completionText.setCache(true);
+        completionText.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 80));
+        completionText.setTextAlignment(TextAlignment.CENTER);
+        root.getChildren().add(completionText);
+    }
+
+    /**
+     * Check game completion and update status
+     */
+    private boolean checkCompletion() {
+        for (Player player : azulGame.getPlayers()) {
+            if (player.getBoard().getMosaic().hasCompleteRow()) {
+                int mul = player.getId() - 'A';
+                showCompletion(mul * 700 + 30, 200);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Show the completion message
+     */
+    private void showCompletion(int x, int y) {
+        completionText.setLayoutX(x);
+        completionText.setLayoutY(y);
+        completionText.toFront();
+        completionText.setOpacity(1);
+    }
+
+
+    /**
+     * Hide the completion message
+     */
+    private void hideCompletion() {
+        completionText.toBack();
+        completionText.setOpacity(0);
+    }
+
+
+    /**
      * Start a new game, resetting everything as necessary
      */
     private void newGame() {
         try {
-//            hideCompletion();
+            hideCompletion();
 //            dinosaursGame = new Dinosaurs((int) difficulty.getValue()-1);
             azulGame = new comp1110.ass2.Game();
 //            String [] resSet = {""};
@@ -1166,7 +1223,7 @@ public class Game extends Application {
         makeBoard(rightBoard, 700, 'B');
         makeCommon();
         makeControls();
-//        makeCompletion();
+        makeCompletion();
 
         newGame();
 
