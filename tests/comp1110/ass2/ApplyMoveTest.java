@@ -17,7 +17,7 @@ public class ApplyMoveTest {
 
     @Test
     public void testFloorFull() {
-        String[] gameState = {"AF4bbccCbbbcdeeeeeeefB1615171913D0000000000", "A0MS2a2FB0MS2a2F", "ACeF"};
+        String[] gameState = {"AF4bbccCbbbcdeeeeeeefB1615171913D0000000000", "A0MS2a2FB0MS2a2F"};
         String move = "ACeF";
         String[] next = {"BF4bbccCbbbcdB1615171913D0000000001", "A0MS2a2FeeeeeefB0MS2a2F"};
         String[] out = Azul.applyMove(gameState, move);
