@@ -3,6 +3,7 @@ package comp1110.ass2.gui;
 import comp1110.ass2.Azul;
 import comp1110.ass2.Player;
 import comp1110.ass2.Tile;
+import comp1110.ass2.board.Score;
 import comp1110.ass2.board.Storage;
 import comp1110.ass2.common.Centre;
 import comp1110.ass2.common.Factory;
@@ -248,7 +249,6 @@ public class Game extends Application {
                     gameState = azulGame.applyMove(gameState, move);
                     System.out.println("A apply move " + gameState[0]);
                     System.out.println("A apply move " + gameState[1]);
-
                     gameState = azulGame.nextRound(gameState);
                     boolean hasComplete = checkCompletion();
                     System.out.println("A next round " + gameState[0]);
@@ -331,6 +331,10 @@ public class Game extends Application {
 
                     gameState = azulGame.nextRound(gameState);
                     boolean hasComplete = checkCompletion();
+                    if(hasComplete&&azulGame.generateAction(gameState)==null){
+                        Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic().calculateBonusScore();
+                        azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
+                    }
                     System.out.println("A next round " + gameState[0]);
                     System.out.println("A next round " + gameState[1]);
                     makeFCTiles();
@@ -352,8 +356,13 @@ public class Game extends Application {
                                 System.out.println("B apply move " + gameState[0]);
                                 System.out.println("B apply move " + gameState[1]);
                             }
+
                             gameState = azulGame.nextRound(gameState);
                             hasComplete = checkCompletion();
+                            if(hasComplete&&action==null){
+                                Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic().calculateBonusScore();
+                                azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
+                            }
                             System.out.println("B next round " + gameState[0]);
                             System.out.println("B next round " + gameState[1]);
                             makeFCTiles();
