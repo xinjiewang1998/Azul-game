@@ -11,14 +11,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -30,11 +24,8 @@ import javafx.stage.Stage;
 /**
  * Author: Xinjie Wang, Jiaan Guo, Xiang Lu
  * <p>
- * WILL Adapt third party code Dinosaurs to make tiles draggable. Third Party: Dinosaurs
+ * Some code adapt from third party code Dinosaurs to make tiles draggable. Third Party: Dinosaurs
  * (https://gitlab.cecs.anu.edu.au/comp1110/dinosaurs)
- * <p>
- * Some testing data A21Ma00b01c02d03e04a11b12c13e21a22c30b34a44S2b2FaaaaB24Ma00c02d03e04e10a11b12c13d14d20a22b23e32b34b40S4d2Fdd
- * AF1bbbe2abde3cdee4bcceCadfB1915161614D1103100920 A1b4 B3e2 A4cF
  */
 public class Game extends Application {
 
@@ -43,6 +34,17 @@ public class Game extends Application {
     private static final int BOARD_HEIGHT = 768;
 
     private static final int SQUARE_SIZE = 40;
+    private static final int SQUARE_GAP = 5;
+    private static final int SQUARE_WITH_GAP = SQUARE_SIZE + SQUARE_GAP; // 45
+    private static final int LEFT_PADDING = 10;
+    private static final int LEFT_BASE = 0;
+    private static final int LEFT_BASE_WITH_PADDING = LEFT_BASE + LEFT_PADDING;
+    private static final int MIDDLE_BASE = 500;
+    private static final int MIDDLE_BASE_WITH_PADDING = MIDDLE_BASE + LEFT_PADDING;
+    private static final int RIGHT_BASE = 700;
+    private static final int RIGHT_BASE_WITH_PADDING = RIGHT_BASE + LEFT_PADDING;
+
+    private static final int LENGTH = 5;
 
     private final Group root = new Group();
     private final Group gTiles = new Group();
@@ -52,10 +54,6 @@ public class Game extends Application {
     private final Group score = new Group();
 
     private final Group controls = new Group();
-
-    private TextField playerTextField;
-    private TextField boardTextField;
-    private TextField moveTextField;
 
     private comp1110.ass2.Game azulGame;
 
@@ -74,12 +72,6 @@ public class Game extends Application {
     /* message on completion */
     private final Text completionText = new Text("WIN!");
 
-    private final Alert alert = new Alert(AlertType.INFORMATION);
-
-    {
-        alert.titleProperty().set("invalid state");
-    }
-
     /* Define a drop shadow effect that we will appy to tiles */
     private static DropShadow dropShadow;
 
@@ -91,7 +83,7 @@ public class Game extends Application {
     }
 
     /* Graphical representations of tiles */
-    class GTile extends Rectangle {
+    static class GTile extends Rectangle {
 
         char tileID;
         Color color;
@@ -148,11 +140,11 @@ public class Game extends Application {
             homeFrom = from;
 
             /* event handlers */
-            setOnMousePressed(event -> {      // mouse press indicates begin of drag
+            setOnMousePressed(event -> {
                 mouseX = event.getSceneX();
                 mouseY = event.getSceneY();
             });
-            setOnMouseDragged(event -> {      // mouse is being dragged
+            setOnMouseDragged(event -> {
                 toFront();
                 double movementX = event.getSceneX() - mouseX;
                 double movementY = event.getSceneY() - mouseY;
@@ -162,303 +154,154 @@ public class Game extends Application {
                 mouseY = event.getSceneY();
                 event.consume();
             });
-            setOnMouseReleased(event -> {     // drag is complete
-                try {
-                    snapToGrid(event.getSceneX(), event.getSceneY());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            setOnMouseReleased(event -> {
+
+                snapToGrid(event.getSceneX(), event.getSceneY());
+
             });
-
-
         }
 
         /**
          * Snap the tile to the nearest grid position (if it is over the grid)
          */
-        private void snapToGrid(double x, double y) throws InterruptedException {
-
-            String move = azulGame.getTurn();
+        private void snapToGrid(double x, double y) {
+            String move = "" + azulGame.getTurn();
+            // from storage to mosaic
             if (homeFrom < 0) {
-                int row = (homeY - 180) / 45;
+                int row = (homeY - 180) / SQUARE_WITH_GAP;
                 move += row;
-                if (y - homeY >= 0 && y - homeY <= 40) {
-                    for (int col = 0; col < 5; col++) {
+                if (y - homeY >= 0 && y - homeY <= SQUARE_SIZE) {
+                    for (int col = 0; col < LENGTH; col++) {
                         if (azulGame.getTurn().equals("A") &&
-                                x - (10 + 240 + 45 * col) <= 40 && x >= 10 + 240) {
+                                x - (LEFT_BASE_WITH_PADDING + 240 + SQUARE_WITH_GAP * col)
+                                        <= SQUARE_SIZE
+                                && x >= LEFT_BASE_WITH_PADDING + 240) {
                             move += col;
                             break;
                         }
                         if (azulGame.getTurn().equals("B") &&
-                                x - (700 + 10 + 240 + 45 * col) <= 40 && x >= 700 + 10 + 240) {
+                                x - (RIGHT_BASE_WITH_PADDING + 240 + SQUARE_WITH_GAP * col)
+                                        <= SQUARE_SIZE
+                                && x >= RIGHT_BASE_WITH_PADDING + 240) {
                             move += col;
                             break;
                         }
                     }
                 }
-                String[] gameState = azulGame.rebuildStateString();
-
-                if (azulGame.generateAction(gameState) == null) {
-                    azulGame.setTurn("B");
-                }
-                if (move.length() == 3 && azulGame.isMoveValid(gameState, move)) {
-                    String currentTurn = azulGame.getTurn();
-                    gameState = azulGame.applyMove(gameState, move);
-                    if (!azulGame.isStateValid(gameState)) {
-                        alert.showAndWait();
-                    }
-
-                    gameState = azulGame.nextRound(gameState);
-                    boolean hasComplete = checkCompletion();
-
-                    if (hasComplete && azulGame.generateAction(gameState) == null) {
-                        Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic()
-                                .calculateBonusScore();
-                        azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
-
-                        int maxScore = 0;
-                        char maxPlayer = 'A';
-                        for (Player player : azulGame.getPlayers()) {
-                            int score = player.getBoard().getScore().getScore();
-                            if (score > maxScore) {
-                                maxScore = score;
-                                maxPlayer = player.getId();
-                            }
-                        }
-                        int mul = maxPlayer - 'A';
-                        showCompletion(mul * 700 + 30, 200);
-                    }
-
-                    if (!azulGame.isStateValid(gameState)) {
-                        alert.showAndWait();
-                    }
-
-                    makeFCTiles();
-                    makeOtherTiles();
-                    makeScore();
-
-                    // AI
-
-                    if (checkbox.isSelected() && !azulGame.getTurn().equals(currentTurn)) {
-                        // until change turn
-                        currentTurn = azulGame.getTurn();
-
-                        while (azulGame.getTurn().equals(currentTurn)) {
-                            String action = azulGame.generateAction(gameState);
-                            if (action != null) {
-                                gameState = azulGame.applyMove(gameState, action);
-
-                                if (!azulGame.isStateValid(gameState)) {
-                                    alert.showAndWait();
-                                }
-                            }
-                            gameState = azulGame.nextRound(gameState);
-
-                            hasComplete = checkCompletion();
-                            if (hasComplete && action == null) {
-                                Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic()
-                                        .calculateBonusScore();
-                                azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
-
-                                int maxScore = 0;
-                                char maxPlayer = 'A';
-                                for (Player player : azulGame.getPlayers()) {
-                                    int score = player.getBoard().getScore().getScore();
-                                    if (score > maxScore) {
-                                        maxScore = score;
-                                        maxPlayer = player.getId();
-                                    }
-                                }
-                                int mul = maxPlayer - 'A';
-                                showCompletion(mul * 700 + 30, 200);
-                                break;
-                            }
-
-                            if (!azulGame.isStateValid(gameState)) {
-                                alert.showAndWait();
-                            }
-
-                            makeFCTiles();
-                            makeOtherTiles();
-                            makeScore();
-                        }
-                    }
-
-                } else {
-                    snapToHome();
-                }
-
+                decodeAndMove(move, 3);
+                // from factory / centre to storage, 100 is a special indicator for centre
             } else {
-                // given x and y
-                // generate move
-                // PLAYER + Factory + Color + row
                 move += (homeFrom == 100) ? String.valueOf('C') : String.valueOf(homeFrom);
                 move += tileID;
 
-                // x + 10 + 45 * i, 430,
-                if (y >= 430 && y <= 430 + 40) {
-                    if (azulGame.getTurn().equals("A") && x >= 10 && x <= 10 + 6 * 45 + 40) {
+                if (y >= 430 && y <= 430 + SQUARE_SIZE) {
+                    if (azulGame.getTurn().equals("A") && x >= LEFT_BASE_WITH_PADDING
+                            && x <= LEFT_BASE_WITH_PADDING + 6 * SQUARE_WITH_GAP + SQUARE_SIZE) {
                         move += "F";
                     }
-                    if (azulGame.getTurn().equals("B") && x >= 700 + 10
-                            && x <= 700 + 10 + 6 * 45 + 40) {
+                    if (azulGame.getTurn().equals("B") && x >= RIGHT_BASE_WITH_PADDING
+                            && x <= RIGHT_BASE_WITH_PADDING + 6 * SQUARE_WITH_GAP + SQUARE_SIZE) {
                         move += "F";
                     }
                 } else {
-                    //  x = x + 10 + 45 * j, y = 180 + 45 * i,
                     for (int row = 0; row < 5; row++) {
-                        if (y - (180 + 45 * row) <= 40 && y >= 180) {
-                            // A
-                            if (azulGame.getTurn().equals("A") && x >= (10 + 45 * (4 - row))
-                                    && x <= 10 + 45 * 4 + 40) {
+                        if (y - (180 + SQUARE_WITH_GAP * row) <= SQUARE_SIZE && y >= 180) {
+                            if (azulGame.getTurn().equals("A") &&
+                                    x >= LEFT_BASE_WITH_PADDING + SQUARE_WITH_GAP * (4 - row) &&
+                                    x <= LEFT_BASE_WITH_PADDING + SQUARE_WITH_GAP * 4
+                                            + SQUARE_SIZE) {
                                 move += row;
                             }
-                            // B
-                            if (azulGame.getTurn().equals("B") && x >= (700 + 10 + 45 * (4 - row))
-                                    && x <= 700 + 10 + 45 * 4 + 40) {
+                            if (azulGame.getTurn().equals("B") &&
+                                    x >= RIGHT_BASE_WITH_PADDING + SQUARE_WITH_GAP * (4 - row) &&
+                                    x <= RIGHT_BASE_WITH_PADDING + SQUARE_WITH_GAP * 4
+                                            + SQUARE_SIZE) {
                                 move += row;
                             }
                             break;
                         }
                     }
                 }
-                String[] gameState = azulGame.rebuildStateString();
-                if (move.length() == 4 && azulGame.isMoveValid(gameState, move)) {
-                    String currentTurn = azulGame.getTurn();
-                    gameState = azulGame.applyMove(gameState, move);
-                    if (!azulGame.isStateValid(gameState)) {
-                        alert.showAndWait();
-                    }
-
-                    gameState = azulGame.nextRound(gameState);
-
-                    boolean hasComplete = checkCompletion();
-                    if (hasComplete && azulGame.generateAction(gameState) == null) {
-                        Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic()
-                                .calculateBonusScore();
-                        azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
-
-                        int maxScore = 0;
-                        char maxPlayer = 'A';
-                        for (Player player : azulGame.getPlayers()) {
-                            int score = player.getBoard().getScore().getScore();
-                            if (score > maxScore) {
-                                maxScore = score;
-                                maxPlayer = player.getId();
-                            }
-                        }
-                        int mul = maxPlayer - 'A';
-                        showCompletion(mul * 700 + 30, 200);
-
-                    }
-                    if (!azulGame.isStateValid(gameState)) {
-                        alert.showAndWait();
-                    }
-
-                    makeFCTiles();
-                    makeOtherTiles();
-                    makeScore();
-
-                    // AI
-                    int index = (azulGame.getTurn().equals("A")) ? 0 : 1;
-                    if (checkbox.isSelected() && !azulGame.getTurn().equals(currentTurn)) {
-                        // until change turn
-                        currentTurn = azulGame.getTurn();
-                        while (azulGame.getTurn().equals(currentTurn)) {
-                            String action = azulGame.generateAction(gameState);
-                            if (action != null) {
-
-                                gameState = azulGame.applyMove(gameState, action);
-
-                                if (!azulGame.isStateValid(gameState)) {
-                                    alert.showAndWait();
-                                }
-                            }
-
-                            gameState = azulGame.nextRound(gameState);
-                            hasComplete = checkCompletion();
-                            if (hasComplete && action == null) {
-                                Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic()
-                                        .calculateBonusScore();
-                                azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
-
-                                int maxScore = 0;
-                                char maxPlayer = 'A';
-                                for (Player player : azulGame.getPlayers()) {
-                                    int score = player.getBoard().getScore().getScore();
-                                    if (score > maxScore) {
-                                        maxScore = score;
-                                        maxPlayer = player.getId();
-                                    }
-                                }
-                                int mul = maxPlayer - 'A';
-                                showCompletion(mul * 700 + 30, 200);
-                                break;
-                            }
-
-                            if (!azulGame.isStateValid(gameState)) {
-                                alert.showAndWait();
-                            }
-
-                            makeFCTiles();
-                            makeOtherTiles();
-                            makeScore();
-                        }
-                    }
-
-                } else {
-                    snapToHome();
-                }
+                decodeAndMove(move, 4);
             }
         }
 
-        /**
-         * @return true if the tile is on the board
-         */
-//        private boolean onBoard() {
-//            return getLayoutX() > (PLAY_AREA_X - (SQUARE_SIZE / 2)) && (getLayoutX() < (PLAY_AREA_X + 3.5 * SQUARE_SIZE))
-//                    && getLayoutY() > (PLAY_AREA_Y - (SQUARE_SIZE / 2)) && (getLayoutY() < (PLAY_AREA_Y + 2.5 * SQUARE_SIZE));
-//        }
+        private void decodeAndMove(String move, int targetLength) {
+            String[] gameState = azulGame.rebuildStateString();
+            if (azulGame.generateAction(gameState) == null) {
+                azulGame.setTurn("B");
+            }
+            if (move.length() == targetLength && azulGame.isMoveValid(gameState, move)) {
+                String currentTurn = azulGame.getTurn();
+                gameState = azulGame.applyMove(gameState, move);
+                gameState = azulGame.nextRound(gameState);
+                boolean hasComplete = checkCompletion();
+                // has complete and cannot tile further
+                if (hasComplete && azulGame.generateAction(gameState) == null) {
+                    Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic()
+                            .calculateBonusScore();
+                    azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
 
-        /**
-         * a function to check whether the current destination cell
-         * is already occupied by another tile
-         *
-         * @return true if the destination cell for the current tile
-         * is already occupied, and false otherwise
-         */
-//        private boolean alreadyOccupied() {
-//            int x = (int) (getLayoutX() + (SQUARE_SIZE / 2) - PLAY_AREA_X) / SQUARE_SIZE;
-//            int y = (int) (getLayoutY() + (SQUARE_SIZE / 2) - PLAY_AREA_Y) / SQUARE_SIZE;
-//
-//            // it occupies two cells
-//            int idx1 = y * 4 + x;
-//            int idx2;
-//
-//            if (orientation%2 == 0)
-//                idx2 = (y+1) * 4 + x;
-//            else
-//                idx2 = y * 4 + x + 1;
-//
-//            for (int i = 0; i < 6; i++) {
-//                if (tileState[i] == NOT_PLACED)
-//                    continue;
-//
-//                int tIdx1 = tileState[i] / 4;
-//                int tIdx2;
-//                int tOrn = tileState[i] % 4;
-//
-//                if (tOrn%2 == 0)
-//                    tIdx2 = tIdx1 + 4;
-//                else
-//                    tIdx2 = tIdx1 + 1;
-//
-//                if (tIdx1 == idx1 || tIdx2 == idx1 || tIdx1 == idx2 || tIdx2 == idx2)
-//                    return true;
-//            }
-//            return false;
-//        }
+                    int maxScore = 0;
+                    char maxPlayer = 'A';
+                    for (Player player : azulGame.getPlayers()) {
+                        int score = player.getBoard().getScore().getScore();
+                        if (score > maxScore) {
+                            maxScore = score;
+                            maxPlayer = player.getId();
+                        }
+                    }
+                    int mul = maxPlayer - 'A';
+                    showCompletion(mul * RIGHT_BASE + 30, 200);
+                }
 
+                makeFCTiles();
+                makeOtherTiles();
+                makeScore();
+
+                // AI
+                if (checkbox.isSelected() && !azulGame.getTurn().equals(currentTurn)) {
+                    // until change turn
+                    currentTurn = azulGame.getTurn();
+
+                    while (azulGame.getTurn().equals(currentTurn)) {
+                        String action = azulGame.generateAction(gameState);
+                        if (action != null) {
+                            gameState = azulGame.applyMove(gameState, action);
+                        }
+                        gameState = azulGame.nextRound(gameState);
+
+                        hasComplete = checkCompletion();
+                        if (hasComplete && action == null) {
+                            Score BonusScore = azulGame.getPlayers()[0].getBoard().getMosaic()
+                                    .calculateBonusScore();
+                            azulGame.getPlayers()[0].getBoard().getScore().addScore(BonusScore);
+
+                            int maxScore = 0;
+                            char maxPlayer = 'A';
+                            for (Player player : azulGame.getPlayers()) {
+                                int score = player.getBoard().getScore().getScore();
+                                if (score > maxScore) {
+                                    maxScore = score;
+                                    maxPlayer = player.getId();
+                                }
+                            }
+                            int mul = maxPlayer - 'A';
+                            showCompletion(mul * RIGHT_BASE + 30, 200);
+                            break;
+                        }
+
+                        makeFCTiles();
+                        makeOtherTiles();
+                        makeScore();
+                    }
+                }
+
+            } else {
+                snapToHome();
+            }
+
+        }
 
         /**
          * Snap the tile to its home position (if it is not on the grid)
@@ -514,9 +357,9 @@ public class Game extends Application {
      */
     private void decodeDiscard(String substringD, Rectangle[][] discard) {
         //Record the number of tiles of various colors in the discard
-        for (int i = 0; i < discard.length; i++) {
-            for (int j = 0; j < discard.length; j++) {
-                discard[i][j].setFill(Color.LIGHTGREY);
+        for (Rectangle[] rectangles : discard) {
+            for (int j = 0; j < LENGTH; j++) {
+                rectangles[j].setFill(Color.LIGHTGREY);
             }
         }
         fillBagAndDiscard(substringD, discard);
@@ -530,9 +373,9 @@ public class Game extends Application {
      */
     private void decodeBag(String substringB, Rectangle[][] bag) {
         //This is used to record the number of tiles of various colors in bag。
-        for (int i = 0; i < bag.length; i++) {
-            for (int j = 0; j < bag.length; j++) {
-                bag[i][j].setFill(Color.LIGHTGREY);
+        for (Rectangle[] rectangles : bag) {
+            for (int j = 0; j < LENGTH; j++) {
+                rectangles[j].setFill(Color.LIGHTGREY);
             }
         }
         fillBagAndDiscard(substringB, bag);
@@ -612,13 +455,6 @@ public class Game extends Application {
     private void makeBoard(Group board, int x, char player) {
         board.getChildren().clear();
 
-//        ImageView baseboard = new ImageView();
-//        baseboard.setImage(new Image(BASEBOARD_URI));
-//        baseboard.setFitWidth(BOARD_WIDTH);
-//        baseboard.setFitHeight(BOARD_HEIGHT);
-//        baseboard.setLayoutX(BOARD_X);
-//        baseboard.setLayoutY(BOARD_Y);
-
         // box
         Text title = new Text(x + 50, 155, "Player " + player + " with Score ");
         title.setFont(Font.font(32));
@@ -642,7 +478,8 @@ public class Game extends Application {
                 if (i + j <= 3) {
                     continue;
                 }
-                Rectangle tileRect = new Rectangle(x + 10 + 45 * j, 180 + 45 * i, SQUARE_SIZE,
+                Rectangle tileRect = new Rectangle(x + LEFT_PADDING + SQUARE_WITH_GAP * j,
+                        180 + SQUARE_WITH_GAP * i, SQUARE_SIZE,
                         SQUARE_SIZE);
                 tileRect.setFill(Color.LIGHTGREY);
                 storage[i][j] = tileRect;
@@ -656,10 +493,9 @@ public class Game extends Application {
         ////////////////////// MOSAIC //////////////////////
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                Rectangle tileRect = new Rectangle(x + 240 + 10 + 45 * j, 180 + 45 * i, SQUARE_SIZE,
+                Rectangle tileRect = new Rectangle(x + 240 + LEFT_PADDING + SQUARE_WITH_GAP * j,
+                        180 + SQUARE_WITH_GAP * i, SQUARE_SIZE,
                         SQUARE_SIZE);
-//                tileRect.setFill(colorArrayList.get((j - i + 5) % 5));
-//                tileRect.setOpacity(0.2);
                 tileRect.setFill(Color.LIGHTGREY);
                 mosaic[i][j] = tileRect;
                 board.getChildren().add(tileRect);
@@ -671,7 +507,9 @@ public class Game extends Application {
 
         ////////////////////// FLOOR //////////////////////
         for (int i = 0; i < 7; i++) {
-            Rectangle tileRect = new Rectangle(x + 10 + 45 * i, 430, SQUARE_SIZE, SQUARE_SIZE);
+            Rectangle tileRect = new Rectangle(x + LEFT_PADDING + SQUARE_WITH_GAP * i, 430,
+                    SQUARE_SIZE,
+                    SQUARE_SIZE);
             tileRect.setFill(Color.LIGHTGREY);
             floor[i] = tileRect;
             board.getChildren().add(tileRect);
@@ -701,13 +539,15 @@ public class Game extends Application {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 2; j++) {
                 for (int k = 0; k < 2; k++) {
-                    Rectangle factoryRect = new Rectangle(10 + i * 95 + j * 45, 10 + k * 45,
+                    Rectangle factoryRect = new Rectangle(
+                            LEFT_PADDING + i * 95 + j * SQUARE_WITH_GAP,
+                            LEFT_PADDING + k * SQUARE_WITH_GAP,
                             SQUARE_SIZE, SQUARE_SIZE);
                     factoryRect.setFill(Color.LIGHTGREY);
                     common.getChildren().add(factoryRect);
                 }
             }
-            Text text = new Text(45 + i * 95, 116, String.valueOf(i));
+            Text text = new Text(SQUARE_WITH_GAP + i * 95, 116, String.valueOf(i));
             text.setFill(Color.BLACK);
             common.getChildren().add(text);
         }
@@ -715,7 +555,8 @@ public class Game extends Application {
         //////////////////////////// CENTRE /////////////////////////////////////
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 2; j++) {
-                Rectangle centreRect = new Rectangle(710 + i * 45, 10 + j * 45, SQUARE_SIZE,
+                Rectangle centreRect = new Rectangle(710 + i * SQUARE_WITH_GAP,
+                        LEFT_PADDING + j * SQUARE_WITH_GAP, SQUARE_SIZE,
                         SQUARE_SIZE);
                 centreRect.setFill(Color.LIGHTGREY);
                 common.getChildren().add(centreRect);
@@ -782,8 +623,8 @@ public class Game extends Application {
             for (int j = 0; j < tiles.size(); j++) {
                 int col = j % 2;
                 int row = j / 2;
-                int x = 10 + i * 95 + col * 45;
-                int y = 10 + row * 45;
+                int x = LEFT_PADDING + i * 95 + col * SQUARE_WITH_GAP;
+                int y = LEFT_PADDING + row * SQUARE_WITH_GAP;
                 gTiles.getChildren().add(new DraggableTile(tiles.get(j).getColorCode(), i, x, y));
             }
         }
@@ -792,15 +633,15 @@ public class Game extends Application {
         for (int i = 0; i < centreTiles.size(); i++) {
             int col = i % 8;
             int row = i / 8;
-            int x = 710 + col * 45;
-            int y = 10 + row * 45;
+            int x = 710 + col * SQUARE_WITH_GAP;
+            int y = LEFT_PADDING + row * SQUARE_WITH_GAP;
             gTiles.getChildren().add(new DraggableTile(centreTiles.get(i).getColorCode(),
                     100, x, y));
         }
 
         if (centre.hasFirstPlayerTile()) {
             gTiles.getChildren().add(new DraggableTile(centre.getFirstPlayerTile().getColorCode(),
-                    100, 710 + 7 * 45, 10 + 1 * 45));
+                    100, 710 + 7 * SQUARE_WITH_GAP, LEFT_PADDING + 1 * SQUARE_WITH_GAP));
         }
 
         for (Player player : players) {
@@ -817,9 +658,9 @@ public class Game extends Application {
                 if (size != 0) {
                     char code = storageTiles.get(row).peek().getColorCode();
                     for (int i = 0; i < size; i++) {
-                        // x + 10 + 45 * j, 180 + 45 * i,
                         gTiles.getChildren().add(new DraggableTile(code, from,
-                                prefix + 10 + 45 * (4 - row + i), 180 + 45 * row));
+                                prefix + LEFT_PADDING + SQUARE_WITH_GAP * (4 - row + i),
+                                180 + SQUARE_WITH_GAP * row));
                     }
                 }
             }
@@ -944,8 +785,8 @@ public class Game extends Application {
 
 //        setUpHandlers(scene);
 //        setUpSoundLoop();
-        makeBoard(leftBoard, 0, 'A');
-        makeBoard(rightBoard, 700, 'B');
+        makeBoard(leftBoard, LEFT_BASE, 'A');
+        makeBoard(rightBoard, RIGHT_BASE, 'B');
         makeCommon();
         makeCompletion();
 
