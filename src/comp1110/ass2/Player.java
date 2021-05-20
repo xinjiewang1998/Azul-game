@@ -3,6 +3,7 @@ package comp1110.ass2;
 import comp1110.ass2.board.Board;
 import comp1110.ass2.common.Common;
 import comp1110.ass2.common.Factory;
+
 import java.util.ArrayDeque;
 
 /**
@@ -29,14 +30,13 @@ public class Player {
         this.isFirstPlayer = isFirstPlayer;
     }
 
-    public void setNextPlayer(Player nextPlayer) {
-        this.nextPlayer = nextPlayer;
-    }
-
     public Player getNextPlayer() {
         return this.nextPlayer;
     }
 
+    public void setNextPlayer(Player nextPlayer) {
+        this.nextPlayer = nextPlayer;
+    }
 
     public char getId() {
         return id;
@@ -55,6 +55,7 @@ public class Player {
     }
 
     /**
+     *
      * draw tiles from factory or centre, and put it on the board
      *
      * @param color        the color picked
@@ -64,7 +65,7 @@ public class Player {
      * @return the tiles picked
      */
     public ArrayDeque<Tile> drawTiles(String color, boolean fromFactory, int factoryIndex,
-            Common common) {
+                                      Common common) {
         if (fromFactory) {
             Factory factory = common.getFactories()[factoryIndex];
             return factory.drawTiles(color, common.getCentre());

@@ -35,6 +35,48 @@ public class Storage {
     }
 
     /**
+     * @Author: Jiaan Guo
+     * The Storage substring begins with an 'S' and is followed by *up to* 5 3-character strings.
+     * Each 3-character string is defined as follows: 1st character is '0' to '4' - representing the
+     * row - each row number must only appear once. 2nd character is 'a' to 'e' - representing the
+     * tile colour. 3rd character is '0' to '5' - representing the number of tiles stored in that
+     * row. Each 3-character string is ordered by row number.
+     *
+     * @param token the storage string
+     * @return true if is well formed storage string
+     */
+    public static boolean isWellFormedStorageString(String token) {
+        if (token == null || token.length() % 3 != 0 || token.length() > 5 * 3) {
+            return false;
+        }
+
+        for (int i = 0; i < token.length(); i++) {
+            char row = token.charAt(i);
+            char color = token.charAt(++i);
+            char num = token.charAt(++i);
+            // only five possible rows
+            if (row != '0' && row != '1' && row != '2' && row != '3' && row != '4') {
+                return false;
+            }
+            // only five different colors
+            if (color != 'a' && color != 'b' && color != 'c' && color != 'd' && color != 'e') {
+                return false;
+            }
+            // only six possible numbers
+            if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4'
+                    && num != '5') {
+                return false;
+            }
+            // ordered by row number
+            if (i > 3 && (row - token.charAt(i - 5) <= 0)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @Author: Xinjie Wang, Xiang Lu
      * Count the number of tiles with specific color
      *
      * @param code the color code
@@ -53,9 +95,10 @@ public class Storage {
     }
 
     /**
-     * @return if has complete row
      * @Author: Xinjie Wang
      * Check if has complete row.
+     *
+     * @return if has complete row
      */
     public boolean hasCompleteRow() {
         for (int i = 0; i < triangle.size(); i++) {
@@ -67,6 +110,40 @@ public class Storage {
     }
 
     /**
+     * @Author: Xinjie Wang
+     * Check if the mosaic contains a tile with same color on specific row
+     *
+     * @param row  the row number
+     * @param code the color code
+     * @return true if the mosaic contains a tile with same color on specific row
+     */
+    public boolean rowHasSameColor(int row, char code) {
+        return this.getTriangle().get(row).getFirst().getColorCode() == code;
+    }
+
+    /**
+     * @Author: Xinjie Wang
+     * Find the rows can contain the tile with specific color code
+     *
+     * @param mosaic the mosaic to check
+     * @param code   the color code
+     * @return the rows
+     */
+    public ArrayList<Integer> rowsCanBePlacedOn(Mosaic mosaic, char code) {
+        ArrayList<Integer> numRow = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            if (this.getTriangle().get(i).size() == 0 && !mosaic.rowHasSameColor(i, code)) {
+                numRow.add(i);
+            } else if (!(this.getTriangle().get(i).size() == 0) && rowHasSameColor(i, code)
+                    && !mosaic.rowHasSameColor(i, code) && this.triangle.get(i).size() < i + 1) {
+                numRow.add(i);
+            }
+        }
+        return numRow;
+    }
+
+    /**
+     * @Author: Jiaan Guo
      * Rules to place the tiles. 1. If a row already contains tiles, you may only add tiles of the
      * same colour to it. 2. If you have more tiles than can fit in your chosen row, then you must
      * place the excess tiles on the floor. 3. You are not allowed to place tiles of a certain
@@ -113,40 +190,10 @@ public class Storage {
         return true;
     }
 
-    /**
-     * @Author: Xinjie Wang
-     * Check if the mosaic contains a tile with same color on specific row
-     *
-     * @param row  the row number
-     * @param code the color code
-     * @return true if the mosaic contains a tile with same color on specific row
-     */
-    public boolean rowHasSameColor(int row, char code) {
-        return this.getTriangle().get(row).getFirst().getColorCode() == code;
-    }
+
 
     /**
-     * @Author: Xinjie Wang
-     * Find the rows can contain the tile with specific color code
-     *
-     * @param mosaic the mosaic to check
-     * @param code   the color code
-     * @return the rows
-     */
-    public ArrayList<Integer> rowsCanBePlacedOn(Mosaic mosaic, char code) {
-        ArrayList<Integer> numRow = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            if (this.getTriangle().get(i).size() == 0 && !mosaic.rowHasSameColor(i, code)) {
-                numRow.add(i);
-            } else if (!(this.getTriangle().get(i).size() == 0) && rowHasSameColor(i, code)
-                    && !mosaic.rowHasSameColor(i, code) && this.triangle.get(i).size() < i + 1) {
-                numRow.add(i);
-            }
-        }
-        return numRow;
-    }
-
-    /**
+     * @Author: Jiaan Guo
      * Tile and Score Tile rules 1. Go through your storage rows from row 0 to row 4 and move the
      * rightmost tile of each complete row to the space of the same colour in the corresponding row
      * of the mosaic. 2. Empty any row that no longer has a tile in the rightmost space and place
@@ -189,48 +236,8 @@ public class Storage {
         return total;
     }
 
-
     /**
-     * The Storage substring begins with an 'S' and is followed by *up to* 5 3-character strings.
-     * Each 3-character string is defined as follows: 1st character is '0' to '4' - representing the
-     * row - each row number must only appear once. 2nd character is 'a' to 'e' - representing the
-     * tile colour. 3rd character is '0' to '5' - representing the number of tiles stored in that
-     * row. Each 3-character string is ordered by row number.
-     *
-     * @param token the storage string
-     * @return true if is well formed storage string
-     */
-    public static boolean isWellFormedStorageString(String token) {
-        if (token == null || token.length() % 3 != 0 || token.length() > 5 * 3) {
-            return false;
-        }
-
-        for (int i = 0; i < token.length(); i++) {
-            char row = token.charAt(i);
-            char color = token.charAt(++i);
-            char num = token.charAt(++i);
-            // only five possible rows
-            if (row != '0' && row != '1' && row != '2' && row != '3' && row != '4') {
-                return false;
-            }
-            // only five different colors
-            if (color != 'a' && color != 'b' && color != 'c' && color != 'd' && color != 'e') {
-                return false;
-            }
-            // only six possible numbers
-            if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4'
-                    && num != '5') {
-                return false;
-            }
-            // ordered by row number
-            if (i > 3 && (row - token.charAt(i - 5) <= 0)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
+     * @Author: Jiaan Guo
      * Reconstruct internal state from string
      *
      * @param token the string representation of storage state
