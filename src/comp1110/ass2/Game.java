@@ -58,6 +58,20 @@ public class Game {
         this.turn = turn;
     }
 
+    public boolean areFactoriesAndCentreEmpty() {
+        for (Factory factory : common.getFactories()) {
+            if (!factory.getTiles().isEmpty()) {
+                return false;
+            }
+        }
+        if (!common.getCentre().getTiles().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+
+
     /**
      * Turn state string to common objects
      *
