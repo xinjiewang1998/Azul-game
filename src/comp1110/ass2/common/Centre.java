@@ -14,6 +14,7 @@ public class Centre {
 
     public Centre() {
         tiles = new ArrayList<>();
+        init();
     }
 
     public ArrayList<Tile> getTiles() {
@@ -30,6 +31,15 @@ public class Centre {
 
     public void setFirstPlayerTile(Tile firstPlayerTile) {
         this.firstPlayerTile = firstPlayerTile;
+    }
+
+    public boolean hasFirstPlayerTile() {
+        return firstPlayerTile != null;
+    }
+
+    public void init() {
+        tiles = new ArrayList<>();
+        this.firstPlayerTile = Tile.from('f');
     }
 
     /**

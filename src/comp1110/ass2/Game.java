@@ -50,6 +50,13 @@ public class Game {
         this.players = players;
     }
 
+    public String getTurn() {
+        return turn;
+    }
+
+    public void setTurn(String turn) {
+        this.turn = turn;
+    }
     /**
      * Turn state string to common objects
      *
@@ -258,12 +265,15 @@ public class Game {
             }
         }
 
+        // prepare next round
+        // change turn
         for (Player player : players) {
             if (player.getBoard().getFloor().hasFirstPlayerTile()) {
                 turn = String.valueOf(player.getId());
             }
         }
 
+        // calculate score
         for (Player player : players) {
             Board playerBoard = player.getBoard();
             playerBoard.getScore().addScore(playerBoard.getFloor().calculatePenalty());
@@ -271,29 +281,20 @@ public class Game {
             playerBoard.getFloor().clearTiles(common.getDiscard(), common.getCentre());
         }
 
-        gameState[0] = turn + common.toString();
-        StringBuilder stringBuilder1 = new StringBuilder();
-        for (Player value : players) {
-            stringBuilder1.append(value.toString());
-        }
-        gameState[1] = stringBuilder1.toString();
-
+        gameState = rebuildStateString();
+        // terminate game
         for (Player value : players) {
             if (value.getBoard().getMosaic().hasCompleteRow()) {
                 return gameState;
             }
         }
 
+        // refill tiles
         for (Factory factory : factories) {
             factory.refillTiles(common.getBag(), common.getDiscard());
         }
 
-        gameState[0] = turn + common.toString();
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Player player : players) {
-            stringBuilder.append(player.toString());
-        }
-        gameState[1] = stringBuilder.toString();
+        gameState = rebuildStateString();
         return gameState;
     }
 
