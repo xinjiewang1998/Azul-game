@@ -16,6 +16,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -103,6 +105,10 @@ public class Game extends Application {
     /* message on completion */
     private final Text completionText = new Text("WIN!");
 
+    private final Alert alert = new Alert(AlertType.INFORMATION);
+    {
+        alert.titleProperty().set("invalid state");
+    }
 
     /* Define a drop shadow effect that we will appy to tiles */
     private static DropShadow dropShadow;
@@ -248,11 +254,18 @@ public class Game extends Application {
                     gameState = azulGame.applyMove(gameState, move);
                     System.out.println("A apply move " + gameState[0]);
                     System.out.println("A apply move " + gameState[1]);
+                    if(!azulGame.isStateValid(gameState)) {
+                        alert.showAndWait();
+                    }
 
                     gameState = azulGame.nextRound(gameState);
                     boolean hasComplete = checkCompletion();
                     System.out.println("A next round " + gameState[0]);
                     System.out.println("A next round " + gameState[1]);
+                    if(!azulGame.isStateValid(gameState)) {
+                        alert.showAndWait();
+                    }
+
                     makeFCTiles();
                     makeOtherTiles();
                     makeScore();
@@ -272,11 +285,18 @@ public class Game extends Application {
                                 gameState = azulGame.applyMove(gameState, action);
                                 System.out.println("B apply move " + gameState[0]);
                                 System.out.println("B apply move " + gameState[1]);
+                                if(!azulGame.isStateValid(gameState)) {
+                                    alert.showAndWait();
+                                }
                             }
                             gameState = azulGame.nextRound(gameState);
                             hasComplete = checkCompletion();
                             System.out.println("B next round " + gameState[0]);
                             System.out.println("B next round " + gameState[1]);
+                            if(!azulGame.isStateValid(gameState)) {
+                                alert.showAndWait();
+                            }
+
                             makeFCTiles();
                             makeOtherTiles();
                             makeScore();
@@ -328,11 +348,18 @@ public class Game extends Application {
                     gameState = azulGame.applyMove(gameState, move);
                     System.out.println("A apply move " + gameState[0]);
                     System.out.println("A apply move " + gameState[1]);
+                    if(!azulGame.isStateValid(gameState)) {
+                        alert.showAndWait();
+                    }
 
                     gameState = azulGame.nextRound(gameState);
                     boolean hasComplete = checkCompletion();
                     System.out.println("A next round " + gameState[0]);
                     System.out.println("A next round " + gameState[1]);
+                    if(!azulGame.isStateValid(gameState)) {
+                        alert.showAndWait();
+                    }
+
                     makeFCTiles();
                     makeOtherTiles();
                     makeScore();
@@ -351,11 +378,19 @@ public class Game extends Application {
                                 gameState = azulGame.applyMove(gameState, action);
                                 System.out.println("B apply move " + gameState[0]);
                                 System.out.println("B apply move " + gameState[1]);
+                                if(!azulGame.isStateValid(gameState)) {
+                                    alert.showAndWait();
+                                }
                             }
+
                             gameState = azulGame.nextRound(gameState);
                             hasComplete = checkCompletion();
                             System.out.println("B next round " + gameState[0]);
                             System.out.println("B next round " + gameState[1]);
+                            if(!azulGame.isStateValid(gameState)) {
+                                alert.showAndWait();
+                            }
+
                             makeFCTiles();
                             makeOtherTiles();
                             makeScore();
@@ -650,6 +685,11 @@ public class Game extends Application {
      */
     void decodeDiscard(String substringD, Rectangle[][] discard) {
         //Record the number of tiles of various colors in the discard
+        for(int i = 0; i < discard.length; i++) {
+            for(int j = 0; j < discard.length; j++) {
+                discard[i][j].setFill(Color.LIGHTGREY);
+            }
+        }
         fillBagAndDiscard(substringD, discard);
     }
 
@@ -661,6 +701,11 @@ public class Game extends Application {
      */
     private void decodeBag(String substringB, Rectangle[][] bag) {
         //This is used to record the number of tiles of various colors in bag。
+        for(int i = 0; i < bag.length; i++) {
+            for(int j = 0; j < bag.length; j++) {
+                bag[i][j].setFill(Color.LIGHTGREY);
+            }
+        }
         fillBagAndDiscard(substringB, bag);
     }
 
