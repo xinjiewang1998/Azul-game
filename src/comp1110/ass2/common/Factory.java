@@ -40,6 +40,22 @@ public class Factory {
 
 
     /**
+     * Sort the tiles by color code
+     */
+    private void sort() {
+        ArrayList<Tile> newList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            for (Tile tile : tiles) {
+                if (tile.getColorCode() == 'a' + i) {
+                    newList.add(tile);
+                }
+            }
+        }
+        tiles.clear();
+        this.tiles = newList;
+    }
+
+    /**
      * Each factory is filled with exactly four tiles drawn randomly from the bag.
      *
      * @param bag     the bag to draw
@@ -48,6 +64,7 @@ public class Factory {
      */
     public void refillTiles(Bag bag, Discard discard) {
         tiles.addAll(bag.drawTiles(discard));
+        sort();
     }
 
     /**
