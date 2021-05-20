@@ -57,6 +57,7 @@ public class Azul {
      * @param sharedState the shared state - factories, bag and discard.
      * @return true if sharedState is well-formed, otherwise return false
      * TASK 2
+     * Author:  Jiaan Guo
      */
     public static boolean isSharedStateWellFormed(String sharedState) {
         Game game = new Game();
@@ -113,6 +114,7 @@ public class Azul {
      * @return True if the playerState is well-formed,
      * false if the playerState is not well-formed
      * TASK 3
+     * Author:  Jiaan Guo
      */
     public static boolean isPlayerStateWellFormed(String playerState) {
         Game game = new Game();
@@ -182,6 +184,7 @@ public class Azul {
      * @param gameState the game state
      * @return the state for the next round.
      * TASK 8
+     * @Author: Xinjie Wang
      */
     public static String[] nextRound(String[] gameState) {
         Game game = new Game();
@@ -221,6 +224,7 @@ public class Azul {
      *                  state[1] = playerStates
      * @return true if the state is valid, false if it is invalid.
      * TASK 9
+     * @Author: Xinjie Wang
      */
     public static boolean isStateValid(String[] gameState) {
         Game game = new Game();
@@ -252,6 +256,7 @@ public class Azul {
      * @return true if the move is valid, false if it is invalid.
      * @Author: Xinjie Wang
      * TASK 10
+     * @Author: Xinjie Wang
      */
     public static boolean isMoveValid(String[] gameState, String move) {
         Game game = new Game();
@@ -276,6 +281,7 @@ public class Azul {
      * @param move      A string representing a move.
      * @return the updated gameState after the move has been applied.
      * TASK 11
+     * @Author:  Jiaan Guo
      */
     public static String[] applyMove(String[] gameState, String move) {
         Game game = new Game();

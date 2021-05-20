@@ -219,6 +219,15 @@ public class Storage {
         return total;
     }
 
+    /**
+     *
+     * @param rowNum the row in mosaic
+     * @param columnNum the column in mosaic
+     * @param mosaic mosaic to be placed
+     * @param discard discard to be placed
+     * @return the score
+     * @Author: Jiaan Guo
+     */
     public Score tileAndScore(int rowNum, int columnNum, Mosaic mosaic, Discard discard) {
         Score total = new Score(0);
 

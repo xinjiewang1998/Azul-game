@@ -138,9 +138,7 @@ public class Game extends Application {
             }
             tileID = tile;
 
-//            setFitHeight(SQUARE_SIZE);
-//            setFitWidth(SQUARE_SIZE);
-//            setImage(new Image(Game.class.getResource(URI_BASE + tile + "-" + (char)(orientation+'0') + ".png").toString()));
+
 
             color = switch (tile) {
                 case 'a' -> Color.BLUE;
@@ -253,7 +251,7 @@ public class Game extends Application {
                 if (azulGame.generateAction(gameState)==null){
                     azulGame.setTurn("B");
                 }
-                if (move.length() == 3 && azulGame.isMoveValid(gameState, move) && azulGame.areFactoriesAndCentreEmpty()) {
+                if (move.length() == 3 && azulGame.isMoveValid(gameState, move)) {
                     String currentTurn = azulGame.getTurn();
                     gameState = azulGame.applyMove(gameState, move);
                     System.out.println("A apply move " + gameState[0]);
