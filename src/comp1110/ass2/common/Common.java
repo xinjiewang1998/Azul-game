@@ -18,28 +18,28 @@ public class Common {
         return bag;
     }
 
-    public Centre getCentre() {
-        return centre;
-    }
-
-    public Discard getDiscard() {
-        return discard;
-    }
-
-    public Factory[] getFactories() {
-        return factories;
-    }
-
     public void setBag(Bag bag) {
         this.bag = bag;
+    }
+
+    public Centre getCentre() {
+        return centre;
     }
 
     public void setCentre(Centre centre) {
         this.centre = centre;
     }
 
+    public Discard getDiscard() {
+        return discard;
+    }
+
     public void setDiscard(Discard discard) {
         this.discard = discard;
+    }
+
+    public Factory[] getFactories() {
+        return factories;
     }
 
     public void setFactories(Factory[] factories) {

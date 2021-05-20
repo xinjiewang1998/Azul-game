@@ -29,85 +29,7 @@ public class Bag {
     }
 
     /**
-     * Fill bag with 20 colored tiles each
-     */
-    public void init() {
-        tiles = new ArrayList<>();
-        int index = 0;
-        for (int i = 0; i < COLOR_LIMIT; i++) {
-            tiles.add(Tile.Blue);
-            tiles.add(Tile.Green);
-            tiles.add(Tile.Orange);
-            tiles.add(Tile.Purple);
-            tiles.add(Tile.Red);
-        }
-        Collections.shuffle(tiles);
-    }
-
-    /**
-     * Each factory is filled with exactly four tiles drawn randomly from the bag
-     * <p>
-     * take four tiles from bag randomly.
-     *
-     * @return a Array contains four tiles.
-     */
-    public ArrayList<Tile> drawTiles(Discard discard) {
-        ArrayList<Tile> tiles = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            Tile tile = this.drawTile(discard);
-            if (tile == null) {
-                break;
-            }
-            tiles.add(tile);
-        }
-        return tiles;
-    }
-
-
-    /**
-     * @param discard the discard may used for refill
-     * @return the tile
-     * @Author: Xinjie Wang
-     * Draw 1 tile
-     */
-    public Tile drawTile(Discard discard) {
-        if (tiles.size() == 0) {
-            discard.refillTiles(this);
-            if (this.tiles.size() == 0) {
-                return null;
-            }
-        }
-        Collections.shuffle(tiles);
-        return tiles.remove(tiles.size() - 1);
-
-    }
-
-    /**
-     * Place other tiles into the bag
-     *
-     * @param otherTiles the tiles to be added
-     */
-    public void placeTiles(ArrayList<Tile> otherTiles) {
-        tiles.addAll(otherTiles);
-    }
-
-    /**
-     * Count the number of tiles with specific color
-     *
-     * @param code the color code
-     * @return the number
-     */
-    public int countTile(char code) {
-        int count = 0;
-        for (Tile tile : this.getTiles()) {
-            if (tile.getColorCode() == code) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
+     * @Author: Jiaan Guo
      * The bag substring starts with a 'B' and is followed by 5 2-character substrings 1st substring
      * represents the number of 'a' tiles, from 0 - 20. 2nd substring represents the number of 'b'
      * tiles, from 0 - 20. 3rd substring represents the number of 'c' tiles, from 0 - 20. 4th
@@ -139,6 +61,90 @@ public class Bag {
     }
 
     /**
+     * @Author: Jiaan Guo
+     * Fill bag with 20 colored tiles each
+     */
+    public void init() {
+        tiles = new ArrayList<>();
+        int index = 0;
+        for (int i = 0; i < COLOR_LIMIT; i++) {
+            tiles.add(Tile.Blue);
+            tiles.add(Tile.Green);
+            tiles.add(Tile.Orange);
+            tiles.add(Tile.Purple);
+            tiles.add(Tile.Red);
+        }
+        Collections.shuffle(tiles);
+    }
+
+    /**
+     * @Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+     * Each factory is filled with exactly four tiles drawn randomly from the bag
+     * take four tiles from bag randomly.
+     *
+     * @return a Array contains four tiles.
+     */
+    public ArrayList<Tile> drawTiles(Discard discard) {
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            Tile tile = this.drawTile(discard);
+            if (tile == null) {
+                break;
+            }
+            tiles.add(tile);
+        }
+        return tiles;
+    }
+
+    /**
+     * @Author: Xinjie Wang
+     * Draw 1 tile
+     *
+     * @param discard the discard may used for refill
+     * @return the tile
+
+     */
+    public Tile drawTile(Discard discard) {
+        if (tiles.size() == 0) {
+            discard.refillTiles(this);
+            if (this.tiles.size() == 0) {
+                return null;
+            }
+        }
+        Collections.shuffle(tiles);
+        return tiles.remove(tiles.size() - 1);
+
+    }
+
+    /**
+     * @Author: Xinjie Wang
+     * Place other tiles into the bag
+     *
+     * @param otherTiles the tiles to be added
+     */
+    public void placeTiles(ArrayList<Tile> otherTiles) {
+        tiles.addAll(otherTiles);
+    }
+
+    /**
+     * @Author: Xinjie Wang, Xiang Lu
+     * Count the number of tiles with specific color
+     *
+     * @param code the color code
+     * @return the number
+     */
+    public int countTile(char code) {
+        int count = 0;
+        for (Tile tile : this.getTiles()) {
+            if (tile.getColorCode() == code) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * @Author: Jiaan Guo
      * Reconstruct internal state from string
      *
      * @param token the string representation of bag state

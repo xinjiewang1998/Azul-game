@@ -14,7 +14,6 @@ public class Board {
         init();
     }
 
-
     public Score getScore() {
         return score;
     }
@@ -49,6 +48,7 @@ public class Board {
 
 
     /**
+     * @Author: Jiaan Guo
      * Initialize the board with correct prams.
      */
     public void init() {

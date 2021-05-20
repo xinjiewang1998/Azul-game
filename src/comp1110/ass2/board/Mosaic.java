@@ -14,7 +14,6 @@ public class Mosaic {
     private final ArrayList<String> DEFAULT_COLORS = new ArrayList<>(
             Arrays.asList("blue", "green", "orange", "purple", "red"));
 
-
     private Tile[][] square;
     private int[] colorCount;
 
@@ -65,35 +64,63 @@ public class Mosaic {
     }
 
     /**
+     * @Author: Jiaan Guo
+     * The Mosaic substring begins with a 'M' Which is followed by *up to* 25 3-character strings.
+     * Each 3-character string is defined as follows: 1st character is 'a' to 'e' - representing the
+     * tile colour. 2nd character is '0' to '4' - representing the row. 3rd character is '0' to '4'
+     * - representing the column. The Mosaic substring is ordered first by row, then by column. That
+     * is, "a01" comes before "a10".
+     *
+     * @param token the mosaic string
+     * @return true if is well formed mosaic string
+     */
+    public static boolean isWellFormedMosaicString(String token) {
+        if (token == null || token.length() % 3 != 0 || token.length() > 25 * 3) {
+            return false;
+        }
+
+        for (int i = 0; i < token.length(); i++) {
+            char color = token.charAt(i);
+            char row = token.charAt(++i);
+            char column = token.charAt(++i);
+            // only five different colors
+            if (color != 'a' && color != 'b' && color != 'c' && color != 'd' && color != 'e') {
+                return false;
+            }
+            // only five possible rows
+            if (row != '0' && row != '1' && row != '2' && row != '3' && row != '4') {
+                return false;
+            }
+            // only five possible columns
+            if (column != '0' && column != '1' && column != '2' && column != '3' && column != '4') {
+                return false;
+            }
+            // order first by row
+            if (i > 3 && (row - token.charAt(i - 4) < 0)) {
+                return false;
+            }
+            // order second by column
+            if (i > 3 && row == token.charAt(i - 4) && column - token.charAt(i - 3) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @Author: Xinjie Wang, Jiaan Guo, Xiang Lu
      * Tells whether a colored tile has occupied that row. if it is true, cannot put tile with same
      * color on that row again.
      *
      * @param color the target color
      * @param row   the target row
      * @return true if the color exists in mosaic
+     *
      */
     public boolean hasColor(String color, int row) {
         for (int i = 0; i < NUM_ROWS; i++) {
             if (square[row][i] != null && square[row][i].getColor().equals(color)) {
                 return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param code   the color code
-     * @param column the column number
-     * @return true if the mosaic contains a tile with same color on specific column
-     * @Author: Xinjie Wang
-     * Check if the mosaic contains a tile with same color on specific column
-     */
-    public boolean columnHasSameColor(char code, int column) {
-        for (int i = 0; i < 5; i++) {
-            if (this.getSquare()[i][column] != null) {
-                if (this.getSquare()[i][column].getColorCode() == code) {
-                    return true;
-                }
             }
         }
         return false;
@@ -131,6 +158,26 @@ public class Mosaic {
     }
 
     /**
+     * @Author: Xinjie Wang
+     * Check if the mosaic contains a tile with same color on specific column
+     *
+     * @param code   the color code
+     * @param column the column number
+     * @return true if the mosaic contains a tile with same color on specific column
+     */
+    public boolean columnHasSameColor(char code, int column) {
+        for (int i = 0; i < 5; i++) {
+            if (this.getSquare()[i][column] != null) {
+                if (this.getSquare()[i][column].getColorCode() == code) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @Author: Jiaan Guo
      * Find the correct position and place the tile
      *
      * @param tile the tile to be placed
@@ -140,62 +187,6 @@ public class Mosaic {
     public Score placeTile(Tile tile, int row) {
         int index = DEFAULT_COLORS.indexOf(tile.getColor());
         return placeTile(tile, row, (row + index) % NUM_ROWS);
-    }
-
-    /**
-     * Place the tile on specific row and column
-     *
-     * @param tile   the tile to be placed
-     * @param row    the target row
-     * @param column the target column
-     * @return the score earned for this move
-     */
-    public Score placeTile(Tile tile, int row, int column) {
-
-        square[row][column] = tile;
-//        colorCount[index]++;
-
-        int count = 1;
-        boolean hasHorizontallyLinkedTiles = false;
-        boolean hasVerticallyLinkedTiles = false;
-        // up
-        for (int i = row - 1; i >= 0; i--) {
-            if (square[i][column] != null) {
-                hasVerticallyLinkedTiles = true;
-                count++;
-            } else {
-                break;
-            }
-        }
-        // down
-        for (int i = row + 1; i < NUM_ROWS; i++) {
-            if (square[i][column] != null) {
-                hasVerticallyLinkedTiles = true;
-                count++;
-            } else {
-                break;
-            }
-        }
-        // left
-        for (int i = column - 1; i >= 0; i--) {
-            if (square[row][i] != null) {
-                hasHorizontallyLinkedTiles = true;
-                count++;
-            } else {
-                break;
-            }
-        }
-        // right
-        for (int i = column + 1; i < NUM_ROWS; i++) {
-            if (square[row][i] != null) {
-                hasHorizontallyLinkedTiles = true;
-                count++;
-            } else {
-                break;
-            }
-        }
-        return (hasHorizontallyLinkedTiles && hasVerticallyLinkedTiles) ? new Score(count + 1) :
-                new Score(count);
     }
 
     /**
@@ -272,51 +263,65 @@ public class Mosaic {
         return new Score(total);
     }
 
-
     /**
-     * The Mosaic substring begins with a 'M' Which is followed by *up to* 25 3-character strings.
-     * Each 3-character string is defined as follows: 1st character is 'a' to 'e' - representing the
-     * tile colour. 2nd character is '0' to '4' - representing the row. 3rd character is '0' to '4'
-     * - representing the column. The Mosaic substring is ordered first by row, then by column. That
-     * is, "a01" comes before "a10".
+     * @Author: Jiaan Guo
+     * Place the tile on specific row and column
      *
-     * @param token the mosaic string
-     * @return true if is well formed mosaic string
+     * @param tile   the tile to be placed
+     * @param row    the target row
+     * @param column the target column
+     * @return the score earned for this move
      */
-    public static boolean isWellFormedMosaicString(String token) {
-        if (token == null || token.length() % 3 != 0 || token.length() > 25 * 3) {
-            return false;
-        }
+    public Score placeTile(Tile tile, int row, int column) {
 
-        for (int i = 0; i < token.length(); i++) {
-            char color = token.charAt(i);
-            char row = token.charAt(++i);
-            char column = token.charAt(++i);
-            // only five different colors
-            if (color != 'a' && color != 'b' && color != 'c' && color != 'd' && color != 'e') {
-                return false;
-            }
-            // only five possible rows
-            if (row != '0' && row != '1' && row != '2' && row != '3' && row != '4') {
-                return false;
-            }
-            // only five possible columns
-            if (column != '0' && column != '1' && column != '2' && column != '3' && column != '4') {
-                return false;
-            }
-            // order first by row
-            if (i > 3 && (row - token.charAt(i - 4) < 0)) {
-                return false;
-            }
-            // order second by column
-            if (i > 3 && row == token.charAt(i - 4) && column - token.charAt(i - 3) < 0) {
-                return false;
+        square[row][column] = tile;
+//        colorCount[index]++;
+
+        int count = 1;
+        boolean hasHorizontallyLinkedTiles = false;
+        boolean hasVerticallyLinkedTiles = false;
+        // up
+        for (int i = row - 1; i >= 0; i--) {
+            if (square[i][column] != null) {
+                hasVerticallyLinkedTiles = true;
+                count++;
+            } else {
+                break;
             }
         }
-        return true;
+        // down
+        for (int i = row + 1; i < NUM_ROWS; i++) {
+            if (square[i][column] != null) {
+                hasVerticallyLinkedTiles = true;
+                count++;
+            } else {
+                break;
+            }
+        }
+        // left
+        for (int i = column - 1; i >= 0; i--) {
+            if (square[row][i] != null) {
+                hasHorizontallyLinkedTiles = true;
+                count++;
+            } else {
+                break;
+            }
+        }
+        // right
+        for (int i = column + 1; i < NUM_ROWS; i++) {
+            if (square[row][i] != null) {
+                hasHorizontallyLinkedTiles = true;
+                count++;
+            } else {
+                break;
+            }
+        }
+        return (hasHorizontallyLinkedTiles && hasVerticallyLinkedTiles) ? new Score(count + 1) :
+                new Score(count);
     }
 
     /**
+     * @Author: Xinjie Wang, Xiang Lu
      * Count the number of tiles with specific color
      *
      * @param code the color code
@@ -337,6 +342,7 @@ public class Mosaic {
     }
 
     /**
+     * @Author: Jiaan Guo
      * Reconstruct internal state from string
      *
      * @param token the string representation of mosaic state

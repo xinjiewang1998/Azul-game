@@ -35,6 +35,7 @@ public class Score {
     }
 
     /**
+     * @Author: Jiaan Guo
      * Add other score
      *
      * @param otherScore the other score with type Score
@@ -46,6 +47,7 @@ public class Score {
     }
 
     /**
+     * @Author: Jiaan Guo
      * Reconstruct internal state from string
      *
      * @param token the string representation of score state

@@ -17,67 +17,8 @@ public class Discard {
         tiles = new ArrayList<>();
     }
 
-    public ArrayList<Tile> getTiles() {
-        return tiles;
-    }
-
-    public void setTiles(ArrayList<Tile> tiles) {
-        this.tiles = tiles;
-    }
-
     /**
-     * Empty any row that no longer has a tile in the rightmost space and place all remaining tiles
-     * in the discard pile. Any tiles that remain in incomplete rows on your board remain for the
-     * next round.
-     *
-     * @param leftTiles tiles left in storage.
-     */
-    public void placeTiles(ArrayDeque<Tile> leftTiles) {
-        while (leftTiles.size() != 0) {
-            tiles.add(leftTiles.pop());
-        }
-    }
-
-    public void placeTiles(ArrayList<Tile> leftTiles) {
-        tiles.addAll(leftTiles);
-    }
-
-    /**
-     * Add extra tile to discard pile.
-     *
-     * @param extraTile extraTile
-     */
-    public void placeTile(Tile extraTile) {
-        this.tiles.add(extraTile);
-    }
-
-    /**
-     * @param bag the bag get refilled
-     * @Author: Xinjie Wang
-     * Send all tiles from discard to bag
-     */
-    public void refillTiles(Bag bag) {
-        bag.placeTiles(tiles);
-        tiles.clear();
-    }
-
-    /**
-     * Count the number of tiles with specific color
-     *
-     * @param code the color code
-     * @return the number
-     */
-    public int countTile(char code) {
-        int count = 0;
-        for (Tile tile : this.getTiles()) {
-            if (tile.getColorCode() == code) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
+     * @Author: Jiaan Guo
      * The discard substring starts with a 'D' and is followed by 5 2-character substrings defined
      * the same as the bag substring. For example: "D0005201020" The bag contains zero 'a' tiles,
      * five 'b' tiles, twenty 'c' tiles, ten 'd' tiles, and twenty 'e' tiles.
@@ -105,7 +46,72 @@ public class Discard {
         return true;
     }
 
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(ArrayList<Tile> tiles) {
+        this.tiles = tiles;
+    }
+
     /**
+     * @Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+     * Empty any row that no longer has a tile in the rightmost space and place all remaining tiles
+     * in the discard pile. Any tiles that remain in incomplete rows on your board remain for the
+     * next round.
+     *
+     * @param leftTiles tiles left in storage.
+     */
+    public void placeTiles(ArrayDeque<Tile> leftTiles) {
+        while (leftTiles.size() != 0) {
+            tiles.add(leftTiles.pop());
+        }
+    }
+
+    public void placeTiles(ArrayList<Tile> leftTiles) {
+        tiles.addAll(leftTiles);
+    }
+
+    /**
+     * @Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+     * Add extra tile to discard pile.
+     *
+     * @param extraTile extraTile
+     */
+    public void placeTile(Tile extraTile) {
+        this.tiles.add(extraTile);
+    }
+
+    /**
+     * @Author: Xinjie Wang
+     * Send all tiles from discard to bag
+     *
+     * @param bag the bag get refilled
+     */
+    public void refillTiles(Bag bag) {
+        bag.placeTiles(tiles);
+        tiles.clear();
+    }
+
+    /**
+     * @Author: Xinjie Wang, Xiang Lu
+     * Count the number of tiles with specific color
+     *
+     * @param code the color code
+     * @return the number
+     */
+    public int countTile(char code) {
+        int count = 0;
+        for (Tile tile : this.getTiles()) {
+            if (tile.getColorCode() == code) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * @Author: Jiaan Guo
      * Reconstruct internal state from string
      *
      * @param token the string representation of score state

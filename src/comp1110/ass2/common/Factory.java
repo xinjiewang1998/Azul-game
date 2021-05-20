@@ -22,104 +22,8 @@ public class Factory {
         tiles = new ArrayList<>();
     }
 
-    public void setTiles(ArrayList<Tile> tiles) {
-        this.tiles = tiles;
-    }
-
-    public ArrayList<Tile> getTiles() {
-        return this.tiles;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-
     /**
-     * Sort the tiles by color code
-     */
-    private void sort() {
-        ArrayList<Tile> newList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            for (Tile tile : tiles) {
-                if (tile.getColorCode() == 'a' + i) {
-                    newList.add(tile);
-                }
-            }
-        }
-        tiles.clear();
-        this.tiles = newList;
-    }
-
-    /**
-     * Each factory is filled with exactly four tiles drawn randomly from the bag.
-     *
-     * @param bag     the bag to draw
-     * @param discard the discard if bag is empty
-     * @Author: Xinjie Wang
-     */
-    public void refillTiles(Bag bag, Discard discard) {
-        tiles.addAll(bag.drawTiles(discard));
-        sort();
-    }
-
-    /**
-     * Pick all tiles of the same colour from one factory.
-     *
-     * @param color the color player chose.
-     * @return a array contains all tiles of the color in this factory.
-     */
-    public ArrayDeque<Tile> drawTiles(String color, Centre centre) {
-        ArrayDeque<Tile> returnTiles = new ArrayDeque<>();
-        for (int i = 0; i < tiles.size(); i++) {
-            Tile tile = tiles.get(i);
-            if (tile != null && tile.getColor().equals(color)) {
-                returnTiles.push(tile);
-            } else {
-                centre.placeTile(tile);
-            }
-        }
-        tiles.clear();
-        return returnTiles;
-    }
-
-    /**
-     * Count the number of tiles with specific color
-     *
-     * @param code the color code
-     * @return the number
-     */
-    public int countTile(char code) {
-        int count = 0;
-        for (Tile tile : this.getTiles()) {
-            if (tile.getColorCode() == code) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Check tiles contains a specific color tile
-     *
-     * @param code the color code
-     * @return true if tiles contains a specific color tile
-     * @Author: Xinjie Wang
-     */
-    public boolean hasTile(char code) {
-        for (int i = 0; i < this.getTiles().size(); i++) {
-            if (this.getTiles().get(i).getColorCode() == code) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
+     * @Author: Jiaan Guo
      * The factories substring begins with an 'F' and is followed by a collection of *up to* 5
      * 5-character factory strings representing each factory. Each factory string is defined in the
      * following way: 1st character is a sequential digit '0' to '4' - representing the factory
@@ -164,7 +68,107 @@ public class Factory {
         return true;
     }
 
+    public ArrayList<Tile> getTiles() {
+        return this.tiles;
+    }
+
+    public void setTiles(ArrayList<Tile> tiles) {
+        this.tiles = tiles;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     /**
+     * @Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+     * Sort the tiles by color code
+     */
+    private void sort() {
+        ArrayList<Tile> newList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            for (Tile tile : tiles) {
+                if (tile.getColorCode() == 'a' + i) {
+                    newList.add(tile);
+                }
+            }
+        }
+        tiles.clear();
+        this.tiles = newList;
+    }
+
+    /**
+     * @Author: Xinjie Wang
+     * Each factory is filled with exactly four tiles drawn randomly from the bag.
+     *
+     * @param bag     the bag to draw
+     * @param discard the discard if bag is empty
+     */
+    public void refillTiles(Bag bag, Discard discard) {
+        tiles.addAll(bag.drawTiles(discard));
+        sort();
+    }
+
+    /**
+     * @Author: Xinjie Wang, Jiaan Guo, Xiang Lu
+     * Pick all tiles of the same colour from one factory.
+     *
+     * @param color the color player chose.
+     * @return a array contains all tiles of the color in this factory.
+     */
+    public ArrayDeque<Tile> drawTiles(String color, Centre centre) {
+        ArrayDeque<Tile> returnTiles = new ArrayDeque<>();
+        for (int i = 0; i < tiles.size(); i++) {
+            Tile tile = tiles.get(i);
+            if (tile != null && tile.getColor().equals(color)) {
+                returnTiles.push(tile);
+            } else {
+                centre.placeTile(tile);
+            }
+        }
+        tiles.clear();
+        return returnTiles;
+    }
+
+    /**
+     * @Author: Xinjie Wang, Xiang Lu
+     * Count the number of tiles with specific color
+     *
+     * @param code the color code
+     * @return the number
+     */
+    public int countTile(char code) {
+        int count = 0;
+        for (Tile tile : this.getTiles()) {
+            if (tile.getColorCode() == code) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * @Author: Xinjie Wang
+     * Check tiles contains a specific color tile
+     *
+     * @param code the color code
+     * @return true if tiles contains a specific color tile
+     */
+    public boolean hasTile(char code) {
+        for (int i = 0; i < this.getTiles().size(); i++) {
+            if (this.getTiles().get(i).getColorCode() == code) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @Author: Jiaan Guo
      * Reconstruct internal state from string
      *
      * @param token the string representation of floor state
