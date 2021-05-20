@@ -19,8 +19,10 @@ declaration: >-
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
 collaboration:
-  - name:
+  - name: Xinjie Wang (Group mate), Xiang Lu (Group mate)
     comment: >-
+    we work together on class like board.Board, .Floor, .Mosaic, .Score, .Storage.
+    common.Bag, .Centre, .Common, .Discard, .Factory, Player, Tile.
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
@@ -29,23 +31,20 @@ collaboration:
 #
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
-code:
-  - comment:
-    url:
-    licence:
 
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
 class:
-   - 
-   - 
+   - gui.Game
+   - test.IsWellFormedStringTest
+   - test.ReconstructFromStringTest
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-   - 
-   - 
+   - Game.applyMove, Game.reconstructCommonFrom, Game.reconstructBoardsFrom, Game.rebuildStateString
+   - Game.isSharedStateWellFormed, Game.isPlayerStateWellFormed
 
 # sign *your* name and uid here
-name:
-uid:
+name: Jiaan Guo
+uid: u7323660
