@@ -17,6 +17,7 @@ public class Bag {
 
     public Bag() {
         tiles = new ArrayList<>();
+        init();
     }
 
     public ArrayList<Tile> getTiles() {
