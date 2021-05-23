@@ -18,11 +18,11 @@ declaration: >-
 #
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
-collaboration:
-  - name: Xinjie Wang (Group mate), Jiaan Guo (Group mate)
-    comment: >-
-    we work together on class like board.Board, .Floor, .Mosaic, .Score, .Storage.
-    common.Bag, .Centre, .Common, .Discard, .Factory, Player, Tile.
+#collaboration:
+#  - name: Xinjie Wang (Group mate), Jiaan Guo (Group mate)
+#    comment: >-
+#    we work together on class like board.Board, .Floor, .Mosaic, .Score, .Storage.
+#    common.Bag, .Centre, .Common, .Discard, .Factory, Player, Tile.
 
 
 # I wish to submit the following classes as entirely my own (remove this if
