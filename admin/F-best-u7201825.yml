@@ -18,7 +18,7 @@ declaration: >-
 #
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
-#collaboration:
+# collaboration:
 #  - name: Jiaan Guo, Xiang Lu
 #    comment: >-
 #    we work together on class like board.Board, .Floor, .Mosaic, .Score, .Storage.
