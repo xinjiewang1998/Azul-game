@@ -18,24 +18,25 @@ declaration: >-
 #
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
-#collaboration:
-#  - name: Jiaan Guo, Xiang Lu
-#    comment: >-
-#    we work together on class like board.Board, .Floor, .Mosaic, .Score, .Storage.
-#    ommon.Bag, .Centre, .Common, .Discard, .Factory, Player, Tile.
+collaboration:
+  - name: Jiaan Guo, Xiang Lu
+    comment: >-
+    we work together on class like board.Board, .Floor, .Mosaic, .Score, .Storage.
+    ommon.Bag, .Centre, .Common, .Discard, .Factory, Player, Tile.
 
 
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
-class: test.TillingTest.class
+class:
    - test.NoValidMoveTest.class
-   - 
+   - test.TillingTest.class
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
-method: Game.getBonusPoints()
+method:
    -  Game.isMoveValid()
    -  Game.isStateValid()
+   -  Game.getBonusPoints()
 
 # sign *your* name and uid here
 name: Xinjie Wang
