@@ -22,7 +22,8 @@ collaboration:
   - name: Jiaan Guo (Group mate), Xiang Lu (Group mate)
     comment: >-
     we work together on class like board.Board, .Floor, .Mosaic, .Score, .Storage.
-    common.Bag, .Centre, .Common, .Discard, .Factory, Player, Tile.
+    ommon.Bag, .Centre, .Common, .Discard, .Factory, Player, Tile.
+
 
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
