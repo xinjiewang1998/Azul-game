@@ -21,7 +21,7 @@ declaration: >-
 collaboration:
   - name: Jiaan Guo (Group mate), Xiang Lu (Group mate)
     comment: >-
-    : we work together on class like board.Board, .Floor, .Mosaic, .Score, .Storage.
+      we work together on class like board.Board, .Floor, .Mosaic, .Score, .Storage.
     ommon.Bag, .Centre, .Common, .Discard, .Factory, Player, Tile.
 
 
